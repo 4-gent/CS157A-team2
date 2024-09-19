@@ -8,13 +8,13 @@
 	<link rel="stylesheet" href="./styles/index.css">
 	<link rel="stylesheet" href="./styles/global.css">
 </head>
-<body>
+<body class="index-body">
 	<div class="nav">
 		<a href="/bookup/index.jsp"><button class="nav-button">Home</button></a>
 		<a href="/bookup/pages/login.jsp"><button class="nav-button">Login</button></a>
 		<a href="/bookup/pages/register.jsp"><button class="nav-button">Register</button></a>
 	</div>
-	<div class="index-body">
+	<div class="index-header">
 		<p class="index-subtitle">
 			Look up new and used books with
 		</p>
