@@ -29,6 +29,6 @@ public class Register extends HttpServlet {
 		Connector con = new Connector();
 		String result = con.insert(user);
 		
-		response.getWriter().println(result);
+		response.sendRedirect("/bookup/pages/login.jsp");
 	}
 }
