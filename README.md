@@ -6,7 +6,7 @@ This document outlines the structure of the database application and explains ho
 
 ### Directory Structure
 
-Below is the directory structure for the project, which will be placed into the `webapps` folder in the Tomcat 9 directory:
+Below is the directory structure for the project where the Tomcat 9.0 server will run directly from Eclipse IDE
 
 ```bash
 CS157A-team2
@@ -25,4 +25,8 @@ CS157A-team2
 
 ### Important Notes
 
-To simplify database queries, a single JavaBeans file will be used to hold methods for SQL CRUD operations. This allows for easy reuse in any `.jsp` file, abstracting the code for calling methods when making queries from the frontend.
+Java classes should be stored in src/main/java to be reused in other methods, Connector acts as the JDBC connection to the backend database.
+
+Actual client-side files will be in src/main/webapp, put .jsp files into pages and css and images will be stored in styles
+
+The db name is bookup which can be changed if need be and the first table so far is user to store all user information in plaintext
