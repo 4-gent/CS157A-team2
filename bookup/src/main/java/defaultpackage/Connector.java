@@ -9,7 +9,7 @@ import java.sql.SQLException;
 public class Connector {
 	private String dburl = "jdbc:mysql://localhost:3306/bookup?autoReconnect=true&userSSL=false";
 	private String dbuname = "root";
-	private String dbpassword = "";
+	private String dbpassword = "Marlon1209@";
 	private String dbdriver = "com.mysql.jdbc.Driver";
 	
 	public void loadDriver(String dbDriver) {
