@@ -1,0 +1,30 @@
+.nav{
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+	align-items: center;
+
+	gap: 200px;
+
+	height: 100%;
+	
+	position: 100;
+}
+
+.nav-button{
+	background-color: ;
+	
+	transition: 300ms;
+	
+	text-decoration: none;
+	width: 100px;
+	height: auto;
+
+	border-radius: 5px;
+	border-color: transparent;
+
+}
+.nav-button:hover{
+	transition: 300ms;
+	box-shadow: 2px 4px 6px 0px grey;
+}
