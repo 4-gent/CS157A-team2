@@ -82,4 +82,11 @@ public class Connector {
 		
 		return user;
 	}
+	
+	public Books getBookByName(String name) {
+		if(name.equalsIgnoreCase("Sample Book")) {
+			return new Books("Sample Book", "John Doe", "1234567", "Fiction", "$9.99");
+		}
+		return null;
+	}
 }
