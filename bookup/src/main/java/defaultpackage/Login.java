@@ -21,7 +21,7 @@ public class Login extends HttpServlet{
 		Connector con = new Connector();
 		User user = con.authUser(username, password);
 		if(user != null)
-			response.sendRedirect("/bookup/pages/success.jsp");
+			response.sendRedirect("/bookup/pages/books.jsp");
 		else
 			response.sendRedirect("/bookup/pages/error.jsp");
 	}

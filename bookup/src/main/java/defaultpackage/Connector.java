@@ -5,6 +5,7 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.*;
 
 public class Connector {
 	private String dburl = "jdbc:mysql://localhost:3306/bookup?autoReconnect=true&userSSL=false";
@@ -83,10 +84,38 @@ public class Connector {
 		return user;
 	}
 	
-	public Books getBookByName(String name) {
-		if(name.equalsIgnoreCase("Sample Book")) {
-			return new Books("Sample Book", "John Doe", "1234567", "Fiction", "$9.99");
+	public List<Books> getAllBooks(){
+		loadDriver(dbdriver);
+		Connection con = getConnection();
+		List<Books> booksList = new ArrayList<>();
+		
+		String sql = "SELECT * FROM books";
+		
+		try {
+			PreparedStatement ps = con.prepareStatement(sql);
+			ResultSet rs = ps.executeQuery();
+			
+			while(rs.next()) {
+				Books book = new Books(
+					rs.getInt("book_id"),
+					rs.getString("name"),
+					rs.getString("author"),
+					rs.getString("ISBN"),
+					rs.getString("genre"),
+					rs.getFloat("price")
+				);
+				booksList.add(book);
+			};
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				if (con != null)
+					con.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
 		}
-		return null;
+		return booksList;
 	}
 }
