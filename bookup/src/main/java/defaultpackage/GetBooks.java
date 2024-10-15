@@ -5,7 +5,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.PrintWriter;
+import java.util.*;
 
 @WebServlet("/Books")
 public class GetBooks extends HttpServlet{
@@ -16,26 +16,11 @@ public class GetBooks extends HttpServlet{
 	}
 	
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		String book_name = request.getParameter("books");
-		
 		Connector con = new Connector();
-		Books book = con.getBookByName(book_name);
+		List<Books> booksList = con.getAllBooks();
 		
-		response.setContentType("text/html");
+		request.setAttribute("booksList", booksList);
 		
-		PrintWriter out = response.getWriter();
-		
-		if(book != null) {
-            out.println("<html><body>");
-            out.println("<h1>Book Details</h1>");
-            out.println("<p>Name: " + book.getName() + "</p>");
-            out.println("<p>Author: " + book.getAuthor() + "</p>");
-            out.println("<p>ISBN: " + book.getISBN() + "</p>");
-            out.println("<p>Genre: " + book.getGenre() + "</p>");
-            out.println("<p>Price: " + book.getPrice() + "</p>");
-            out.println("</body></html>");
-		} else 
-			out.println("<html><body><h1>No Book Found</h1></body></html>");
-		
+		request.getRequestDispatcher("/bookup/pages/books.jsp").forward(request, response);
 	}
 }
