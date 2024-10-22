@@ -2,21 +2,27 @@
     background-color: #e3e3e3;
     width: 100vw;
     height: 100vh;
+     font-family: 'Poppins', sans-serif;
+     font-weight: 400;
+      background-color: #f5f5f5;
+      
 }
 
 .index-header {
-    background-image: url("./images/books.webp");
+    /*background-image: url("./images/books.webp");*/ 
+    
     background-size: cover; /* Optional: Ensures the image covers the entire area */
     background-position: center; /* Optional: Centers the image */
     width: 100%;
     height: 100vh;
     padding-top: 0;
     color: black;
-    
+  
     display: flex;
     flex-direction: row;
     justify-content: space-around;
     align-items: center;
+    background-color: #d3d3d3;
     
 }
 
@@ -37,6 +43,8 @@
 
 .index-title-container{
 	text-align: center;
+	     font-weight: 400;
+	
 }
 
 .index-button{
@@ -44,10 +52,11 @@
 	height: 10vh;
 	
 	background-color: rgb(32, 31, 31);
-	border-radius: 3px;
+	border-radius: 50px;
 	border-color: transparent;
 	
 	gap: 15px;
+	font-weight: 700; 
 	
 	transition: 300ms;
 	
