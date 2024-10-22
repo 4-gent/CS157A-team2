@@ -9,7 +9,7 @@ public class DbConnection {
     private Connection connection;
     private String url = "jdbc:mysql://localhost:3306/Bookie";  // Adjust based on your DB
     private String username = "root";  // Adjust as needed
-    private String password = "root";  // Adjust as needed
+    private String password = "Marlon1209@";  // Adjust as needed
 
     private DbConnection() throws SQLException {
         try {

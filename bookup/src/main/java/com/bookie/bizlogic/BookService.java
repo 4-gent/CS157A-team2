@@ -56,4 +56,14 @@ public class BookService {
     public List<Book> browseBooks() {
         return bookDAO.getAllBooks();
     }
+    
+    /**
+     * Get a book by a keyword
+     * @param title - Title of book
+     * @param publisher - Publisher of book
+     * @return If the book is found it'll be returned, otherwise null
+     */
+    public List<Book> bookSearch(String phrase) {
+    	return bookDAO.searchByKeyword(phrase);
+    }
 }

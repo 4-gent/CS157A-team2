@@ -1,4 +1,4 @@
-package defaultpackage;
+package com.bookie.bizlogic;
 
 import java.io.IOException; 
 import javax.servlet.ServletException;
@@ -24,10 +24,12 @@ public class Register extends HttpServlet {
 		String password = request.getParameter("password");
 		String email = request.getParameter("email");
 		String phone = request.getParameter("phone");
+		boolean admin = false;
+		int favoriteAuthor = 0, favoriteGenre = 0;
 		
-		User user = new User(username, password, email, phone);
-		Connector con = new Connector();
-		String result = con.insert(user);
+		UserService user = new UserService();
+		
+		user.register(username, password, email, phone, admin, favoriteAuthor, favoriteGenre);
 		
 		response.sendRedirect("/bookup/pages/login.jsp");
 	}

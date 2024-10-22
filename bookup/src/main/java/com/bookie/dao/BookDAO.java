@@ -105,4 +105,35 @@ public class BookDAO extends BaseDAO<Book, String> {
         }
         return books;
     }
+    
+    public List<Book> searchByKeyword(String keyword){
+    	List<Book> books = new ArrayList<>();
+    	
+    	try {
+    		String query = "SELECT * From Books WHERE title LIKE ? or publisher LIKE ?";
+    		PreparedStatement statement = connection.prepareStatement(query);
+    		
+    		String keywordPattern = "%" + keyword + "%";
+    		
+    		statement.setString(1, keywordPattern);
+    		statement.setString(2, keywordPattern);
+    		ResultSet rs = statement.executeQuery();
+    		
+    		while(rs.next()) {
+    			Book book = new Book(
+    				rs.getString("ISBN"),
+    				rs.getString("title"),
+    				rs.getInt("year"),
+    				rs.getString("publisher"),
+    				rs.getBoolean("isFeatured")
+    			);
+    			books.add(book);
+    		}
+    	
+    	} catch (SQLException e) {
+    		e.printStackTrace();   	
+    	}
+    	return books;
+    }
+    
 }

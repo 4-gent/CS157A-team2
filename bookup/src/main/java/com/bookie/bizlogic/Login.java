@@ -1,4 +1,4 @@
-package defaultpackage;
+package com.bookie.bizlogic;
 import java.io.IOException; 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -18,10 +18,11 @@ public class Login extends HttpServlet{
 		String username = request.getParameter("username");
 		String password = request.getParameter("password");
 		
-		Connector con = new Connector();
-		User user = con.authUser(username, password);
-		if(user != null)
-			response.sendRedirect("/bookup/pages/books.jsp");
+
+		UserService user = new UserService();
+		boolean login_result = user.login(username, password);
+		if(login_result == true)
+			response.sendRedirect("/bookup/Books");
 		else
 			response.sendRedirect("/bookup/pages/error.jsp");
 	}

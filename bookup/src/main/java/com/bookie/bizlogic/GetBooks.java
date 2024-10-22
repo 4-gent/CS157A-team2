@@ -1,4 +1,5 @@
-package defaultpackage;
+package com.bookie.bizlogic;
+import com.bookie.models.Book;
 import java.io.IOException;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -16,11 +17,12 @@ public class GetBooks extends HttpServlet{
 	}
 	
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		Connector con = new Connector();
-		List<Books> booksList = con.getAllBooks();
+		BookService book = new BookService();
 		
-		request.setAttribute("booksList", booksList);
+		List<Book> bookList = book.browseBooks();
 		
-		request.getRequestDispatcher("/bookup/pages/books.jsp").forward(request, response);
+		request.setAttribute("bookList", bookList);
+		
+		request.getRequestDispatcher("/pages/books.jsp").forward(request, response);
 	}
 }
