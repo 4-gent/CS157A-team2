@@ -1,120 +1,194 @@
-CREATE TABLE User (
-    UserID INT AUTO_INCREMENT PRIMARY KEY,
-    Email VARCHAR(100),
-    PhoneNumber VARCHAR(15),
-    Name VARCHAR(100)
+-- Create the schema if it doesn't exist
+CREATE SCHEMA IF NOT EXISTS Bookie;
+
+-- Set the default schema to 'Bookie'
+USE Bookie;
+
+
+-- Entities
+
+-- Authors Table
+CREATE TABLE IF NOT EXISTS Authors (
+    authorID INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(255) NOT NULL
 );
 
-CREATE TABLE Authentication (
-    Username VARCHAR(50),
-    Password VARCHAR(50),
-    UserID INT,
-    PRIMARY KEY (Username, UserID),
-    FOREIGN KEY (UserID) REFERENCES User(UserID)
+-- Genres Table
+CREATE TABLE IF NOT EXISTS Genres (
+    genreID INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(255) NOT NULL
 );
 
-CREATE TABLE Employee (
-    EmployeeID INT AUTO_INCREMENT PRIMARY KEY,
-    Name VARCHAR(100)
+-- Users Table
+CREATE TABLE IF NOT EXISTS Users (
+    username VARCHAR(255) PRIMARY KEY,
+    password VARCHAR(255) NOT NULL,
+    email VARCHAR(255),
+    phone VARCHAR(15),
+    isAdmin BOOLEAN NOT NULL,
+    favoriteAuthorID INT,
+    favoriteGenreID INT,
+    FOREIGN KEY (favoriteAuthorID) REFERENCES Authors(authorID),
+    FOREIGN KEY (favoriteGenreID) REFERENCES Genres(genreID)
 );
 
-CREATE TABLE Catalog (
-    CatalogID INT PRIMARY KEY,
-    CatalogName VARCHAR(100),
-    Description TEXT
-);
-
-CREATE TABLE Listing (
-    ListingID INT AUTO_INCREMENT PRIMARY KEY,
-    ListingName VARCHAR(100)
-);
-
-CREATE TABLE Category (
-    ID INT PRIMARY KEY,
-    Name VARCHAR(100),
-    Version VARCHAR(50)
-);
-
-CREATE TABLE Books (
+-- Books Table
+CREATE TABLE IF NOT EXISTS Books (
     ISBN VARCHAR(13) PRIMARY KEY,
-    Name VARCHAR(255),
-    Genre VARCHAR(50),
-    Publisher VARCHAR(100),
-    Author VARCHAR(100)
+    title VARCHAR(255) NOT NULL,
+    year INT,
+    publisher VARCHAR(255),
+    isFeatured BOOLEAN
 );
 
-CREATE TABLE Orders (
-    OrderID INT AUTO_INCREMENT PRIMARY KEY,
-    Status VARCHAR(50),
-    DateOrdered DATE
-);
-
-CREATE TABLE Cart (
-    CartID INT AUTO_INCREMENT PRIMARY KEY,
-    UserID INT,
-    NumberBooks INT,
-    PendingAmount DECIMAL(10, 2),
-    FOREIGN KEY (UserID) REFERENCES User(UserID)
-);
-
-CREATE TABLE PaymentDetails (
-    PaymentDetailsID INT AUTO_INCREMENT PRIMARY KEY,
-    CardNumber VARCHAR(16),
-    CVV VARCHAR(4),
-    ExpireDate DATE,
-    CardType VARCHAR(20),
-    CardholderName VARCHAR(100)
-);
-
-CREATE TABLE CardValidity (
-    PaymentDetailsID INT,
-    MM INT,
-    YYYY INT,
-    PRIMARY KEY (PaymentDetailsID),
-    FOREIGN KEY (PaymentDetailsID) REFERENCES PaymentDetails(PaymentDetailsID)
-);
-
-CREATE TABLE Manages (
-    CatalogID INT,
-    EmployeeID INT,
-    PRIMARY KEY (CatalogID, EmployeeID),
-    FOREIGN KEY (CatalogID) REFERENCES Catalog(CatalogID),
-    FOREIGN KEY (EmployeeID) REFERENCES Employee(EmployeeID)
-);
-
-CREATE TABLE Has (
-    CatalogID INT,
-    ListingID INT,
-    PRIMARY KEY (CatalogID, ListingID),
-    FOREIGN KEY (CatalogID) REFERENCES Catalog(CatalogID),
-    FOREIGN KEY (ListingID) REFERENCES Listing(ListingID)
-);
-
-CREATE TABLE Purchases (
-    PurchaseID INT,
-    UserID INT,
-    ListingID INT,
-    DateOrdered DATE,
-    Status VARCHAR(50),
-    PRIMARY KEY (PurchaseID, UserID, ListingID),
-    FOREIGN KEY (UserID) REFERENCES User(UserID),
-    FOREIGN KEY (ListingID) REFERENCES Listing(ListingID, CatalogID)
-);
-
-CREATE TABLE Includes (
-    CatalogID INT,
+-- InventoryItems Table
+CREATE TABLE IF NOT EXISTS InventoryItems (
+    inventoryItemID INT AUTO_INCREMENT PRIMARY KEY,
     ISBN VARCHAR(13),
-    PRIMARY KEY (CatalogID, ISBN),
-    FOREIGN KEY (CatalogID) REFERENCES Catalog(CatalogID),
+    price DECIMAL(10, 2),
+    qty INT,
+    description TEXT,
     FOREIGN KEY (ISBN) REFERENCES Books(ISBN)
 );
 
-CREATE TABLE Oversees (
-    EmployeeID INT,
-    OrderID INT,
-    PRIMARY KEY (EmployeeID, OrderID),
-    FOREIGN KEY (EmployeeID) REFERENCES Employee(EmployeeID),
-    FOREIGN KEY (OrderID) REFERENCES Orders(OrderID)
+-- Addresses Table
+CREATE TABLE IF NOT EXISTS Addresses (
+    addressID INT AUTO_INCREMENT PRIMARY KEY,
+    street VARCHAR(255),
+    city VARCHAR(100),
+    state VARCHAR(100),
+    zip VARCHAR(10),
+    country VARCHAR(100)
+);
+
+-- PaymentDetails Table
+CREATE TABLE IF NOT EXISTS PaymentDetails (
+    paymentID INT AUTO_INCREMENT PRIMARY KEY,
+    username VARCHAR(255),
+    cardNumber VARCHAR(16),
+    exp DATE,
+    cardHolderName VARCHAR(255),
+    cvv VARCHAR(4),
+    addressID INT,
+    isDeleted BOOLEAN,
+    FOREIGN KEY (username) REFERENCES Users(username),
+    FOREIGN KEY (addressID) REFERENCES Addresses(addressID)
+);
+
+-- Orders Table
+CREATE TABLE IF NOT EXISTS Orders (
+    orderID INT AUTO_INCREMENT PRIMARY KEY,
+    username VARCHAR(255),
+    addressID INT,
+    orderDate DATE,
+    orderStatus VARCHAR(50),
+    total DECIMAL(10, 2),
+    FOREIGN KEY (username) REFERENCES Users(username),
+    FOREIGN KEY (addressID) REFERENCES Addresses(addressID)
+);
+
+-- Cart Table
+CREATE TABLE IF NOT EXISTS Cart (
+    cartID INT AUTO_INCREMENT PRIMARY KEY,
+    username VARCHAR(255),
+    FOREIGN KEY (username) REFERENCES Users(username)
 );
 
 
+
+-- Relationships
+
+-- Owns Relationship (Between Users and Cart)
+CREATE TABLE IF NOT EXISTS Owns (
+    username VARCHAR(255),
+    cartID INT,
+    PRIMARY KEY (username, cartID),
+    FOREIGN KEY (username) REFERENCES Users(username),
+    FOREIGN KEY (cartID) REFERENCES Cart(cartID)
+);
+
+-- Includes Relationship (Between Cart and InventoryItems)
+CREATE TABLE IF NOT EXISTS Includes (
+    cartID INT,
+    inventoryItemID INT,
+    username VARCHAR(255),
+    ISBN VARCHAR(13),
+    PRIMARY KEY (cartID, inventoryItemID),
+    FOREIGN KEY (cartID) REFERENCES Cart(cartID),
+    FOREIGN KEY (inventoryItemID) REFERENCES InventoryItems(inventoryItemID),
+    FOREIGN KEY (username) REFERENCES Users(username),
+    FOREIGN KEY (ISBN) REFERENCES Books(ISBN)
+);
+
+-- Contains Relationship (Between Orders and InventoryItems)
+CREATE TABLE IF NOT EXISTS Contains (
+    orderID INT,
+    inventoryItemID INT,
+    addressID INT,
+    ISBN VARCHAR(13),
+    PRIMARY KEY (orderID, inventoryItemID),
+    FOREIGN KEY (orderID) REFERENCES Orders(orderID),
+    FOREIGN KEY (inventoryItemID) REFERENCES InventoryItems(inventoryItemID),
+    FOREIGN KEY (addressID) REFERENCES Addresses(addressID),
+    FOREIGN KEY (ISBN) REFERENCES Books(ISBN)
+);
+
+-- FavoriteBooks Relationship (Between Users and Books)
+CREATE TABLE IF NOT EXISTS FavoriteBooks (
+    username VARCHAR(255),
+    ISBN VARCHAR(13),
+    PRIMARY KEY (username, ISBN),
+    FOREIGN KEY (username) REFERENCES Users(username),
+    FOREIGN KEY (ISBN) REFERENCES Books(ISBN)
+);
+
+-- Written Relationship (Between Authors and Books)
+CREATE TABLE IF NOT EXISTS Written (
+    authorID INT,
+    ISBN VARCHAR(13),
+    PRIMARY KEY (authorID, ISBN),
+    FOREIGN KEY (authorID) REFERENCES Authors(authorID),
+    FOREIGN KEY (ISBN) REFERENCES Books(ISBN)
+);
+
+-- Recommend Relationship (Between Users and Books)
+CREATE TABLE IF NOT EXISTS Recommend (
+    username VARCHAR(255),
+    ISBN VARCHAR(13),
+    PRIMARY KEY (username, ISBN),
+    FOREIGN KEY (username) REFERENCES Users(username),
+    FOREIGN KEY (ISBN) REFERENCES Books(ISBN)
+);
+
+-- Modifies Relationship (Between Users, Orders, and Addresses)
+CREATE TABLE IF NOT EXISTS OrderModifications (
+    username VARCHAR(255),
+    orderID INT,
+    addressID INT,
+    modifiedDateTime TIMESTAMP,
+    PRIMARY KEY (username, orderID, addressID),
+    FOREIGN KEY (username) REFERENCES Users(username),
+    FOREIGN KEY (orderID) REFERENCES Orders(orderID),
+    FOREIGN KEY (addressID) REFERENCES Addresses(addressID)
+);
+
+-- Update Relationship (Between Users, Books, and InventoryItems)
+CREATE TABLE IF NOT EXISTS InventoryUpdates (
+    username VARCHAR(255),
+    ISBN VARCHAR(13),
+    inventoryItemID INT,
+    updatedDateTime TIMESTAMP,
+    PRIMARY KEY (username, ISBN, inventoryItemID),
+    FOREIGN KEY (username) REFERENCES Users(username),
+    FOREIGN KEY (ISBN) REFERENCES Books(ISBN),
+    FOREIGN KEY (inventoryItemID) REFERENCES InventoryItems(inventoryItemID)
+);
+
+-- Belong Relationship (Between Books and Genres)
+CREATE TABLE IF NOT EXISTS Belong (
+    ISBN VARCHAR(13),
+    genreID INT,
+    PRIMARY KEY (ISBN, genreID),
+    FOREIGN KEY (ISBN) REFERENCES Books(ISBN),
+    FOREIGN KEY (genreID) REFERENCES Genres(genreID)
+);
