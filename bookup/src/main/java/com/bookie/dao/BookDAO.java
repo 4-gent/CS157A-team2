@@ -136,4 +136,41 @@ public class BookDAO extends BaseDAO<Book, String> {
     	return books;
     }
     
+    /**
+     * Fetches all books by the given authorId.
+     *
+     * @param authorId The ID of the author whose books you want to retrieve.
+     * @return A list of books written by the specified author.
+     */
+    public List<Book> getBooksByAuthor(int authorId) {
+        List<Book> books = new ArrayList<>();
+        try {
+            String query = "SELECT B.*, A.name AS authorName " +
+                           "FROM Books B " +
+                           "INNER JOIN Written W ON B.ISBN = W.ISBN " +
+                           "INNER JOIN Authors A ON W.authorID = A.authorID " +
+                           "WHERE A.authorID = ?";
+            PreparedStatement stmt = connection.prepareStatement(query);
+            stmt.setInt(1, authorId);
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                // Create a new Book object with the data from the result set
+                Book book = new Book(
+                    rs.getString("ISBN"),
+                    rs.getString("title"),
+                    rs.getInt("year"),
+                    rs.getString("publisher"),
+                    rs.getBoolean("isFeatured")
+                );
+                books.add(book);
+                System.out.println("Author: " + rs.getString("authorName"));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return books;
+    }
+
+    
 }

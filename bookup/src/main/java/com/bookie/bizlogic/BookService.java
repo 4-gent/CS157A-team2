@@ -66,4 +66,13 @@ public class BookService {
     public List<Book> bookSearch(String phrase) {
     	return bookDAO.searchByKeyword(phrase);
     }
+    
+    /**
+     * Retrieves all books by an author the system.
+     * @return A list of all books.
+     * @param authorId
+     */
+	public List<Book> getBooksByAuthor(int authorId) {
+		return bookDAO.getBooksByAuthor(authorId);
+	}
 }
