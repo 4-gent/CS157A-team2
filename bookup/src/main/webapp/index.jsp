@@ -17,9 +17,9 @@
 		</div>
 		<div class="index-title-container">
 			<p class="index-subtitle">
-				Look up new and used books with
+				The Platform for Used and New Books! 
 			</p>
-			<h1 class="index-title">Book Up!</h1>
+			<h1 class="index-title">Book Up! 📚</h1>
 		</div>
 	</div>
 </body>
