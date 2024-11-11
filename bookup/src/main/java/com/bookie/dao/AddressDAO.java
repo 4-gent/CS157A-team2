@@ -3,11 +3,9 @@ package com.bookie.dao;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
+import java.sql.Statement;
 
 import com.bookie.models.Address;
-import com.bookie.models.Author;
 
 public class AddressDAO extends BaseDAO<Address, Integer>{
 
@@ -38,24 +36,37 @@ public class AddressDAO extends BaseDAO<Address, Integer>{
 	}
 
 	@Override
-	public boolean add(Address address) {
-		try {
-			String query = "INSERT INTO Addresses (addressID, street, city, state, zip, country) VALUES (?, ?, ?, ?, ?, ?)";
-			PreparedStatement stmt = connection.prepareStatement(query);
-			stmt.setInt(1, address.getAddressID());
-			stmt.setString(2, address.getStreet());
-			stmt.setString(3, address.getCity());
-			stmt.setString(4, address.getState());
-			stmt.setString(5, address.getZip());
-			stmt.setString(6, address.getCountry());
-			
-			return stmt.executeUpdate() > 0;
-			
-		} catch (SQLException e) {
-            e.printStackTrace();
-            return false;
-        }
-	}	
+	public Address add(Address address) {
+	    try {
+	        // Prepare the INSERT statement with RETURN_GENERATED_KEYS to get the auto-generated key
+	        String query = "INSERT INTO Addresses (street, city, state, zip, country) VALUES (?, ?, ?, ?, ?)";
+	        PreparedStatement stmt = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
+	        
+	        // Set the parameters for the query
+	        stmt.setString(1, address.getStreet());
+	        stmt.setString(2, address.getCity());
+	        stmt.setString(3, address.getState());
+	        stmt.setString(4, address.getZip());
+	        stmt.setString(5, address.getCountry());
+	        
+	        // Execute the update
+	        int rowsAffected = stmt.executeUpdate();
+	        
+	        // If the insertion was successful, retrieve the generated addressID
+	        if (rowsAffected > 0) {
+	            ResultSet generatedKeys = stmt.getGeneratedKeys();
+	            if (generatedKeys.next()) {
+	                int newAddressID = generatedKeys.getInt(1);
+	                // Set the new addressID to the Address object
+	                address = new Address(newAddressID, address.getStreet(), address.getCity(), address.getState(), address.getZip(), address.getCountry());
+	                return address;
+	            }
+	        }
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	    }
+	    return null; // Return null if insertion fails
+	}
 	
 
 	@Override

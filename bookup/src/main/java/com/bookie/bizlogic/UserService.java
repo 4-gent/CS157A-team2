@@ -13,11 +13,11 @@ public class UserService {
     /**
      * Registers a new user in the system.
      */
-    public boolean register(String username, String password, String email, String phone, boolean isAdmin, int favoriteAuthorID, int favoriteGenreID) {
+    public User register(String username, String password, String email, String phone, boolean isAdmin, int favoriteAuthorID, int favoriteGenreID) {
         User existingUser = userDAO.getById(username);
         if (existingUser != null) {
             System.out.println("User already exists!");
-            return false;
+            return null;
         }
 
         User newUser = new User(username, password, email, phone, isAdmin, favoriteAuthorID, favoriteGenreID);

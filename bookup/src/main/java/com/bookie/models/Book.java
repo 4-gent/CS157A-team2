@@ -6,6 +6,7 @@ public class Book {
     private int year;
     private String publisher;
     private boolean isFeatured;
+    private String author;
 
     // Constructor
     public Book(String ISBN, String title, int year, String publisher, boolean isFeatured) {
@@ -14,6 +15,15 @@ public class Book {
         this.year = year;
         this.publisher = publisher;
         this.isFeatured = isFeatured;
+    }
+    
+    public Book(String ISBN, String title, int year, String publisher, boolean isFeatured, String author) {
+        this.ISBN = ISBN;
+        this.title = title;
+        this.year = year;
+        this.publisher = publisher;
+        this.isFeatured = isFeatured;
+        this.author = author;
     }
 
     // Getters and Setters
@@ -57,8 +67,12 @@ public class Book {
         this.isFeatured = isFeatured;
     }
 
-    @Override
+    public String getAuthor() {
+		return author;
+	}
+
+	@Override
     public String toString() {
-        return "Book [ISBN=" + ISBN + ", title=" + title + ", year=" + year + ", publisher=" + publisher + ", isFeatured=" + isFeatured + "]";
+        return "Book [ISBN=" + ISBN + ", title=" + title + ", author=" + author +",  year=" + year + ", publisher=" + publisher + ", isFeatured=" + isFeatured + "]";
     }
 }

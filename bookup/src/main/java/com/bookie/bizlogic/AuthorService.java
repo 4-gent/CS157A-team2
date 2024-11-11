@@ -19,7 +19,7 @@ public class AuthorService {
 	}
 	
 	//TODO Add Admin check, only admin can use this method
-	public boolean addAuthor(Author author) {
+	public Author addAuthor(Author author) {
 		
 		return authorDAO.add(author);
 	}

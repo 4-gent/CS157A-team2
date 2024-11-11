@@ -35,21 +35,30 @@ public class BookDAO extends BaseDAO<Book, String> {
     }
 
     @Override
-    public boolean add(Book book) {
+    public Book add(Book book) {
         try {
+            // Prepare the INSERT statement
             String query = "INSERT INTO Books (ISBN, title, year, publisher, isFeatured) VALUES (?, ?, ?, ?, ?)";
             PreparedStatement stmt = connection.prepareStatement(query);
+            
+            // Set the parameters
             stmt.setString(1, book.getISBN());
             stmt.setString(2, book.getTitle());
             stmt.setInt(3, book.getYear());
             stmt.setString(4, book.getPublisher());
             stmt.setBoolean(5, book.isFeatured());
 
-            return stmt.executeUpdate() > 0;
+            // Execute the update
+            int rowsAffected = stmt.executeUpdate();
+            
+            // If the insertion is successful, return the book object
+            if (rowsAffected > 0) {
+                return book;
+            }
         } catch (SQLException e) {
             e.printStackTrace();
-            return false;
         }
+        return null;
     }
 
     @Override
@@ -170,6 +179,73 @@ public class BookDAO extends BaseDAO<Book, String> {
             e.printStackTrace();
         }
         return books;
+    }
+    
+    public List<Book> seachBookByAuthorKeyword(String keyword) {
+		List<Book> books = new ArrayList<>();
+	    	
+    	try {
+    		String query = "SELECT \n"
+    				+ "    a.authorID, \n"
+    				+ "    a.name AS authorName, \n"
+    				+ "    b.ISBN, \n"
+    				+ "    b.title AS bookTitle, \n"
+    				+ "    b.publisher\n"
+    				+ "FROM \n"
+    				+ "    Authors a\n"
+    				+ "JOIN \n"
+    				+ "    Written w ON a.authorID = w.authorID\n"
+    				+ "JOIN \n"
+    				+ "    Books b ON w.ISBN = b.ISBN\n"
+    				+ "WHERE \n"
+    				+ "    a.name LIKE CONCAT('%', ?, '%')\n"
+    				+ "ORDER BY \n"
+    				+ "    a.authorID, b.title;";
+    		PreparedStatement statement = connection.prepareStatement(query);
+    		
+    		String keywordPattern = "%" + keyword + "%";
+    		
+    		statement.setString(1, keywordPattern);
+    		ResultSet rs = statement.executeQuery();
+    		
+    		while(rs.next()) {
+    			Book book = new Book(
+    				rs.getString("ISBN"),
+    				rs.getString("title"),
+    				rs.getInt("year"),
+    				rs.getString("publisher"),
+    				rs.getBoolean("isFeatured"),
+    				rs.getString("authorName")
+    			);
+    			books.add(book);
+    		}
+    	
+    	} catch (SQLException e) {
+    		e.printStackTrace();   	
+    	}
+    	return books;   	
+    	
+    }
+    
+    public boolean addAuthorToBook(String ISBN, int authorID) {
+        String query = "INSERT INTO Written (authorID, ISBN) VALUES (?, ?)";
+        try {
+        	PreparedStatement statement = connection.prepareStatement(query);
+                
+            // Set the parameters
+            statement.setInt(1, authorID);
+            statement.setString(2, ISBN);
+            
+            // Execute the update
+            int rowsAffected = statement.executeUpdate();
+            
+            // If one row was inserted, return true
+            return rowsAffected > 0;
+            
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
     }
 
     

@@ -10,6 +10,11 @@ public class Genre {
 		this.genreID = genreID;
 		this.name = name;
 	}
+	
+	public Genre(String name) {
+		super();
+		this.name = name;
+	}
 
 	public int getGenreID() {
 		return genreID;

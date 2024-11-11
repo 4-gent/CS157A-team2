@@ -35,10 +35,13 @@ public class UserDAO extends BaseDAO<User, String> {
     }
 
 	@Override
-	public boolean add(User user) {
+	public User add(User user) {
 	    try {
+	        // Prepare the INSERT statement
 	        String query = "INSERT INTO Users (username, password, email, phone, isAdmin, favoriteAuthorID, favoriteGenreID) VALUES (?, ?, ?, ?, ?, ?, ?)";
 	        PreparedStatement stmt = connection.prepareStatement(query);
+	        
+	        // Set the parameters for the query
 	        stmt.setString(1, user.getUsername());
 	        stmt.setString(2, user.getPassword());
 	        stmt.setString(3, user.getEmail());
@@ -47,25 +50,32 @@ public class UserDAO extends BaseDAO<User, String> {
 
 	        // Set favoriteAuthorID to NULL if it's not set
 	        if (user.getFavoriteAuthorID() == 0) {
-	            stmt.setNull(6, java.sql.Types.INTEGER);  // Use setNull for optional fields
+	            stmt.setNull(6, java.sql.Types.INTEGER);
 	        } else {
 	            stmt.setInt(6, user.getFavoriteAuthorID());
 	        }
 
 	        // Set favoriteGenreID to NULL if it's not set
 	        if (user.getFavoriteGenreID() == 0) {
-	            stmt.setNull(7, java.sql.Types.INTEGER);  // Use setNull for optional fields
+	            stmt.setNull(7, java.sql.Types.INTEGER);
 	        } else {
 	            stmt.setInt(7, user.getFavoriteGenreID());
 	        }
 
-	        return stmt.executeUpdate() > 0;
+	        // Execute the update
+	        int rowsAffected = stmt.executeUpdate();
+	        
+	        // If insertion is successful, return the user object
+	        if (rowsAffected > 0) {
+	            return user;
+	        }
 	    } catch (SQLException e) {
 	        e.printStackTrace();
-	        return false;
 	    }
+	    return null; // Return null if insertion fails
 	}
-
+	
+	
 	@Override
     public boolean update(User user) {
         try {
