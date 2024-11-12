@@ -6,24 +6,27 @@ public class Book {
     private int year;
     private String publisher;
     private boolean isFeatured;
-    private String author;
+    private Author author;
+    private Genre genre;
 
     // Constructor
-    public Book(String ISBN, String title, int year, String publisher, boolean isFeatured) {
+    public Book(String ISBN, String title, int year, String publisher, boolean isFeatured, Genre genre) {
         this.ISBN = ISBN;
         this.title = title;
         this.year = year;
         this.publisher = publisher;
         this.isFeatured = isFeatured;
+        this.genre = genre;
     }
     
-    public Book(String ISBN, String title, int year, String publisher, boolean isFeatured, String author) {
+    public Book(String ISBN, String title, int year, String publisher, boolean isFeatured, Author author, Genre genre) {
         this.ISBN = ISBN;
         this.title = title;
         this.year = year;
         this.publisher = publisher;
         this.isFeatured = isFeatured;
         this.author = author;
+        this.genre = genre;
     }
 
     // Getters and Setters
@@ -67,12 +70,21 @@ public class Book {
         this.isFeatured = isFeatured;
     }
 
-    public String getAuthor() {
+    public Author getAuthor() {
 		return author;
 	}
 
+	public Genre getGenre() {
+		return genre;
+	}
+
+	public void setGenre(Genre genre) {
+		this.genre = genre;
+	}
+
 	@Override
-    public String toString() {
-        return "Book [ISBN=" + ISBN + ", title=" + title + ", author=" + author +",  year=" + year + ", publisher=" + publisher + ", isFeatured=" + isFeatured + "]";
-    }
+	public String toString() {
+		return "Book [ISBN=" + ISBN + ", title=" + title + ", year=" + year + ", publisher=" + publisher
+				+ ", isFeatured=" + isFeatured + ", author=" + author.getName() + ", genre=" + genre.getName() + "]";
+	}
 }

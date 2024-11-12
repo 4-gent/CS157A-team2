@@ -76,11 +76,11 @@ public class BookService {
 		return bookDAO.getBooksByAuthor(authorId);
 	}
 	
-	public List<Book> seachBookByAuthorKeyword(String keyword) {
-		return bookDAO.seachBookByAuthorKeyword(keyword);
+	public List<Book> searchBookByAuthorKeyword(String keyword) {
+		return bookDAO.searchBookByAuthorKeyword(keyword);
 	}
 	
-	public boolean addAuthorToBook(String ISBN, int authorID) {
-		return bookDAO.addAuthorToBook(ISBN, authorID);
-	}
+//	public boolean addAuthorToBook(String ISBN, int authorID) {
+//		return bookDAO.addAuthorToBook(ISBN, authorID);
+//	}
 }

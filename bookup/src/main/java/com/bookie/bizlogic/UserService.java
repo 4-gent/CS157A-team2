@@ -74,7 +74,7 @@ public class UserService {
     /**
      * Deletes a user from the system.
      */
-    public boolean deleteUser(String username) {
+    public boolean deleteUser(String username) {    //FIXME Do a soft delete
         return userDAO.delete(username);
     }
 }
