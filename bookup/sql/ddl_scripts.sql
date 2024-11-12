@@ -107,17 +107,14 @@ CREATE TABLE IF NOT EXISTS Owns (
     FOREIGN KEY (cartID) REFERENCES Cart(cartID)
 );
 
--- Includes Relationship (Between Cart and InventoryItems)
+-- Updated Includes Relationship (Between Cart and InventoryItems)
 CREATE TABLE IF NOT EXISTS Includes (
     cartID INT,
     inventoryItemID INT,
-    username VARCHAR(255),
-    ISBN VARCHAR(13),
+    quantity INT NOT NULL,
     PRIMARY KEY (cartID, inventoryItemID),
-    FOREIGN KEY (cartID) REFERENCES Cart(cartID),
-    FOREIGN KEY (inventoryItemID) REFERENCES InventoryItems(inventoryItemID),
-    FOREIGN KEY (username) REFERENCES Users(username),
-    FOREIGN KEY (ISBN) REFERENCES Books(ISBN)
+    FOREIGN KEY (cartID) REFERENCES Cart(cartID) ON DELETE CASCADE,
+    FOREIGN KEY (inventoryItemID) REFERENCES InventoryItems(inventoryItemID) ON DELETE CASCADE
 );
 
 -- Contains Relationship (Between Orders and InventoryItems)
@@ -125,12 +122,10 @@ CREATE TABLE IF NOT EXISTS Contains (
     orderID INT,
     inventoryItemID INT,
     addressID INT,
-    ISBN VARCHAR(13),
     PRIMARY KEY (orderID, inventoryItemID),
     FOREIGN KEY (orderID) REFERENCES Orders(orderID),
     FOREIGN KEY (inventoryItemID) REFERENCES InventoryItems(inventoryItemID),
-    FOREIGN KEY (addressID) REFERENCES Addresses(addressID),
-    FOREIGN KEY (ISBN) REFERENCES Books(ISBN)
+    FOREIGN KEY (addressID) REFERENCES Addresses(addressID)
 );
 
 -- FavoriteBooks Relationship (Between Users and Books)
@@ -150,6 +145,7 @@ CREATE TABLE IF NOT EXISTS Written (
     FOREIGN KEY (authorID) REFERENCES Authors(authorID),
     FOREIGN KEY (ISBN) REFERENCES Books(ISBN)
 );
+
 
 -- Recommend Relationship (Between Users and Books)
 CREATE TABLE IF NOT EXISTS Recommend (
