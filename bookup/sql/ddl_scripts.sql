@@ -87,10 +87,11 @@ CREATE TABLE IF NOT EXISTS Orders (
     FOREIGN KEY (addressID) REFERENCES Addresses(addressID)
 );
 
--- Cart Table
+-- Updated Cart Table with totalPrice
 CREATE TABLE IF NOT EXISTS Cart (
     cartID INT AUTO_INCREMENT PRIMARY KEY,
     username VARCHAR(255),
+    cartTotal DECIMAL(10, 2) DEFAULT 0.0,
     FOREIGN KEY (username) REFERENCES Users(username)
 );
 
