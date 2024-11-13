@@ -19,7 +19,7 @@ private GenreDAO genreDAO;
 	}
 	
 	//TODO Add Admin check, only admin can use this method
-	public boolean addGenre(Genre genre) {
+	public Genre addGenre(Genre genre) {
 		
 		return genreDAO.add(genre);
 	}

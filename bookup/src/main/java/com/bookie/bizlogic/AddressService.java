@@ -20,7 +20,7 @@ private AddressDAO addressDAO;
 //	}
 	
 	
-	public boolean addAddress(Address address) {
+	public Address addAddress(Address address) {
 		
 		return addressDAO.add(address);
 	}

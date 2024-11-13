@@ -17,7 +17,7 @@ public class BookService {
      * @param book - The book to be added.
      * @return true if the book is added successfully, false otherwise.
      */
-    public boolean addBook(Book book) {
+    public Book addBook(Book book) {
         return bookDAO.add(book);
     }
 
@@ -75,4 +75,12 @@ public class BookService {
 	public List<Book> getBooksByAuthor(int authorId) {
 		return bookDAO.getBooksByAuthor(authorId);
 	}
+	
+	public List<Book> searchBookByAuthorKeyword(String keyword) {
+		return bookDAO.searchBookByAuthorKeyword(keyword);
+	}
+	
+//	public boolean addAuthorToBook(String ISBN, int authorID) {
+//		return bookDAO.addAuthorToBook(ISBN, authorID);
+//	}
 }
