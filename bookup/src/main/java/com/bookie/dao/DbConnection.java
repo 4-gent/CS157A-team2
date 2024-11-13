@@ -7,7 +7,7 @@ import java.sql.SQLException;
 public class DbConnection {
     private static DbConnection instance;
     private Connection connection;
-    private String url = "jdbc:mysql://localhost:3306/Bookie";  // Adjust based on your DB
+    private String url = "jdbc:mysql://localhost:3306/bookup";  // Adjust based on your DB
     private String username = "root";  // Adjust as needed
     private String password = "root";  // Adjust as needed
 
