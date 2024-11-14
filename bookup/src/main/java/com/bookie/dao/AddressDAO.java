@@ -4,6 +4,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
 
 import com.bookie.models.Address;
 
@@ -104,28 +106,33 @@ public class AddressDAO extends BaseDAO<Address, Integer>{
         }
 	}
 	
-//	public List<Address> getAllAddresses() {
-//        List<Address> addresses = new ArrayList<>();
-//        try {
-//            String query = "SELECT * FROM Addresses";
-//            PreparedStatement stmt = connection.prepareStatement(query);
-//            ResultSet rs = stmt.executeQuery();
-//
-//            while (rs.next()) {
-//                Address address = new Address(
-//                    rs.getInt("addressID"),
-//                    rs.getString("street"),
-//                    rs.getString("city"),
-//                    rs.getString("state"),
-//                    rs.getString("zip"),
-//                    rs.getString("country")
-//                );
-//                addresses.add(address);
-//            }
-//        } catch (SQLException e) {
-//            e.printStackTrace();
-//        }
-//        return addresses;
-//    }
+	public List<Address> getAllAddresses() {  //Only and admin can access this
+        List<Address> addresses = new ArrayList<>();
+        try {
+            String query = "SELECT * FROM Addresses";
+            PreparedStatement stmt = connection.prepareStatement(query);
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                Address address = new Address(
+                    rs.getInt("addressID"),
+                    rs.getString("street"),
+                    rs.getString("city"),
+                    rs.getString("state"),
+                    rs.getString("zip"),
+                    rs.getString("country")
+                );
+                addresses.add(address);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return addresses;
+    }
+	
+	public List<Address> getUserAddresses(String username) {
+
+		return null;  //FIXME we might have to create another relationship table between Users and Addresses
+	}
 	
 }

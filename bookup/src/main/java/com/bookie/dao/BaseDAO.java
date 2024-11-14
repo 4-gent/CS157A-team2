@@ -15,7 +15,7 @@ public abstract class BaseDAO<T, K> {  // T for entity type, K for primary key t
     }
 
     public abstract T getById(K id) throws Exception;  // Use the generic type K for primary key
-    public abstract T add(T t);
+    public abstract T add(T t) throws Exception;
     public abstract boolean update(T t);
     public abstract boolean delete(K id);
 }

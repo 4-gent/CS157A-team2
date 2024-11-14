@@ -7,9 +7,11 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.bookie.models.Address;
 import com.bookie.models.Book;
 import com.bookie.models.Cart;
 import com.bookie.models.InventoryItem;
+import com.bookie.models.Order;
 
 public class CartDAO extends BaseDAO<Cart, Integer> {
 
@@ -21,23 +23,61 @@ public class CartDAO extends BaseDAO<Cart, Integer> {
 	public Cart getCartByUsername(String username) throws SQLException {
 	    Cart cart = null;
 
-	    // Step 1: Retrieve the cart details for the given username
-	    String query = "SELECT cartID, cartTotal FROM Cart WHERE username = ?";
+	    // Step 1: Retrieve the cart details for the given username along with the cart items
+	    String query = "SELECT c.cartID, c.cartTotal, i.inventoryItemID, i.ISBN, i.price, inc.quantity, i.description, " +
+	                   "b.title, b.year, b.publisher, b.isFeatured " +
+	                   "FROM Cart c " +
+	                   "LEFT JOIN Includes inc ON c.cartID = inc.cartID " +
+	                   "LEFT JOIN InventoryItems i ON inc.inventoryItemID = i.inventoryItemID " +
+	                   "LEFT JOIN Books b ON i.ISBN = b.ISBN " +
+	                   "WHERE c.username = ?";
+
 	    PreparedStatement stmt = connection.prepareStatement(query);
 	    stmt.setString(1, username);
 	    ResultSet rs = stmt.executeQuery();
 
-	    int cartID;
-	    double cartTotal;
-	    if (rs.next()) {
-	        cartID = rs.getInt("cartID");
-	        cartTotal = rs.getDouble("cartTotal");
+	    int cartID = -1;
+	    double cartTotal = 0.0;
+	    List<InventoryItem> items = new ArrayList<>();
 
-	        // Step 2: Create a Cart object with the retrieved details
-	        cart = new Cart(cartID, username, cartTotal);
+	    // Step 2: Fetch the cart and associated items
+	    while (rs.next()) {
+	        // Initialize the Cart object if it's not already created
+	        if (cart == null) {
+	            cartID = rs.getInt("cartID");
+	            cartTotal = rs.getDouble("cartTotal");
+	            cart = new Cart(cartID, username, cartTotal);
+	        }
 
-	        // Step 3: Fetch the associated InventoryItems for the cart
-	        List<InventoryItem> items = getCartItems(cartID);
+	        // If the result set includes items, create InventoryItem objects
+	        if (rs.getInt("inventoryItemID") != 0) {
+	            // Create a Book object
+	            Book book = new Book(
+	                rs.getString("ISBN"),
+	                rs.getString("title"),
+	                rs.getInt("year"),
+	                rs.getString("publisher"),
+	                rs.getBoolean("isFeatured"),
+	                null,
+	                null
+	            );
+
+	            // Create an InventoryItem object
+	            InventoryItem item = new InventoryItem(
+	                rs.getInt("inventoryItemID"),
+	                book,
+	                rs.getDouble("price"),
+	                rs.getInt("quantity"),
+	                rs.getString("description")
+	            );
+
+	            // Add the item to the list
+	            items.add(item);
+	        }
+	    }
+
+	    // Step 3: Set the items in the cart object
+	    if (cart != null) {
 	        cart.setInventoryItems(items);
 	    }
 
@@ -439,10 +479,96 @@ public class CartDAO extends BaseDAO<Cart, Integer> {
 	 * This method will check out cart, and create the order and order Items
 	 * @return
 	 */
-//	public Order checkOut() { //FIXME IMEPLEMENT ME
-//		
-//	}
-	
+	public Order checkout(String username, int addressID) throws Exception {
+	    Order order = null;
+
+	    try {
+	        // Start transaction
+	        connection.setAutoCommit(false);
+
+	        // Step 1: Fetch the user's cart
+	        Cart cart = getCartByUsername(username);
+	        if (cart == null || cart.getInventoryItems().isEmpty()) {
+	            throw new Exception("Cart is empty or not found.");
+	        }
+
+	        // Step 2: Create a new order
+	        String insertOrderQuery = "INSERT INTO Orders (username, addressID, orderDate, orderStatus, total) VALUES (?, ?, CURDATE(), ?, ?)";
+	        PreparedStatement orderStmt = connection.prepareStatement(insertOrderQuery, Statement.RETURN_GENERATED_KEYS);
+	        orderStmt.setString(1, username);
+	        orderStmt.setInt(2, addressID);
+	        orderStmt.setString(3, "Pending");
+	        orderStmt.setDouble(4, cart.getTotal());
+
+	        int rowsAffected = orderStmt.executeUpdate();
+	        if (rowsAffected == 0) {
+	            throw new SQLException("Creating order failed, no rows affected.");
+	        }
+
+	        // Step 3: Get the generated orderID
+	        ResultSet generatedKeys = orderStmt.getGeneratedKeys();
+	        int orderID;
+	        if (generatedKeys.next()) {
+	            orderID = generatedKeys.getInt(1);
+	        } else {
+	            throw new SQLException("Creating order failed, no ID obtained.");
+	        }
+
+	        // Step 4: Fetch the order date from the Orders table
+	        String fetchOrderDateQuery = "SELECT orderDate FROM Orders WHERE orderID = ?";
+	        PreparedStatement fetchOrderDateStmt = connection.prepareStatement(fetchOrderDateQuery);
+	        fetchOrderDateStmt.setInt(1, orderID);
+	        ResultSet orderDateRs = fetchOrderDateStmt.executeQuery();
+
+	        java.sql.Date orderDate = null;
+	        if (orderDateRs.next()) {
+	            orderDate = orderDateRs.getDate("orderDate");
+	        }
+
+	        // Step 5: Insert all cart items into the Contains table
+	        String insertContainsQuery = "INSERT INTO Contains (orderID, inventoryItemID, addressID) VALUES (?, ?, ?)";
+	        PreparedStatement containsStmt = connection.prepareStatement(insertContainsQuery);
+
+	        for (InventoryItem item : cart.getInventoryItems()) {
+	            containsStmt.setInt(1, orderID);
+	            containsStmt.setInt(2, item.getInventoryItemID());
+	            containsStmt.setInt(3, addressID);
+	            containsStmt.addBatch();
+	        }
+	        containsStmt.executeBatch();
+
+	        // Step 6: Insert into OrderModifications table
+	        String insertModificationQuery = "INSERT INTO OrderModifications (username, orderID, addressID, modifiedDateTime) VALUES (?, ?, ?, CURRENT_TIMESTAMP)";
+	        PreparedStatement modificationStmt = connection.prepareStatement(insertModificationQuery);
+	        modificationStmt.setString(1, username);
+	        modificationStmt.setInt(2, orderID);
+	        modificationStmt.setInt(3, addressID);
+	        modificationStmt.executeUpdate();
+
+	        // Step 7: Clear the cart items
+	        String clearCartQuery = "DELETE FROM Includes WHERE cartID = ?";
+	        PreparedStatement clearCartStmt = connection.prepareStatement(clearCartQuery);
+	        clearCartStmt.setInt(1, cart.getCartID());
+	        clearCartStmt.executeUpdate();
+
+	        // Step 8: Fetch the address details
+	        AddressDAO addressDAO = new AddressDAO();
+	        Address shippingAddress = addressDAO.getById(addressID);
+
+	        // Step 9: Commit the transaction
+	        connection.commit();
+
+	        // Step 10: Create and return the Order object
+	        order = new Order(orderID, username, cart.getTotal(), shippingAddress, orderDate, "Pending", cart.getInventoryItems());
+	        return order;
+
+	    } catch (Exception e) {
+	        connection.rollback();
+	        throw e;
+	    } finally {
+	        connection.setAutoCommit(true);
+	    }
+	}
 	
 	private void updateCartTotal(int cartID) throws SQLException {
 	    // Constructing the query using string concatenation

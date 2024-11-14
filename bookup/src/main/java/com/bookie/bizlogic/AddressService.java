@@ -14,10 +14,10 @@ private AddressDAO addressDAO;
 		addressDAO = new AddressDAO();
 	}
 	
-//	public List<Address> getAddresses() {
-//
-//		return addressDAO.getAllAddresses();
-//	}
+	public List<Address> getUserAddresses(String username) {
+
+		return null;  //FIXME we might have to create another relationship table between Users and Addresses
+	}
 	
 	
 	public Address addAddress(Address address) {
