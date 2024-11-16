@@ -4,6 +4,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import com.bookie.models.Address;
@@ -97,13 +98,12 @@ public class OrderDAO extends BaseDAO<Order, Integer> {
     /**
      * Update the status of an existing order.
      */
-    @Override
-    public boolean update(Order order) {
+    public boolean updateStatus(int orderID, String status) {
         try {
             String query = "UPDATE Orders SET orderStatus = ? WHERE orderID = ?";
             PreparedStatement stmt = connection.prepareStatement(query);
-            stmt.setString(1, order.getOrderStatus());
-            stmt.setInt(2, order.getOrderID());
+            stmt.setString(1, status);
+            stmt.setInt(2, orderID);
             return stmt.executeUpdate() > 0;
         } catch (SQLException e) {
             e.printStackTrace();
@@ -131,4 +131,260 @@ public class OrderDAO extends BaseDAO<Order, Integer> {
 	public Order add(Order t) throws Exception {
 		throw new Exception("Order is created by checking out, look into CartService checkout()");
 	}
+	
+	/**
+	 * Get all orders for a specific user with orderID, orderDate, orderStatus, total, and shipping address.
+	 */
+	public List<Order> getOrdersByUsername(String username) throws SQLException {
+	    List<Order> orders = new ArrayList<>();
+	    
+	    String query = "SELECT o.orderID, o.orderDate, o.orderStatus, o.total, " +
+	                   "a.addressID, a.street, a.city, a.state, a.zip, a.country " +
+	                   "FROM Orders o " +
+	                   "JOIN Addresses a ON o.addressID = a.addressID " +
+	                   "WHERE o.username = ? " +
+	                   "ORDER BY o.orderDate DESC";
+
+	    PreparedStatement stmt = connection.prepareStatement(query);
+	    stmt.setString(1, username);
+	    ResultSet rs = stmt.executeQuery();
+
+	    while (rs.next()) {
+	        // Create an Address object for the shipping address
+	        Address shippingAddress = new Address(
+	            rs.getInt("addressID"),
+	            rs.getString("street"),
+	            rs.getString("city"),
+	            rs.getString("state"),
+	            rs.getString("zip"),
+	            rs.getString("country")
+	        );
+
+	        // Create a minimal Order object with the required fields
+	        Order order = new Order(
+	            rs.getInt("orderID"),
+	            username,
+	            rs.getDouble("total"),
+	            shippingAddress,
+	            rs.getDate("orderDate"),
+	            rs.getString("orderStatus"),
+	            null // items are not needed here
+	        );
+
+	        orders.add(order);
+	    }
+	    
+	    return orders;
+	}
+	
+	/**
+	 * Get all orders with a specific status, including orderID, username, orderDate, total, and shipping address.
+	 */
+	public List<Order> getAllOrdersByStatus(String status) throws SQLException {
+	    List<Order> orders = new ArrayList<>();
+	    
+	    String query = "SELECT o.orderID, o.username, o.orderDate, o.orderStatus, o.total, " +
+	                   "a.addressID, a.street, a.city, a.state, a.zip, a.country " +
+	                   "FROM Orders o " +
+	                   "JOIN Addresses a ON o.addressID = a.addressID " +
+	                   "WHERE o.orderStatus = ? " +
+	                   "ORDER BY o.orderDate DESC";
+
+	    PreparedStatement stmt = connection.prepareStatement(query);
+	    stmt.setString(1, status);
+	    ResultSet rs = stmt.executeQuery();
+
+	    while (rs.next()) {
+	        // Create an Address object for the shipping address
+	        Address shippingAddress = new Address(
+	            rs.getInt("addressID"),
+	            rs.getString("street"),
+	            rs.getString("city"),
+	            rs.getString("state"),
+	            rs.getString("zip"),
+	            rs.getString("country")
+	        );
+
+	        // Create an Order object with the retrieved fields
+	        Order order = new Order(
+	            rs.getInt("orderID"),
+	            rs.getString("username"),
+	            rs.getDouble("total"),
+	            shippingAddress,
+	            rs.getDate("orderDate"),
+	            rs.getString("orderStatus"),
+	            null // items are not needed here
+	        );
+
+	        orders.add(order);
+	    }
+	    
+	    return orders;
+	}
+	
+	/**
+	 * Get all orders within a specific date range.
+	 */
+	public List<Order> getAllOrders(Date fromDate, Date toDate) throws SQLException {
+	    List<Order> orders = new ArrayList<>();
+	    
+	    String query = "SELECT o.orderID, o.username, o.orderDate, o.orderStatus, o.total, " +
+	                   "a.addressID, a.street, a.city, a.state, a.zip, a.country " +
+	                   "FROM Orders o " +
+	                   "JOIN Addresses a ON o.addressID = a.addressID " +
+	                   "WHERE o.orderDate BETWEEN ? AND ? " +
+	                   "ORDER BY o.orderDate DESC";
+
+	    PreparedStatement stmt = connection.prepareStatement(query);
+	    stmt.setDate(1, new java.sql.Date(fromDate.getTime()));
+	    stmt.setDate(2, new java.sql.Date(toDate.getTime()));
+	    ResultSet rs = stmt.executeQuery();
+
+	    while (rs.next()) {
+	        // Create an Address object for the shipping address
+	        Address shippingAddress = new Address(
+	            rs.getInt("addressID"),
+	            rs.getString("street"),
+	            rs.getString("city"),
+	            rs.getString("state"),
+	            rs.getString("zip"),
+	            rs.getString("country")
+	        );
+
+	        // Create an Order object with the retrieved fields
+	        Order order = new Order(
+	            rs.getInt("orderID"),
+	            rs.getString("username"),
+	            rs.getDouble("total"),
+	            shippingAddress,
+	            rs.getDate("orderDate"),
+	            rs.getString("orderStatus"),
+	            null // items are not needed here
+	        );
+
+	        orders.add(order);
+	    }
+	    
+	    return orders;
+	}
+	
+	/**
+	 * Get all orders for a user by searching for a keyword in past orders.
+	 * The search is performed on book title, author name, and publisher name.
+	 */
+	public List<Order> getAllOrdersByKeyword(String username, String searchKeyWord) throws SQLException {
+	    List<Order> orders = new ArrayList<>();
+
+	    String query = 
+	        "SELECT o.orderID, o.orderDate, o.orderStatus, o.total, " +
+	        "a.addressID, a.street, a.city, a.state, a.zip, a.country " +
+	        "FROM Orders o " +
+	        "JOIN Contains c ON o.orderID = c.orderID " +
+	        "JOIN InventoryItems i ON c.inventoryItemID = i.inventoryItemID " +
+	        "JOIN Books b ON i.ISBN = b.ISBN " +
+	        "LEFT JOIN Written w ON b.ISBN = w.ISBN " +
+	        "LEFT JOIN Authors au ON w.authorID = au.authorID " +
+	        "JOIN Addresses a ON o.addressID = a.addressID " +
+	        "WHERE o.username = ? " +
+	        "AND (b.title LIKE ? OR b.publisher LIKE ? OR au.name LIKE ?) " +
+	        "ORDER BY o.orderDate DESC";
+
+	    PreparedStatement stmt = connection.prepareStatement(query);
+	    stmt.setString(1, username);
+	    String keywordPattern = "%" + searchKeyWord + "%";
+	    stmt.setString(2, keywordPattern);
+	    stmt.setString(3, keywordPattern);
+	    stmt.setString(4, keywordPattern);
+
+	    ResultSet rs = stmt.executeQuery();
+
+	    while (rs.next()) {
+	        // Create an Address object for the shipping address
+	        Address shippingAddress = new Address(
+	            rs.getInt("addressID"),
+	            rs.getString("street"),
+	            rs.getString("city"),
+	            rs.getString("state"),
+	            rs.getString("zip"),
+	            rs.getString("country")
+	        );
+
+	        // Create an Order object with the retrieved fields
+	        Order order = new Order(
+	            rs.getInt("orderID"),
+	            username,
+	            rs.getDouble("total"),
+	            shippingAddress,
+	            rs.getDate("orderDate"),
+	            rs.getString("orderStatus"),
+	            null // items are not needed here
+	        );
+
+	        orders.add(order);
+	    }
+
+	    return orders;
+	}
+	
+	/**
+	 * Get all orders by searching for a keyword in past orders.
+	 * The search is performed on book title, author name, and publisher name.
+	 */
+	public List<Order> getAllOrdersByKeyword(String searchKeyWord) throws SQLException {
+	    List<Order> orders = new ArrayList<>();
+
+	    String query = 
+	        "SELECT o.orderID, o.username, o.orderDate, o.orderStatus, o.total, " +
+	        "a.addressID, a.street, a.city, a.state, a.zip, a.country " +
+	        "FROM Orders o " +
+	        "JOIN Contains c ON o.orderID = c.orderID " +
+	        "JOIN InventoryItems i ON c.inventoryItemID = i.inventoryItemID " +
+	        "JOIN Books b ON i.ISBN = b.ISBN " +
+	        "LEFT JOIN Written w ON b.ISBN = w.ISBN " +
+	        "LEFT JOIN Authors au ON w.authorID = au.authorID " +
+	        "JOIN Addresses a ON o.addressID = a.addressID " +
+	        "WHERE (b.title LIKE ? OR b.publisher LIKE ? OR au.name LIKE ?) " +
+	        "ORDER BY o.orderDate DESC";
+
+	    PreparedStatement stmt = connection.prepareStatement(query);
+	    String keywordPattern = "%" + searchKeyWord + "%";
+	    stmt.setString(1, keywordPattern);
+	    stmt.setString(2, keywordPattern);
+	    stmt.setString(3, keywordPattern);
+
+	    ResultSet rs = stmt.executeQuery();
+
+	    while (rs.next()) {
+	        // Create an Address object for the shipping address
+	        Address shippingAddress = new Address(
+	            rs.getInt("addressID"),
+	            rs.getString("street"),
+	            rs.getString("city"),
+	            rs.getString("state"),
+	            rs.getString("zip"),
+	            rs.getString("country")
+	        );
+
+	        // Create an Order object with the retrieved fields
+	        Order order = new Order(
+	            rs.getInt("orderID"),
+	            rs.getString("username"),
+	            rs.getDouble("total"),
+	            shippingAddress,
+	            rs.getDate("orderDate"),
+	            rs.getString("orderStatus"),
+	            null // items are not needed here
+	        );
+
+	        orders.add(order);
+	    }
+
+	    return orders;
+	}
+
+	@Override
+	public boolean update(Order t) throws Exception {
+		throw new Exception("Not implmeneted");
+	}
+	
 }

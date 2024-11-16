@@ -14,32 +14,38 @@ public class OrderService {
 		return orderDAO.getById(orderID);
 	}
 	
-	public List<Order> getAllOrdersForUser(String username){ //TODO
-		return null; 
+	public List<Order> getAllOrdersForUser(String username) throws Exception{ 
+		return orderDAO.getOrdersByUsername(username); 
 	}
 	
-	public List<Order> getAllOrdersByStatus(String status){ //TODO this needs admin privilages
-		return null;
+	public List<Order> getAllOrdersByStatus(String status) throws Exception{ //TODO this needs admin privilages
+		return orderDAO.getAllOrdersByStatus(status);
 	}
 	
-	public List<Order> getAllOrders(Date fromDate, Date toDate){ //TODO this needs admin
-		return null;
+	public List<Order> getAllOrders(Date fromDate, Date toDate) throws Exception{ //TODO this needs admin
+		return orderDAO.getAllOrders(fromDate, toDate);
 	}
 	
-	public List<Order> getAllOrdersByKeyword(String username, String searchKeyWord){ //TODO this can be search in past orders by book name, author name, publisher
-		return null;
+	public List<Order> getAllOrdersByKeyword(String username, String searchKeyWord) throws Exception{ 
+		return orderDAO.getAllOrdersByKeyword(username, searchKeyWord);
 	}
 	
-	public boolean update(Order order) { //TODO
-		return false;
+	/***
+	 * Specific for an Admin
+	 * @param searchKeyWord
+	 * @return
+	 * @throws Exception
+	 */
+	public List<Order> getAllOrdersByKeyword(String searchKeyWord) throws Exception{
+		return orderDAO.getAllOrdersByKeyword(searchKeyWord);
 	}
 	
-	 public boolean delete(Integer orderID) { //TODO
-		 return false;
-	 }
+	public boolean updateOrderStatus(int orderID, String status) { 
+		return orderDAO.updateStatus(orderID, status);
+	}
 	 
-	 public boolean cancelOrder(int orderID) { //TODO
-		 return false;
+	 public boolean cancelOrder(int orderID) { 
+		 return orderDAO.delete(orderID);
 	 }
 	
 }
