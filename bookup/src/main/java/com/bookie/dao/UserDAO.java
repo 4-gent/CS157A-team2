@@ -4,6 +4,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import com.bookie.auth.UserContext;
 import com.bookie.models.User;
 
 public class UserDAO extends BaseDAO<User, String> {
@@ -108,4 +109,47 @@ public class UserDAO extends BaseDAO<User, String> {
             return false;
         }
     }
+	
+	/**
+	 * Check if a user is an admin.
+	 * 
+	 * @param username The username of the user to check.
+	 * @return true if the user is an admin, false otherwise.
+	 * @throws Exception if the user does not exist.
+	 */
+	public static boolean isUserAnAdmin() throws Exception {
+		String username = UserContext.getUserId(); //get the logged in users userId from ThreadLocal
+		
+		if(username == null) {
+			throw new Exception("User is not available in Context");
+		}
+		UserDAO userDAO = new UserDAO();
+	    // Fetch the user using the existing getById() method
+	    User user = userDAO.getById(username);
+	    
+	    // If the user is not found, throw a generic exception
+	    if (user == null) {
+	        throw new Exception("User does not exist");
+	    }
+
+	    // Return true if the user is an admin, false otherwise
+	    return user.isAdmin();
+	}
+	
+	/***
+	 * compare the userName provided with the loggedIn users uername and return true or false
+	 * @param userName
+	 * @return
+	 * @throws Exception
+	 */
+	public static boolean isSameUser(String userName) throws Exception {
+		if(userName == null) {
+			throw new Exception("Username not provided");
+		}
+		String username = UserContext.getUserId(); //get the logged in users userId from ThreadLocal
+		if(username == null) {
+			throw new Exception("No user is logged In");
+		}
+		return userName.equals(username);
+	}
 }

@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.List;
 
 import com.bookie.dao.OrderDAO;
+import com.bookie.dao.UserDAO;
 import com.bookie.models.Order;
 
 public class OrderService {
@@ -14,12 +15,27 @@ public class OrderService {
 		return orderDAO.getById(orderID);
 	}
 	
+
 	public List<Order> getAllOrdersForUser(String username) throws Exception{ 
-		return orderDAO.getOrdersByUsername(username); 
+		if(UserDAO.isUserAnAdmin() || UserDAO.isSameUser(username)) {
+			return orderDAO.getOrdersByUsername(username); 
+		}
+		throw new Exception("Not Authorized");
 	}
 	
-	public List<Order> getAllOrdersByStatus(String status) throws Exception{ //TODO this needs admin privilages
-		return orderDAO.getAllOrdersByStatus(status);
+	/***
+	 * Needs admin credentials
+	 * @param status
+	 * @return
+	 * @throws Exception
+	 */
+	public List<Order> getAllOrdersByStatus(String status) throws Exception{ 
+		if(UserDAO.isUserAnAdmin()) {
+			return orderDAO.getAllOrdersByStatus(status);
+		}
+		else {
+			throw new Exception("Admin Privillages Needed");
+		}
 	}
 	
 	public List<Order> getAllOrders(Date fromDate, Date toDate) throws Exception{ //TODO this needs admin
