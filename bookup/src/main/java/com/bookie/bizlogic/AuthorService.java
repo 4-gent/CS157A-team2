@@ -2,6 +2,7 @@ package com.bookie.bizlogic;
 
 import java.util.List;
 
+import com.bookie.auth.IsAdmin;
 import com.bookie.dao.AuthorDAO;
 import com.bookie.models.Author;
 
@@ -18,13 +19,13 @@ public class AuthorService {
 		return authorDAO.getAllAuthors();
 	}
 	
-	//TODO Add Admin check, only admin can use this method
+	@IsAdmin
 	public Author addAuthor(Author author) {
 		
 		return authorDAO.add(author);
 	}
 	
-	//TODO Add Admin check, only admin can use this method
+	@IsAdmin
 	public boolean changeAuthorName(int authId, String newName) {
 		Author a = authorDAO.getById(authId);
 		a.setName(newName);

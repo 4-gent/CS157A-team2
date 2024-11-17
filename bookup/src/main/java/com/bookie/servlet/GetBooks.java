@@ -1,4 +1,5 @@
-package com.bookie.bizlogic;
+package com.bookie.servlet;
+import com.bookie.bizlogic.BookService;
 import com.bookie.models.Book;
 import java.io.IOException;
 import javax.servlet.ServletException;

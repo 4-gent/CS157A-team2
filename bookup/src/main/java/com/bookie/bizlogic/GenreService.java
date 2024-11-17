@@ -2,6 +2,7 @@ package com.bookie.bizlogic;
 
 import java.util.List;
 
+import com.bookie.auth.IsAdmin;
 import com.bookie.dao.GenreDAO;
 import com.bookie.models.Genre;
 
@@ -18,13 +19,13 @@ private GenreDAO genreDAO;
 		return genreDAO.getAllGenres();
 	}
 	
-	//TODO Add Admin check, only admin can use this method
+	@IsAdmin
 	public Genre addGenre(Genre genre) {
 		
 		return genreDAO.add(genre);
 	}
 	
-	//TODO Add Admin check, only admin can use this method
+	@IsAdmin
 	public boolean changeGenreName(int genreID, String newName) {
 		Genre a = genreDAO.getById(genreID);
 		a.setName(newName);

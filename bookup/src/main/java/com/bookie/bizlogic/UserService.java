@@ -1,5 +1,6 @@
 package com.bookie.bizlogic;
 
+import com.bookie.auth.IsAdmin;
 import com.bookie.dao.UserDAO;
 import com.bookie.models.User;
 
@@ -74,6 +75,7 @@ public class UserService {
     /**
      * Deletes a user from the system.
      */
+    @IsAdmin
     public boolean deleteUser(String username) {    //FIXME Do a soft delete
         return userDAO.delete(username);
     }

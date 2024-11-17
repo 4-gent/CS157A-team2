@@ -2,6 +2,7 @@ package com.bookie.bizlogic;
 
 import java.util.List;
 
+import com.bookie.auth.IsAdmin;
 import com.bookie.dao.InventoryDAO;
 import com.bookie.models.InventoryItem;
 
@@ -9,6 +10,7 @@ public class InventoryService {
 
 	private InventoryDAO inventoryDAO = new InventoryDAO();
 	
+	@IsAdmin
 	public InventoryItem addInventoryItem(InventoryItem item) {
 		return inventoryDAO.add(item);
 	}
@@ -17,10 +19,12 @@ public class InventoryService {
 		return inventoryDAO.getById(id);
 	}
 	
+	@IsAdmin
 	public boolean updateInventoryItem(InventoryItem t) {
 		return inventoryDAO.update(t);
 	}
 	
+	@IsAdmin
 	public boolean removeInventoryItem(Integer id) {
 		return inventoryDAO.delete(id);
 	}

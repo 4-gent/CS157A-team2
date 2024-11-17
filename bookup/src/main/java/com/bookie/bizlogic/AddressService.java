@@ -2,9 +2,9 @@ package com.bookie.bizlogic;
 
 import java.util.List;
 
+import com.bookie.auth.SameUser;
 import com.bookie.dao.AddressDAO;
 import com.bookie.models.Address;
-import com.bookie.models.Author;
 
 public class AddressService {
 

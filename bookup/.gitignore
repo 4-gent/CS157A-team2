@@ -1,1 +1,83 @@
-/build/
+# Maven target directory
+/target/
+
+# Maven and Eclipse specific files
+.classpath
+.project
+.settings/
+
+# IntelliJ IDEA specific files
+.idea/
+*.iml
+*.iws
+out/
+
+# NetBeans specific files
+nbproject/private/
+build/
+nbbuild/
+dist/
+nbdist/
+.nb-gradle/
+
+# VS Code specific files
+.vscode/
+
+# macOS system files
+.DS_Store
+
+# Logs
+*.log
+logs/
+*.out
+*.err
+
+# Temporary files
+*.tmp
+*.temp
+*.swp
+*.swo
+*.bak
+
+# Build artifacts
+*.war
+*.jar
+*.ear
+
+# Generated files
+target/
+dependency-reduced-pom.xml
+release.properties
+pom.xml.tag
+pom.xml.releaseBackup
+pom.xml.versionsBackup
+pom.xml.next
+dependency-reduced-pom.xml
+
+# Class files
+*.class
+
+# Thumbs.db (Windows)
+Thumbs.db
+
+# Tomcat specific files
+*.pid
+logs/
+work/
+temp/
+
+# Local environment variable files
+.env
+.env.local
+.env.*.local
+.envrc
+
+# Node specific (if using frontend assets)
+node_modules/
+npm-debug.log
+yarn-error.log
+yarn-debug.log
+
+# JetBrains IDE files (if using WebStorm, IntelliJ, etc.)
+.idea/
+*.iml

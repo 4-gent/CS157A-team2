@@ -2,6 +2,7 @@ package com.bookie.bizlogic;
 
 import java.util.List;
 
+import com.bookie.auth.IsAdmin;
 import com.bookie.dao.BookDAO;
 import com.bookie.models.Book;
 
@@ -17,6 +18,7 @@ public class BookService {
      * @param book - The book to be added.
      * @return true if the book is added successfully, false otherwise.
      */
+    @IsAdmin
     public Book addBook(Book book) {
         return bookDAO.add(book);
     }
@@ -26,6 +28,7 @@ public class BookService {
      * @param book - The book with updated details.
      * @return true if the update is successful, false otherwise.
      */
+    @IsAdmin
     public boolean updateBook(Book book) {
         return bookDAO.update(book);
     }
@@ -35,6 +38,7 @@ public class BookService {
      * @param ISBN - The ISBN of the book to be deleted.
      * @return true if the deletion is successful, false otherwise.
      */
+    @IsAdmin
     public boolean deleteBook(String ISBN) {
         return bookDAO.delete(ISBN);
     }

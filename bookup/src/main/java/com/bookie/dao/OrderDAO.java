@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import com.bookie.auth.UserContext;
 import com.bookie.models.Address;
 import com.bookie.models.Book;
 import com.bookie.models.InventoryItem;
@@ -17,44 +18,65 @@ public class OrderDAO extends BaseDAO<Order, Integer> {
     /**
      * Retrieve an Order by its ID, including its items and shipping address.
      */
-    @Override
-    public Order getById(Integer orderID) throws Exception {
-        Order order = null;
-        String query = "SELECT o.orderID, o.username, o.total, o.orderDate, o.orderStatus, " +
-                       "a.addressID, a.street, a.city, a.state, a.zip, a.country " +
-                       "FROM Orders o " +
-                       "JOIN Addresses a ON o.addressID = a.addressID " +
-                       "WHERE o.orderID = ?";
+	@Override
+	public Order getById(Integer orderID) throws Exception {
+	    // Step 1: Get the logged-in user's username from UserContext
+	    String currentUsername = UserContext.getUserId();
+	    if (currentUsername == null) {
+	        throw new Exception("User is not logged in.");
+	    }
 
-        PreparedStatement stmt = connection.prepareStatement(query);
-        stmt.setInt(1, orderID);
-        ResultSet rs = stmt.executeQuery();
+	    // Step 2: Prepare the query to fetch the order details
+	    String query = "SELECT o.orderID, o.username, o.total, o.orderDate, o.orderStatus, " +
+	                   "a.addressID, a.street, a.city, a.state, a.zip, a.country " +
+	                   "FROM Orders o " +
+	                   "JOIN Addresses a ON o.addressID = a.addressID " +
+	                   "WHERE o.orderID = ?";
 
-        if (rs.next()) {
-            // Fetch the shipping address
-            Address shippingAddress = new Address(
-                rs.getInt("addressID"),
-                rs.getString("street"),
-                rs.getString("city"),
-                rs.getString("state"),
-                rs.getString("zip"),
-                rs.getString("country")
-            );
+	    PreparedStatement stmt = connection.prepareStatement(query);
+	    stmt.setInt(1, orderID);
+	    ResultSet rs = stmt.executeQuery();
 
-            // Fetch the order details
-            order = new Order(
-                rs.getInt("orderID"),
-                rs.getString("username"),
-                rs.getDouble("total"),
-                shippingAddress,
-                rs.getDate("orderDate"),
-                rs.getString("orderStatus"),
-                getOrderItems(orderID)
-            );
-        }
-        return order;
-    }
+	    Order order = null;
 
+	    if (rs.next()) {
+	        // Step 3: Fetch the owner of the order
+	        String orderOwner = rs.getString("username");
+
+	        // Step 4: Authorization check
+	        // Check if the current user is either the owner of the order or an admin
+	        if (!currentUsername.equals(orderOwner) && !UserDAO.isUserAnAdmin()) {
+	            throw new Exception("Access denied: You do not have permission to access this order.");
+	        }
+
+	        // Step 5: Create the Address object
+	        Address shippingAddress = new Address(
+	            rs.getInt("addressID"),
+	            rs.getString("street"),
+	            rs.getString("city"),
+	            rs.getString("state"),
+	            rs.getString("zip"),
+	            rs.getString("country")
+	        );
+
+	        // Step 6: Create and return the Order object
+	        order = new Order(
+	            rs.getInt("orderID"),
+	            orderOwner,
+	            rs.getDouble("total"),
+	            shippingAddress,
+	            rs.getDate("orderDate"),
+	            rs.getString("orderStatus"),
+	            getOrderItems(orderID) // Fetch the items associated with the order
+	        );
+	    } else {
+	        throw new Exception("Order not found for ID: " + orderID);
+	    }
+
+	    return order;
+	}
+	
+	
     /**
      * Retrieve all items associated with a specific order.
      */
@@ -115,16 +137,49 @@ public class OrderDAO extends BaseDAO<Order, Integer> {
      * Soft delete an order by setting its status to 'Cancelled'.
      */
     @Override
-    public boolean delete(Integer orderID) {
+    public boolean delete(Integer orderID) throws Exception {
         try {
-            String query = "UPDATE Orders SET orderStatus = 'Cancelled' WHERE orderID = ?";
+            // Step 1: Get the logged-in user's username from UserContext
+            String currentUsername = UserContext.getUserId();
+            if (currentUsername == null) {
+                throw new Exception("User is not logged in.");
+            }
+
+            // Step 2: Fetch the username associated with the given orderID
+            String query = "SELECT username FROM Orders WHERE orderID = ?";
             PreparedStatement stmt = connection.prepareStatement(query);
             stmt.setInt(1, orderID);
-            return stmt.executeUpdate() > 0;
+            ResultSet rs = stmt.executeQuery();
+
+            String orderUsername = null;
+            if (rs.next()) {
+                orderUsername = rs.getString("username");
+            } else {
+                throw new Exception("Order not found for ID: " + orderID);
+            }
+
+            // Step 3: Authorization check
+            // If the user is not the owner and not an admin, throw an exception
+            if (!currentUsername.equals(orderUsername) && !UserDAO.isUserAnAdmin()) {
+                throw new Exception("Access denied: You do not have permission to cancel this order.");
+            }
+
+            // Step 4: If validation passes, cancel the order
+            query = "UPDATE Orders SET orderStatus = 'Cancelled' WHERE orderID = ?";
+            stmt = connection.prepareStatement(query);
+            stmt.setInt(1, orderID);
+            int rowsAffected = stmt.executeUpdate();
+
+            // Check if the update was successful
+            if (rowsAffected > 0) {
+                return true;
+            } else {
+                throw new Exception("Failed to cancel the order. Please try again.");
+            }
         } catch (SQLException e) {
             e.printStackTrace();
+            throw new Exception("Database error occurred while cancelling the order.");
         }
-        return false;
     }
 
 	@Override
