@@ -1,5 +1,7 @@
 package com.bookie.bizlogic;
 
+import java.sql.SQLException;
+
 import com.bookie.auth.IsAdmin;
 import com.bookie.dao.UserDAO;
 import com.bookie.models.User;
@@ -13,8 +15,9 @@ public class UserService {
 
     /**
      * Registers a new user in the system.
+     * @throws SQLException 
      */
-    public User register(String username, String password, String email, String phone, boolean isAdmin, int favoriteAuthorID, int favoriteGenreID) {
+    public User register(String username, String password, String email, String phone, boolean isAdmin, int favoriteAuthorID, int favoriteGenreID) throws SQLException {
         User existingUser = userDAO.getById(username);
         if (existingUser != null) {
             System.out.println("User already exists!");
@@ -51,8 +54,9 @@ public class UserService {
      * @param oldPassword - The old password of the user
      * @param newPassword - The new password to be updated
      * @return true if the password is successfully updated, false otherwise
+     * @throws SQLException 
      */
-    public boolean resetPassword(String username, String oldPassword, String newPassword) {
+    public boolean resetPassword(String username, String oldPassword, String newPassword) throws SQLException {
         // Retrieve the user by username
         User user = userDAO.getById(username);
         

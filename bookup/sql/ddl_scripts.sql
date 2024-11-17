@@ -19,17 +19,17 @@ CREATE TABLE IF NOT EXISTS Genres (
     name VARCHAR(255) NOT NULL
 );
 
--- Users Table
+-- Updated Users Table
 CREATE TABLE IF NOT EXISTS Users (
     username VARCHAR(255) PRIMARY KEY,
     password VARCHAR(255) NOT NULL,
     email VARCHAR(255),
     phone VARCHAR(15),
     isAdmin BOOLEAN NOT NULL,
-    favoriteAuthorID INT,
-    favoriteGenreID INT,
-    FOREIGN KEY (favoriteAuthorID) REFERENCES Authors(authorID),
-    FOREIGN KEY (favoriteGenreID) REFERENCES Genres(genreID)
+    favoriteAuthorID INT DEFAULT NULL,
+    favoriteGenreID INT DEFAULT NULL,
+    FOREIGN KEY (favoriteAuthorID) REFERENCES Authors(authorID) ON DELETE SET NULL,
+    FOREIGN KEY (favoriteGenreID) REFERENCES Genres(genreID) ON DELETE SET NULL
 );
 
 -- Books Table

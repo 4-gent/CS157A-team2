@@ -1,6 +1,8 @@
 package com.bookie.servlet;
 
-import java.io.IOException; 
+import java.io.IOException;
+import java.sql.SQLException;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -31,7 +33,12 @@ public class Register extends HttpServlet {
 		
 		UserService user = new UserService();
 		
-		user.register(username, password, email, phone, admin, favoriteAuthor, favoriteGenre);
+		try {
+			user.register(username, password, email, phone, admin, favoriteAuthor, favoriteGenre);
+		} catch (SQLException e) {
+			// FIXME SHOW to the User that new user creation failed
+			e.printStackTrace();
+		}
 		
 		response.sendRedirect("/bookup/pages/login.jsp");
 	}

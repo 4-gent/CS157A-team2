@@ -6,6 +6,9 @@
 .project
 .settings/
 
+# Ignore database configuration file
+src/main/resources/db.properties
+
 # IntelliJ IDEA specific files
 .idea/
 *.iml
