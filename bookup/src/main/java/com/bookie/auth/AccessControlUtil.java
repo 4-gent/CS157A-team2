@@ -1,10 +1,10 @@
 package com.bookie.auth;
 
-import com.bookie.dao.UserDAO;
-import com.bookie.auth.UserContext;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
+
+import com.bookie.dao.UserDAO;
 
 public class AccessControlUtil {
 

@@ -1,22 +1,19 @@
 package com.bookie.bizlogic;
 
-import java.sql.SQLException;
-
 import com.bookie.auth.IsAdmin;
+import com.bookie.auth.SameUser;
 import com.bookie.dao.UserDAO;
 import com.bookie.models.User;
+import java.sql.SQLException;
 
-public class UserService {
+public class UserService implements UserServiceInterface {
     private UserDAO userDAO;
 
     public UserService() {
         this.userDAO = new UserDAO();
     }
 
-    /**
-     * Registers a new user in the system.
-     * @throws SQLException 
-     */
+    @Override
     public User register(String username, String password, String email, String phone, boolean isAdmin, int favoriteAuthorID, int favoriteGenreID) throws SQLException {
         User existingUser = userDAO.getById(username);
         if (existingUser != null) {
@@ -28,59 +25,39 @@ public class UserService {
         return userDAO.add(newUser);
     }
 
-    /**
-     * Logs in a user by validating the username and password.
-     */
+    @Override
     public boolean login(String username, String password) {
         User user = userDAO.getById(username);
-        
-        if (user == null) {
-            System.out.println("User not found!");
-            return false;
-        }
-
-        if (user.getPassword().equals(password)) {
-            System.out.println("Login successful!");
-            return true;
-        } else {
-            System.out.println("Invalid password!");
-            return false;
-        }
+        return user != null && user.getPassword().equals(password);
     }
 
-    /**
-     * Resets the user's password by validating the old password and updating it to a new password.
-     * @param username - The username of the user
-     * @param oldPassword - The old password of the user
-     * @param newPassword - The new password to be updated
-     * @return true if the password is successfully updated, false otherwise
-     * @throws SQLException 
-     */
+    @Override
     public boolean resetPassword(String username, String oldPassword, String newPassword) throws SQLException {
-        // Retrieve the user by username
         User user = userDAO.getById(username);
-        
-        if (user == null) {
-            System.out.println("User not found!");
-            return false;
-        }
-
-        // Check if the old password matches the stored password
-        if (!user.getPassword().equals(oldPassword)) {
-            System.out.println("Old password does not match!");
-            return false;
-        }
-
-        // Update the password to the new password
+        if (user == null || !user.getPassword().equals(oldPassword)) return false;
         user.setPassword(newPassword);
         return userDAO.update(user);
     }
 
-    /**
-     * Deletes a user from the system.
-     */
+    @Override
+    @SameUser("username")
+    public boolean updateFavoriteAuthor(String username, int favoriteAuthorID) throws SQLException {
+        User user = userDAO.getById(username);
+        user.setFavoriteAuthorID(favoriteAuthorID);
+        return userDAO.update(user);
+    }
+
+    @Override
+    @SameUser("username")
+    public boolean updateFavoriteGenre(String username, int favoriteGenreID) throws SQLException {
+        User user = userDAO.getById(username);
+        user.setFavoriteGenreID(favoriteGenreID);
+        return userDAO.update(user);
+    }
+
+    @Override
     @IsAdmin
-    public boolean deleteUser(String username) {    //FIXME Do a soft delete
+    public boolean deleteUser(String username) throws SQLException {
         return userDAO.delete(username);
     }
 }

@@ -13,8 +13,14 @@ public abstract class BaseDAO<T, K> {  // T for entity type, K for primary key t
             e.printStackTrace();
         }
     }
+    
 
-    public abstract T getById(K id) throws Exception;  // Use the generic type K for primary key
+    public Connection getConnection() {
+		return connection;
+	}
+
+
+	public abstract T getById(K id) throws Exception;  // Use the generic type K for primary key
     public abstract T add(T t) throws Exception;
     public abstract boolean update(T t) throws Exception;
     public abstract boolean delete(K id) throws Exception;
