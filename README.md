@@ -8,51 +8,188 @@ This document outlines the structure of the database application and explains ho
 
 Below is the directory structure for the project where the Tomcat 9.0 server will run directly from Eclipse IDE
 
-```bash
-CS157A-team2
-├── Java Resources
-│   └── src/main/java
-│       └── defaultpackage
-│           ├── Connector.java    # Class to handle database connections
-│           ├── Login.java        # Class to handle user login queries
-│           ├── Register.java     # Class to handle new user registration
-│           └── User.java         # Class to create User objects
-│
-├── src
-│   ├── main
-│   │   ├── java
-│   │   │   ├── com.bookie.bizlogic  # all the high level functions like registerUser(), login() etc
-│   │   │   ├── com.bookie.dao       # low level data access and db interaction classes
-│   │   │   ├── com.bookie.models    # java classes that are equivalent for each Entities in db, User, Book etc.
-│   ├── test
-│   │   ├── java
-│   │   │   ├── com.bookie.bizlogic
-│   │   │   ├── com.bookie.dao
-│   │   │   ├── com.bookie.models
+```
+bookup/                    <-- Root directory of your Maven project
+├── pom.xml                <-- Maven configuration file
+├── src/
+│   ├── main/
+│   │   ├── java/
+│   │   │   └── com/
+│   │   │       └── bookie/
+│   │   │           ├── auth/               <-- Package for authentication and authorization
+│   │   │           │   ├── AccessControlUtil.java
+│   │   │           │   ├── IsAdmin.java
+│   │   │           │   ├── IsAdminOrSameUser.java
+│   │   │           │   ├── SameUser.java
+│   │   │           │   └── UserContext.java
+│   │   │           ├── bizlogic/           <-- Package for business logic (empty in the screenshot)
+│   │   │           ├── dao/                <-- Package for Data Access Objects (DAOs)
+│   │   │           ├── models/             <-- Package for models or data entities
+│   │   │           └── servlet/            <-- Package for Servlets
+│   │   │               ├── GetBooks.java
+│   │   │               ├── Login.java
+│   │   │               ├── Register.java
+│   │   │               └── Search.java
+│   │   ├── resources/                      <-- Resource files (e.g., configuration files)
+│   │   └── webapp/
+│   │       ├── META-INF/                   <-- Metadata files
+│   │       ├── WEB-INF/
+│   │       │   └── web.xml                <-- Deployment descriptor
+│   │       ├── pages/                     <-- JSP pages for the web application
+│   │       │   ├── books.jsp
+│   │       │   ├── error.jsp
+│   │       │   ├── login.jsp
+│   │       │   ├── register.jsp
+│   │       │   ├── search.jsp
+│   │       │   └── success.jsp
+│   │       ├── index.jsp                  <-- Landing page for the application
+│   │       ├── styles/                    <-- CSS files
+│   │       └── web-resources/             <-- Additional web resources (if any)
+│   ├── test/
+│   │   ├── java/                          <-- Unit tests for your application
+│   │   └── resources/                     <-- Test resources (e.g., test configuration)
+├── target/                                <-- Compiled classes and build artifacts (generated)
+├── build/                                 <-- Build-related files (e.g., compiled WAR files)
+└── sql/                                   <-- SQL scripts (if any)
+```
+# Project Structure
 
-├── src/main/webapp               # Web client files (.jsp)
-│   ├── styles                    # CSS and other styling files/images
-│   ├── pages                     # Web pages
-│   └── index.jsp                 # Landing page for the application
+## pom.xml
+The Maven configuration file where dependencies, plugins, and project details are defined.
+
+## src/main/java
+This is where your Java source code resides.
+
+- **auth/**: Contains classes related to authentication and authorization (e.g., `UserContext`, annotations for access control).
+- **bizlogic/**: *(Currently empty)* A placeholder for business logic-related classes.
+- **dao/**: Contains Data Access Objects that interact with the database.
+- **models/**: Contains classes representing data entities.
+- **servlet/**: Contains servlets that handle HTTP requests.
+
+## src/main/resources
+This directory is typically used for configuration files (like `.properties` files).
+
+## src/main/webapp
+- **META-INF/**: Contains metadata files (usually related to the application server).
+- **WEB-INF/**: Contains the `web.xml` deployment descriptor and other server-side configurations.
+- **pages/**: Contains JSP files used to render views in your web application.
+- **styles/**: Contains CSS files for styling the web pages.
+- **index.jsp**: The main entry point for your application.
+
+## src/test/java
+Contains unit tests for your application.
+
+## target/
+The directory where compiled classes, JAR/WAR files, and other build artifacts are generated.
+
+## build/ and sql/
+- **build/**: Directory for build-related files (optional).
+- **sql/**: Directory for SQL scripts used to set up the database (optional).
+
+# How to Use the Project Structure
+
+## Building the Project
+To compile and package your project, run the following command in the terminal:
+
+```bash
+mvn clean package
 ```
 
-### Important Notes
+This command will:
+- Clean any previous build artifacts.
+- Compile the Java source code.
+- Generate the `.war` file in the `target/` directory.
 
-[ Depricated - See Notes Updates Section below]
+---
 
-Java classes should be stored in src/main/java to be reused in other methods, Connector acts as the JDBC connection to the backend database.
+## Running the Project on Tomcat
 
-Actual client-side files will be in src/main/webapp, put .jsp files into pages and css and images will be stored in styles
+### Option 1: Manually Deploy the WAR File
+1. Locate the generated `.war` file in the `target/` directory (e.g., `bookup.war`).
+2. Copy the `.war` file to the `webapps/` folder of your Tomcat installation.
+3. Start the Tomcat server:
+   ```bash
+   /opt/homebrew/opt/tomcat/bin/catalina.sh start
+   ```
+4. Access the application in your browser at:
+   ```
+   http://localhost:8080/bookup
+   ```
 
-The db name is bookup which can be changed if need be and the first table so far is user to store all user information in plaintext
+---
 
-### Updates
+### Option 2: Use the Tomcat Maven Plugin
+If you’ve configured the Tomcat Maven plugin in your `pom.xml`, you can deploy directly from the terminal.
 
-The package com.bookie.bizlogic  has all the high level business logic classes like UserService ( all user level interactions and methods - functions like registerUser(), login() etc), BookService with all book level interactions (Like browseBooks() etc)
+To deploy the application:
+```bash
+mvn tomcat9:deploy
+```
 
-The package com.bookie.dao   has all the low level data access and db interaction classes including the dbConnection
+To stop the deployed application:
+```bash
+mvn tomcat9:undeploy
+```
 
-The package com.bookie.models  has all the java classes that are equivalent for each Entities in db, User, Book etc. At the higher levels of abstraction these classes are used at the business logic layer and UI layer.
+---
 
-Please the tests folder on how to use these high level methods
+## Accessing the Application
+Once deployed, access your application in a web browser at:
+```
+http://localhost:8080/bookup
+```
 
+---
+
+## Running Tests
+To run your unit tests, use the following command:
+
+```bash
+mvn test
+```
+
+This will:
+- Compile the test classes located in `src/test/java`.
+- Execute the tests using **JUnit** and **Mockito**.
+- Generate a test report in the `target/surefire-reports` directory.
+
+---
+
+## Common Issues and Solutions
+
+### 1. Dependencies Not Found
+If you encounter issues with missing dependencies in Eclipse, try the following:
+
+```bash
+mvn clean install -U
+```
+
+Then refresh your project in Eclipse:
+- Right-click on your project > **Maven** > **Update Project**.
+
+---
+
+### 2. Cleaning the Project
+To force a clean build:
+
+```bash
+mvn clean
+mvn package
+```
+
+---
+
+## Updating the Database
+If you have SQL scripts in the `sql/` directory, you can run them manually in your MySQL database to set up the schema:
+
+```bash
+mysql -u root -p < sql/bookup_user.sql
+```
+
+---
+
+## Summary
+- **Compile the project**: `mvn clean package`
+- **Deploy to Tomcat**: Copy the `.war` file or use `mvn tomcat9:deploy`
+- **Run tests**: `mvn test`
+- **Clean project**: `mvn clean install -U`
