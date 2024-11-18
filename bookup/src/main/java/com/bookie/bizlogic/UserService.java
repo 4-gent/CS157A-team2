@@ -1,10 +1,11 @@
 package com.bookie.bizlogic;
 
+import java.sql.SQLException;
+
 import com.bookie.auth.IsAdmin;
 import com.bookie.auth.SameUser;
 import com.bookie.dao.UserDAO;
 import com.bookie.models.User;
-import java.sql.SQLException;
 
 public class UserService implements UserServiceInterface {
     private UserDAO userDAO;
@@ -15,12 +16,6 @@ public class UserService implements UserServiceInterface {
 
     @Override
     public User register(String username, String password, String email, String phone, boolean isAdmin, int favoriteAuthorID, int favoriteGenreID) throws SQLException {
-        User existingUser = userDAO.getById(username);
-        if (existingUser != null) {
-            System.out.println("User already exists!");
-            return null;
-        }
-
         User newUser = new User(username, password, email, phone, isAdmin, favoriteAuthorID, favoriteGenreID);
         return userDAO.add(newUser);
     }

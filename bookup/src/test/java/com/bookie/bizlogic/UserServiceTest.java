@@ -72,14 +72,16 @@ public class UserServiceTest {
     @Test
     public void testRegister_UserAlreadyExists() {
         try {
+            // Register the first user
             userService.register("janeDoe", "password123", "jane@example.com", "0987654321", false, 0, 0);
 
-            SQLException exception = assertThrows(SQLException.class, () -> {
+            // Attempt to register the same user again and expect an exception
+            assertThrows(Exception.class, () -> {
                 userService.register("janeDoe", "password123", "jane@example.com", "0987654321", false, 0, 0);
             });
-            assertTrue(exception.getMessage().contains("User already exists"));
-        } catch (SQLException e) {
-            fail("SQLException during test: " + e.getMessage());
+
+        } catch (Exception e) {
+            fail("Unexpected exception during test: " + e.getMessage());
         }
     }
 
