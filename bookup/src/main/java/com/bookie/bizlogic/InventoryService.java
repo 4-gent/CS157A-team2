@@ -6,7 +6,7 @@ import com.bookie.auth.IsAdmin;
 import com.bookie.dao.InventoryDAO;
 import com.bookie.models.InventoryItem;
 
-public class InventoryService {
+public class InventoryService implements InventoryServiceInterface {
 
 	private InventoryDAO inventoryDAO = new InventoryDAO();
 	

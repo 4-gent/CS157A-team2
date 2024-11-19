@@ -1,90 +1,57 @@
 package com.bookie.bizlogic;
-
 import java.util.List;
 
 import com.bookie.auth.IsAdmin;
 import com.bookie.dao.BookDAO;
 import com.bookie.models.Book;
 
-public class BookService {
+public class BookService implements BookServiceInterface {
     private BookDAO bookDAO;
 
     public BookService() {
         this.bookDAO = new BookDAO();
     }
 
-    /**
-     * Adds a new book to the system.
-     * @param book - The book to be added.
-     * @return true if the book is added successfully, false otherwise.
-     */
+    @Override
     @IsAdmin
     public Book addBook(Book book) {
         return bookDAO.add(book);
     }
 
-    /**
-     * Updates the details of an existing book.
-     * @param book - The book with updated details.
-     * @return true if the update is successful, false otherwise.
-     */
+    @Override
     @IsAdmin
     public boolean updateBook(Book book) {
         return bookDAO.update(book);
     }
 
-    /**
-     * Deletes a book from the system.
-     * @param ISBN - The ISBN of the book to be deleted.
-     * @return true if the deletion is successful, false otherwise.
-     */
+    @Override
     @IsAdmin
     public boolean deleteBook(String ISBN) {
         return bookDAO.delete(ISBN);
     }
 
-    /**
-     * Retrieves a book by its ISBN.
-     * @param ISBN - The ISBN of the book.
-     * @return The book if found, otherwise null.
-     */
+    @Override
     public Book getBookByISBN(String ISBN) {
         return bookDAO.getById(ISBN);
     }
 
-    /**
-     * Renamed from getAllBooks to browseBooks
-     * Retrieves all books in the system.
-     * @return A list of all books.
-     */
+    @Override
     public List<Book> browseBooks() {
         return bookDAO.getAllBooks();
     }
-    
-    /**
-     * Get a book by a keyword
-     * @param title - Title of book
-     * @param publisher - Publisher of book
-     * @return If the book is found it'll be returned, otherwise null
-     */
+
+    @Override
     public List<Book> bookSearch(String phrase) {
-    	return bookDAO.searchByKeyword(phrase);
+        return bookDAO.searchByKeyword(phrase);
     }
-    
-    /**
-     * Retrieves all books by an author the system.
-     * @return A list of all books.
-     * @param authorId
-     */
-	public List<Book> getBooksByAuthor(int authorId) {
-		return bookDAO.getBooksByAuthor(authorId);
-	}
-	
-	public List<Book> searchBookByAuthorKeyword(String keyword) {
-		return bookDAO.searchBookByAuthorKeyword(keyword);
-	}
-	
-//	public boolean addAuthorToBook(String ISBN, int authorID) {
-//		return bookDAO.addAuthorToBook(ISBN, authorID);
-//	}
+
+    @Override
+    public List<Book> getBooksByAuthor(int authorId) {
+        return bookDAO.getBooksByAuthor(authorId);
+    }
+
+    @Override
+    public List<Book> searchBookByAuthorKeyword(String keyword) {
+        return bookDAO.searchBookByAuthorKeyword(keyword);
+    }
 }
