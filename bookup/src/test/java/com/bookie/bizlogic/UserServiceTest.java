@@ -51,6 +51,7 @@ public class UserServiceTest {
             stmt.execute("DELETE FROM Users");
             stmt.execute("DELETE FROM Authors");
             stmt.execute("DELETE FROM Genres");
+            UserContext.clear();
         } catch (SQLException e) {
             e.printStackTrace();
         }

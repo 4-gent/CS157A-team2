@@ -6,8 +6,10 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
+import java.sql.SQLException;
 import java.util.List;
 
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -30,16 +32,25 @@ public class BookServiceTest {
         // Create a proxied instance of BookService
         bookService = AuthorizationProxy.createProxy(new BookService());
         userService = AuthorizationProxy.createProxy(new UserService());
+    }
 
-        // Initialize DAOs to access the database connection
+    @AfterEach
+    public void tearDown() {
+        UserContext.clear();
+     // Initialize DAOs to access the database connection
         bookDAO = new BookDAO();
         userDAO = new UserDAO();
 
         // Clean up Users and Books
-        userDAO.getConnection().createStatement().execute("DELETE FROM Users");
-        bookDAO.getConnection().createStatement().execute("DELETE FROM Books");
+        try {
+			userDAO.getConnection().createStatement().execute("DELETE FROM Users");
+			bookDAO.getConnection().createStatement().execute("DELETE FROM Books");
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
     }
-
+    
     @Test
     public void testAddBook_AccessDenied() {
         try {

@@ -34,6 +34,7 @@ public class AuthorServiceTest {
         try (Statement stmt = userDAO.getConnection().createStatement()) {
             stmt.execute("DELETE FROM Users");
             stmt.execute("DELETE FROM Authors");
+            UserContext.clear();
         } catch (SQLException e) {
             e.printStackTrace();
         }

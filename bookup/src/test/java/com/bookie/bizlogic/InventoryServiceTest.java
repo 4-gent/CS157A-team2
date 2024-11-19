@@ -33,8 +33,13 @@ public class InventoryServiceTest {
         inventoryService = AuthorizationProxy.createProxy(new InventoryService());
         bookService = AuthorizationProxy.createProxy(new BookService());
         userService = AuthorizationProxy.createProxy(new UserService());
-
-        // Clean up database using DAO connections
+    }
+    
+    @AfterEach
+    public void tearDown() {
+        // Clear the UserContext after each test
+        UserContext.clear();
+     // Clean up database using DAO connections
         try {
             InventoryDAO inventoryDAO = new InventoryDAO();
             BookDAO bookDAO = new BookDAO();
@@ -46,12 +51,6 @@ public class InventoryServiceTest {
         } catch (Exception e) {
             fail("Failed to clean up the database: " + e.getMessage());
         }
-    }
-    
-    @AfterEach
-    public void tearDown() {
-        // Clear the UserContext after each test
-        UserContext.clear();
     }
 
     @Test

@@ -35,6 +35,7 @@ public class GenreServiceTest {
         try (Statement stmt = userDAO.getConnection().createStatement()) {
             stmt.execute("DELETE FROM Users");
             stmt.execute("DELETE FROM Genres");
+            UserContext.clear();
         } catch (SQLException e) {
             e.printStackTrace();
         }

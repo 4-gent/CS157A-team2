@@ -10,7 +10,7 @@ import com.bookie.models.Cart;
 import com.bookie.models.InventoryItem;
 import com.bookie.models.Order;
 
-public class CartService {
+public class CartService implements CartServiceInterface{
 
 	private CartDAO cartDAO = new CartDAO();
 	
