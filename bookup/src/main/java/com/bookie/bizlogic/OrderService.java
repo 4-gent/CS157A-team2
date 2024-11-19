@@ -9,7 +9,7 @@ import com.bookie.dao.OrderDAO;
 import com.bookie.dao.UserDAO;
 import com.bookie.models.Order;
 
-public class OrderService {
+public class OrderService implements OrderServiceInterface{
 
 	private OrderDAO orderDAO = new OrderDAO();
 	
