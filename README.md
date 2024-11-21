@@ -85,16 +85,21 @@ You should see output displaying the Maven version, Java version, and OS informa
      * Open the Start menu, search for “Environment Variables,” and select “Edit the system environment variables.”
      * In the System Properties window, click on “Environment Variables.”
      * Under “System variables,” click “New” and add:
-     ** Variable name: MAVEN_HOME
-     ** Variable value: C:\Program Files\Apache\Maven (or your chosen directory)
-       Find the Path variable in the “System variables” section, select it, and click “Edit.”
-       Click “New” and add:
+     1. Variable name: MAVEN_HOME
+     2. Variable value: C:\Program Files\Apache\Maven (or your chosen directory)
+     3. Find the Path variable in the “System variables” section, select it, and click “Edit.”
+     4. Click “New” and add:
 
 ```
 %MAVEN_HOME%\bin
 ```
 
-
+    5. Click “OK” to close all dialogs.
+4. Verify Installation:
+```
+mvn -version
+```
+You should see output displaying the Maven version, Java version, and OS information.
 
 ## pom.xml
 The Maven configuration file where dependencies, plugins, and project details are defined.
