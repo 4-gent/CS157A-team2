@@ -54,4 +54,10 @@ public class BookService implements BookServiceInterface {
     public List<Book> searchBookByAuthorKeyword(String keyword) {
         return bookDAO.searchBookByAuthorKeyword(keyword);
     }
+    
+    @Override
+    public List<Book> filterBooks(String genre, String availability, String publisher, int year, String author){
+    	return bookDAO.filterBooks(genre, availability, publisher, year, author);
+    }
+    
 }
