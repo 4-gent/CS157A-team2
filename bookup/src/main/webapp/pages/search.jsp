@@ -37,7 +37,7 @@
             </c:when>
 
             <c:otherwise>
-                <p>No books found. Try a different search term.</p>
+                <p class="none-found">No books found. Try a different search term.</p>
             </c:otherwise>
           </c:choose>
         </div>

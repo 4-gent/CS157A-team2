@@ -1,37 +1,35 @@
--- Must insert Authors, Genres, and Books first to be able to insert Users otherwise there will be no favoriteAuthorIDs or favoriteGenreIDs to tie to
-
 -- Inserting Authors
-INSERT INTO Authors (name) VALUES
-('George Orwell'),
-('J.K. Rowling'),
-('J.R.R. Tolkien'),
-('Agatha Christie'),
-('Stephen King'),
-('Harper Lee'),
-('F. Scott Fitzgerald'),
-('Ernest Hemingway'),
-('Mark Twain'),
-('Jane Austen');
+INSERT INTO Authors (authorID, name) VALUES
+(1, 'George Orwell'),
+(2, 'J.K. Rowling'),
+(3, 'J.R.R. Tolkien'),
+(4, 'Agatha Christie'),
+(5, 'Stephen King'),
+(6, 'Harper Lee'),
+(7, 'F. Scott Fitzgerald'),
+(8, 'Ernest Hemingway'),
+(9, 'Mark Twain'),
+(10, 'Jane Austen');
 
 -- Inserting Genres
-INSERT INTO Genres (name) VALUES
-('Fiction'),
-('Fantasy'),
-('Mystery'),
-('Thriller');
+INSERT INTO Genres (genreID, name) VALUES
+(1, 'Fiction'),
+(2, 'Fantasy'),
+(3, 'Mystery'),
+(4, 'Thriller');
 
 -- Inserting Books
 INSERT INTO Books (ISBN, title, year, publisher, isFeatured) VALUES
-('978-0451524935', '1984', 1949, 'Secker & Warburg', TRUE),
-('978-0747532743', 'Harry Potter and the Philosopher\'s Stone', 1997, 'Bloomsbury', TRUE),
-('978-0261102385', 'The Hobbit', 1937, 'George Allen & Unwin', TRUE),
-('978-0007119314', 'Murder on the Orient Express', 1934, 'Collins Crime Club', FALSE),
-('978-0743273565', 'The Great Gatsby', 1925, 'Charles Scribner\'s Sons', TRUE),
-('978-0684830421', 'The Old Man and the Sea', 1952, 'Charles Scribner\'s Sons', FALSE),
-('978-0451527999', 'The Adventures of Tom Sawyer', 1876, 'Chatto & Windus', FALSE),
-('978-1501160827', 'To Kill a Mockingbird', 1960, 'J.B. Lippincott & Co.', TRUE),
-('978-0452284234', 'It', 1986, 'Viking Press', TRUE),
-('978-0446310789', 'The Client', 1993, 'Putnam', FALSE);
+('9780451524935', '1984', 1949, 'Secker & Warburg', TRUE),
+('9780747532743', 'Harry Potter and the Philosopher\'s Stone', 1997, 'Bloomsbury', TRUE),
+('9780261102385', 'The Hobbit', 1937, 'George Allen & Unwin', TRUE),
+('9780007119314', 'Murder on the Orient Express', 1934, 'Collins Crime Club', FALSE),
+('9780743273565', 'The Great Gatsby', 1925, 'Charles Scribner\'s Sons', TRUE),
+('9780684830421', 'The Old Man and the Sea', 1952, 'Charles Scribner\'s Sons', FALSE),
+('9780451527999', 'The Adventures of Tom Sawyer', 1876, 'Chatto & Windus', FALSE),
+('9781501160827', 'To Kill a Mockingbird', 1960, 'J.B. Lippincott & Co.', TRUE),
+('9780452284234', 'It', 1986, 'Viking Press', TRUE),
+('9780446310789', 'The Client', 1993, 'Putnam', FALSE);
 
 -- Inserting Users (2 Admins and 8 Customers)
 INSERT INTO Users (username, password, email, phone, isAdmin, favoriteAuthorID, favoriteGenreID) VALUES
@@ -45,5 +43,3 @@ INSERT INTO Users (username, password, email, phone, isAdmin, favoriteAuthorID, 
 ('customer4', 'custpass4', 'cust4@store.com', '654-321-0987', FALSE, 6, 2),
 ('customer5', 'custpass5', 'cust5@store.com', '543-210-9876', FALSE, 7, 3),
 ('customer6', 'custpass6', 'cust6@store.com', '432-109-8765', FALSE, 8, 4);
-
-

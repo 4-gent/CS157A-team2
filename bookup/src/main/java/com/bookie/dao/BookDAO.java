@@ -375,6 +375,93 @@ public class BookDAO extends BaseDAO<Book, String> {
         return books;
     }
     
+    public List<Book> filterBooks(String titleKeyword, String authorKeyword, String genreKeyword, Integer year, String availability) {
+        List<Book> books = new ArrayList<>();
+        
+        try {
+            StringBuilder query = new StringBuilder(
+                "SELECT b.ISBN, b.title, b.year, b.publisher, b.isFeatured, " + 
+                "a.authorID, a.name AS authorName, " +
+                "g.genreID, g.name AS genreName " + 
+                "FROM Books b " + 
+                "LEFT JOIN Written w ON b.ISBN = w.ISBN " +
+                "LEFT JOIN Authors a ON w.authorID = a.authorID " +
+                "LEFT JOIN Belong b1 on b.ISBN = b1.ISBN " +
+                "LEFT JOIN Genres g ON b1.genreID = g.genreID WHERE 1=1"
+            );
+            
+            // Add conditions based on filters
+            if (titleKeyword != null && !titleKeyword.isEmpty())
+                query.append(" AND b.title LIKE ?");
+            if (authorKeyword != null && !authorKeyword.isEmpty())
+                query.append(" AND a.name LIKE ?");
+            if (genreKeyword != null && !genreKeyword.isEmpty())
+                query.append(" AND g.name LIKE ?");
+            if (year != null)
+                query.append(" AND b.year = ?");
+            if (availability != null && !availability.isEmpty())
+                query.append(" AND b.isAvailable = ?"); // Adjust the column name as per your schema
+            
+            // Prepare the statement with the dynamically built query
+            PreparedStatement stmt = connection.prepareStatement(query.toString());
+            
+            // Set the parameters for the prepared statement
+            int paramIndex = 1;
+            
+            if (titleKeyword != null && !titleKeyword.isEmpty())
+                stmt.setString(paramIndex++, "%" + titleKeyword + "%");
+            if (authorKeyword != null && !authorKeyword.isEmpty())
+                stmt.setString(paramIndex++, "%" + authorKeyword + "%");
+            if (genreKeyword != null && !genreKeyword.isEmpty())
+                stmt.setString(paramIndex++, "%" + genreKeyword + "%");
+            if (year != null)
+                stmt.setInt(paramIndex++, year);
+            if (availability != null && !availability.isEmpty()) {
+                // Convert availability to boolean if it's not already
+                boolean isAvailable = "available".equalsIgnoreCase(availability); // Adjust this based on your needs
+                stmt.setBoolean(paramIndex++, isAvailable);
+            }
+            
+            // Execute the query
+            ResultSet rs = stmt.executeQuery();
+            
+            // Process the result set and map it to Book objects
+            while (rs.next()) {
+                // Fetch Author and Genre objects
+                Author author = null;
+                if (rs.getInt("authorID") != 0)
+                    author = new Author(rs.getInt("authorID"), rs.getString("authorName"));
+                
+                Genre genre = null;
+                if (rs.getInt("genreID") != 0)
+                    genre = new Genre(rs.getInt("genreID"), rs.getString("genreName"));
+                
+                // Create Book object
+                Book book = new Book(
+                    rs.getString("ISBN"),
+                    rs.getString("title"),
+                    rs.getInt("year"),
+                    rs.getString("publisher"),
+                    rs.getBoolean("isFeatured"),
+                    author,
+                    genre
+                );
+                
+                // Add book to the result list
+                books.add(book);
+            }
+            
+        } catch (SQLException e) {
+            // Log the error properly (e.g., use logging framework instead of printStackTrace in production)
+            e.printStackTrace();
+        }
+        
+        return books;
+    }
+
+
+
+    
 //    public boolean addAuthorToBook(String ISBN, int authorID) {
 //        String query = "INSERT INTO Written (authorID, ISBN) VALUES (?, ?)";
 //        try {

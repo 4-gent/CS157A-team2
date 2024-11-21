@@ -122,3 +122,66 @@
     color: black;
     cursor: pointer;
 }
+
+.none-found{
+	font-size: 2em;
+	color: white;
+	font-weight: bold;
+}
+
+
+/* Container for the filter form */
+.filter-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    margin-bottom: 3vh;
+    gap: 20px;
+}
+
+/* Styling for each filter dropdown */
+.filter-dropdown {
+    width: 12vw;
+    height: 5vh;
+    border-radius: 3px;
+    background-color: #2B2624;
+    color: white;
+    border: none;
+    padding: 5px;
+    font-size: 1em;
+    box-shadow: 0px 7px 10px 4px black;
+    transition: 300ms;
+}
+
+.filter-dropdown:hover {
+    transform: scale(1.02);
+}
+
+.filter-dropdown:focus {
+    outline: none;
+    box-shadow: 0 0 5px 2px #FFA500;
+}
+
+/* Filter button styling */
+.filter-button {
+    width: 10vw;
+    height: 5vh;
+    margin-top: auto;
+    margin-bottom: auto;
+    transition: 300ms;
+    border-radius: 3px;
+    background-color: #2B2624;
+    color: white;
+    border: none;
+    box-shadow: 0px 7px 10px 4px black;
+}
+
+.filter-button:hover {
+    transform: scale(1.04);
+    box-shadow: 0px 1px 4px 3px #FFA500;
+}
+
+/* Add some margin to space out the filters properly */
+.filter-container select {
+    margin: 0 10px;
+}

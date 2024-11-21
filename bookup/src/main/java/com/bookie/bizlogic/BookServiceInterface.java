@@ -60,4 +60,14 @@ public interface BookServiceInterface {
      * @return A list of books matching the author's keyword.
      */
     List<Book> searchBookByAuthorKeyword(String keyword);
+    
+    /**
+     * Searches books by filter
+     * @param genre
+     * @param availability
+     * @param publisher
+     * @param year
+     * @param author
+     */
+    List<Book> filterBooks(String genre, String availability, String publisher, int year, String author);
 }

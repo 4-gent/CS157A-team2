@@ -1,0 +1,110 @@
+/* General Body Styling for the Profile Page */
+.profile-body {
+    width: 100%;
+    height: 100vh;
+    background-color: #342F2C;
+    font-family: Arial, sans-serif;
+}
+
+/* Navigation Bar Styling */
+.nav {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 3vh;
+    gap: 20px;
+}
+
+.nav-button {
+    width: 10vw;
+    height: 5vh;
+    border-radius: 3px;
+    background-color: #2B2624;
+    color: white;
+    border: none;
+    font-size: 1.2em;
+    box-shadow: 0px 7px 10px 4px black;
+    transition: 300ms;
+}
+
+.nav-button:hover {
+    transform: scale(1.04);
+    box-shadow: 0px 1px 4px 3px #FFA500;
+}
+
+/* Profile Header */
+.profile-header {
+    text-align: center;
+    margin-top: 5vh;
+}
+
+.user-element {
+    background-color: #2B2624;
+    color: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0px 7px 10px 4px black;
+    width: 50%;
+    margin: 0 auto;
+    text-align: left;
+}
+
+.user-element label {
+    font-size: 1.2em;
+    margin-bottom: 10px;
+}
+
+.user-element input {
+    width: 100%;
+    padding: 10px;
+    margin: 5px 0 15px 0;
+    border-radius: 5px;
+    border: 1px solid #FFA500;
+    background-color: #342F2C;
+    color: white;
+    font-size: 1em;
+    box-shadow: 0px 7px 10px 4px black;
+    transition: 300ms;
+}
+
+.user-element input:focus {
+    outline: none;
+    box-shadow: 0 0 5px 2px #FFA500;
+}
+
+.user-element button {
+    width: 100%;
+    padding: 10px;
+    background-color: #2B2624;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 1.1em;
+    margin-top: 15px;
+    box-shadow: 0px 7px 10px 4px black;
+    transition: 300ms;
+}
+
+.user-element button:hover {
+    transform: scale(1.04);
+    box-shadow: 0px 1px 4px 3px #FFA500;
+}
+
+/* Form Layout for Inputs and Labels */
+.user-element form {
+    display: flex;
+    flex-direction: column;
+}
+
+/* Remove the underline and styling for links (in case of 'Log Out' link in nav bar) */
+a {
+    text-decoration: none;
+}
+
+/* Modal-like effect for delete button (Confirmation) */
+.user-element button[type="submit"]:nth-child(4) {
+    background-color: #D9534F; /* Red for delete action */
+}
+
+.user-element button[type="submit"]:nth-child(4):hover {
+    background-color: #C9302C; /* Darker red on hover */
+}

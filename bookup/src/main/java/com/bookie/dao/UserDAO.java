@@ -161,4 +161,41 @@ public class UserDAO extends BaseDAO<User, String> {
 		}
 		return userName.equals(username);
 	}
+	
+	/**
+	 * Fetch user information based on their username
+	 * @param username - username of user
+	 * @return User object if user is found, otherwise null
+	 * @throws SQLException if database has error
+	 */
+	public User getUserByUsername(String username) throws SQLException{
+		User user = null;
+		
+		String query = "SELECT * FROM Users where username = ?";
+		
+		try (PreparedStatement stmt = connection.prepareStatement(query)) {
+			stmt.setString(1, username);
+			
+			try (ResultSet rs = stmt.executeQuery()) {
+				if(rs.next()) {
+					user = new User(
+						rs.getString("username"),
+						rs.getString("password"),
+						rs.getString("email"),
+						rs.getString("phone"),
+						rs.getBoolean("isAdmin"),
+						rs.getInt("favoriteAuthorID"),
+						rs.getInt("favoriteGenreID")
+					);
+				}
+			}
+			
+			
+		} catch(SQLException e) {
+			e.printStackTrace();
+			throw e;
+		}
+		
+		return user;
+	}
 }
