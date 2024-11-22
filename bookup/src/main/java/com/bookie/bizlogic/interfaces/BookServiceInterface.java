@@ -1,4 +1,4 @@
-package com.bookie.bizlogic;
+package com.bookie.bizlogic.interfaces;
 
 import com.bookie.models.Book;
 

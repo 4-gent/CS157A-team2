@@ -38,6 +38,9 @@ public class Register extends HttpServlet {
 		} catch (SQLException e) {
 			// FIXME SHOW to the User that new user creation failed
 			e.printStackTrace();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 		
 		response.sendRedirect("/bookup/pages/login.jsp");

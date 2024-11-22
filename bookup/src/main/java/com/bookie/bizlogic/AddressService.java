@@ -1,42 +1,80 @@
 package com.bookie.bizlogic;
 
+import java.sql.SQLException;
 import java.util.List;
 
-import com.bookie.auth.SameUser;
+import com.bookie.auth.IsAdmin;
+import com.bookie.auth.IsAdminOrSameUser;
 import com.bookie.dao.AddressDAO;
 import com.bookie.models.Address;
+import com.bookie.bizlogic.interfaces.AddressServiceInterface;
 
-public class AddressService {
+public class AddressService implements AddressServiceInterface {
 
-private AddressDAO addressDAO;
-	
-	public AddressService() {
-		addressDAO = new AddressDAO();
-	}
-	
-	public List<Address> getUserAddresses(String username) {
+    private AddressDAO addressDAO;
 
-		return null;  //FIXME we might have to create another relationship table between Users and Addresses
-	}
-	
-	
-	public Address addAddress(Address address) {
-		
-		return addressDAO.add(address);
-	}
-	
-	public boolean changeAddress(int addressID, String street, String city, String state, String zip, String country) {
-		Address a = addressDAO.getById(addressID);
-		a.setStreet(street);;
-		a.setCity(city);
-		a.setState(state);
-		a.setZip(zip);
-		a.setCountry(country);
-		return addressDAO.update(a);
-	}
-	
-	public boolean removeAddress(Address address) {
-		return addressDAO.delete(address.getAddressID());
-	}
-	
+    public AddressService() {
+        this.addressDAO = new AddressDAO();
+    }
+
+    /**
+     * Adds a new address.
+     * @param addr - The address to add.
+     * @return The added address.
+     */
+    @Override
+    public Address addAddress(Address addr) {
+        return addressDAO.add(addr);
+    }
+
+    /**
+     * Updates an existing address.
+     * @param addr - The address to update.
+     * @return The updated address.
+     */
+    @Override
+    public Address updateAddress(Address addr) {
+        if (addressDAO.update(addr)) {
+            return addr;
+        }
+        return null;
+    }
+
+    /**
+     * Deletes an address by ID.
+     * @param addressId - The ID of the address to delete.
+     * @return true if the address was deleted successfully; false otherwise.
+     */
+    @Override
+    public boolean deleteAddress(int addressId) {
+        return addressDAO.delete(addressId);
+    }
+
+    /**
+     * Retrieves all shipping addresses for a specific user by traversing orders.
+     * Only the user or an admin can access this method.
+     * @param username - The username of the user.
+     * @return A list of unique addresses associated with the user.
+     */
+    @Override
+    @IsAdminOrSameUser("userName")
+    public List<Address> getAllShippingAddressesOfUser(String userName) {
+        try {
+            return addressDAO.getUserShippingAddressesOfUser(userName);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    /**
+     * Retrieves all addresses in the system.
+     * Only an admin can access this method.
+     * @return A list of all addresses.
+     */
+    @Override
+    @IsAdmin
+    public List<Address> getAllAddresses() {
+        return addressDAO.getAllAddresses();
+    }
 }

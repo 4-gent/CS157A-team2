@@ -6,6 +6,7 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 
 import com.bookie.auth.UserContext;
+import com.bookie.bizlogic.interfaces.GenreServiceInterface;
 import com.bookie.auth.AuthorizationProxy;
 import com.bookie.dao.UserDAO;
 import com.bookie.models.Genre;

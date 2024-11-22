@@ -1,6 +1,6 @@
 package com.bookie.models;
 
-public class PaymentDetails {
+public class PaymentInfo {
 	
 	private int paymentID;
 	private String username;
@@ -12,7 +12,7 @@ public class PaymentDetails {
 	private boolean isDeleted;
 
 
-	public PaymentDetails(int paymentID, String username, String cardNumber, String monthYear, String cardHolderName,
+	public PaymentInfo(int paymentID, String username, String cardNumber, String monthYear, String cardHolderName,
 			String cvv, Address billingAddress, boolean isDeleted) {
 		super();
 		this.paymentID = paymentID;

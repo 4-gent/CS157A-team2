@@ -1,4 +1,4 @@
-package com.bookie.bizlogic;
+package com.bookie.bizlogic.interfaces;
 
 import java.util.List;
 import com.bookie.models.Genre;

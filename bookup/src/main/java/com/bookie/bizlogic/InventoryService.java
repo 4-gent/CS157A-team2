@@ -3,6 +3,7 @@ package com.bookie.bizlogic;
 import java.util.List;
 
 import com.bookie.auth.IsAdmin;
+import com.bookie.bizlogic.interfaces.InventoryServiceInterface;
 import com.bookie.dao.InventoryDAO;
 import com.bookie.models.InventoryItem;
 

@@ -10,6 +10,7 @@ import java.util.List;
 import com.bookie.auth.UserContext;
 import com.bookie.models.Address;
 import com.bookie.models.Book;
+import com.bookie.models.CartItem;
 import com.bookie.models.InventoryItem;
 import com.bookie.models.Order;
 
@@ -80,43 +81,49 @@ public class OrderDAO extends BaseDAO<Order, Integer> {
     /**
      * Retrieve all items associated with a specific order.
      */
-    private List<InventoryItem> getOrderItems(int orderID) throws SQLException {
-        List<InventoryItem> items = new ArrayList<>();
-        String query = "SELECT i.inventoryItemID, i.ISBN, i.price, c.quantity, i.description, " +
-                       "b.title, b.year, b.publisher, b.isFeatured " +
-                       "FROM Contains c " +
-                       "JOIN InventoryItems i ON c.inventoryItemID = i.inventoryItemID " +
-                       "JOIN Books b ON i.ISBN = b.ISBN " +
-                       "WHERE c.orderID = ?";
+	/**
+	 * Retrieve all items associated with a specific order.
+	 */
+	private List<CartItem> getOrderItems(int orderID) throws SQLException {
+	    List<CartItem> cartItems = new ArrayList<>();
+	    String query = "SELECT i.inventoryItemID, i.ISBN, i.price, c.quantity, i.description, " +
+	                   "b.title, b.year, b.publisher, b.isFeatured " +
+	                   "FROM Contains c " +
+	                   "JOIN InventoryItems i ON c.inventoryItemID = i.inventoryItemID " +
+	                   "JOIN Books b ON i.ISBN = b.ISBN " +
+	                   "WHERE c.orderID = ?";
 
-        PreparedStatement stmt = connection.prepareStatement(query);
-        stmt.setInt(1, orderID);
-        ResultSet rs = stmt.executeQuery();
+	    PreparedStatement stmt = connection.prepareStatement(query);
+	    stmt.setInt(1, orderID);
+	    ResultSet rs = stmt.executeQuery();
 
-        while (rs.next()) {
-            Book book = new Book(
-                rs.getString("ISBN"),
-                rs.getString("title"),
-                rs.getInt("year"),
-                rs.getString("publisher"),
-                rs.getBoolean("isFeatured"),
-                null,
-                null
-            );
+	    while (rs.next()) {
+	        // Create the Book object
+	        Book book = new Book(
+	            rs.getString("ISBN"),
+	            rs.getString("title"),
+	            rs.getInt("year"),
+	            rs.getString("publisher"),
+	            rs.getBoolean("isFeatured"),
+	            null, // Author is not included in this query
+	            null  // Genre is not included in this query
+	        );
 
-            InventoryItem item = new InventoryItem(
-                rs.getInt("inventoryItemID"),
-                book,
-                rs.getDouble("price"),
-                rs.getInt("quantity"),
-                rs.getString("description")
-            );
+	        // Create the InventoryItem object
+	        InventoryItem inventoryItem = new InventoryItem(
+	            rs.getInt("inventoryItemID"),
+	            book,
+	            rs.getDouble("price"),
+	            rs.getInt("quantity"), // Quantity in the Contains table
+	            rs.getString("description")
+	        );
 
-            items.add(item);
-        }
-        return items;
-    }
-
+	        // Create and add the CartItem object to the list
+	        CartItem cartItem = new CartItem(inventoryItem, rs.getInt("quantity"));
+	        cartItems.add(cartItem);
+	    }
+	    return cartItems;
+	}
     /**
      * Update the status of an existing order.
      */

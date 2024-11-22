@@ -1,4 +1,4 @@
-package com.bookie.bizlogic;
+package com.bookie.bizlogic.interfaces;
 
 import java.util.Date;
 import java.util.List;

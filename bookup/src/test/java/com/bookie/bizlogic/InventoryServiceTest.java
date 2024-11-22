@@ -16,6 +16,9 @@ import org.junit.jupiter.api.Test;
 
 import com.bookie.auth.AuthorizationProxy;
 import com.bookie.auth.UserContext;
+import com.bookie.bizlogic.interfaces.BookServiceInterface;
+import com.bookie.bizlogic.interfaces.InventoryServiceInterface;
+import com.bookie.bizlogic.interfaces.UserServiceInterface;
 import com.bookie.dao.BookDAO;
 import com.bookie.dao.InventoryDAO;
 import com.bookie.dao.UserDAO;
@@ -225,7 +228,7 @@ public class InventoryServiceTest {
     }
 
     @Test
-    public void testUpdateInventoryItem_AccessDenied() {
+    public void testUpdateInventoryItem_AccessDenied() throws Exception {
         try {
             // Create a non-admin user and set context
             userService.register("regularUser", "password", "user@example.com", "1234567890", false, 0, 0);
@@ -254,7 +257,7 @@ public class InventoryServiceTest {
     }
 
     @Test
-    public void testRemoveInventoryItem_AccessDenied() {
+    public void testRemoveInventoryItem_AccessDenied() throws Exception {
         try {
             // Create a non-admin user and set context
             userService.register("regularUser", "password", "user@example.com", "1234567890", false, 0, 0);

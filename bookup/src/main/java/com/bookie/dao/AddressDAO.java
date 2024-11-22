@@ -22,7 +22,7 @@ public class AddressDAO extends BaseDAO<Address, Integer>{
 			
 			if (rs.next()) {
 				address = new Address(
-                    rs.getInt(addressID),
+                    rs.getInt("addressID"),
                     rs.getString("street"),
                     rs.getString("city"),
                     rs.getString("state"),
@@ -130,9 +130,39 @@ public class AddressDAO extends BaseDAO<Address, Integer>{
         return addresses;
     }
 	
-	public List<Address> getUserAddresses(String username) {
+    /**
+     * Retrieves all unique shipping addresses for a given user by traversing orders.
+     * @param username - The username of the user
+     * @return A list of unique addresses associated with the user's orders
+     * @throws SQLException
+     */
+    public List<Address> getUserShippingAddressesOfUser(String username) throws SQLException {
+        List<Address> addresses = new ArrayList<>();
 
-		return null;  //FIXME we might have to create another relationship table between Users and Addresses
-	}
-	
+        // Constructing SQL string using `+` for appending
+        String query = "SELECT DISTINCT a.addressID, a.street, a.city, a.state, a.zip, a.country "
+                     + "FROM Orders o "
+                     + "INNER JOIN Addresses a ON o.addressID = a.addressID "
+                     + "WHERE o.username = ?";
+
+        try (PreparedStatement stmt = connection.prepareStatement(query)) {
+            stmt.setString(1, username);
+
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    Address address = new Address(
+                        rs.getInt("addressID"),
+                        rs.getString("street"),
+                        rs.getString("city"),
+                        rs.getString("state"),
+                        rs.getString("country"),
+                        rs.getString("zip")
+                    );
+                    addresses.add(address);
+                }
+            }
+        }
+
+        return addresses;
+    }
 }

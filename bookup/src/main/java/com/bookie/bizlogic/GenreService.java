@@ -2,6 +2,7 @@ package com.bookie.bizlogic;
 
 import java.util.List;
 import com.bookie.auth.IsAdmin;
+import com.bookie.bizlogic.interfaces.GenreServiceInterface;
 import com.bookie.dao.GenreDAO;
 import com.bookie.models.Genre;
 

@@ -8,16 +8,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.bookie.models.Address;
-import com.bookie.models.PaymentDetails;
+import com.bookie.models.PaymentInfo;
 
-public class PaymentDetailsDAO extends BaseDAO<PaymentDetails, Integer> {
+public class PaymentInfoDAO extends BaseDAO<PaymentInfo, Integer> {
 
     /**
      * Retrieve a PaymentDetails entry by its paymentID.
      */
     @Override
-    public PaymentDetails getById(Integer paymentID) throws SQLException {
-        PaymentDetails paymentDetails = null;
+    public PaymentInfo getById(Integer paymentID) throws SQLException {
+        PaymentInfo paymentDetails = null;
         String query = "SELECT pd.paymentID, pd.username, pd.cardNumber, pd.exp, pd.cardHolderName, pd.cvv, pd.isDeleted, " +
                        "a.addressID, a.street, a.city, a.state, a.zip, a.country " +
                        "FROM PaymentDetails pd " +
@@ -38,7 +38,7 @@ public class PaymentDetailsDAO extends BaseDAO<PaymentDetails, Integer> {
                 rs.getString("country")
             );
 
-            paymentDetails = new PaymentDetails(
+            paymentDetails = new PaymentInfo(
                 rs.getInt("paymentID"),
                 rs.getString("username"),
                 rs.getString("cardNumber"),
@@ -56,7 +56,7 @@ public class PaymentDetailsDAO extends BaseDAO<PaymentDetails, Integer> {
      * Add a new PaymentDetails entry to the database.
      */
     @Override
-    public PaymentDetails add(PaymentDetails paymentDetails) {
+    public PaymentInfo add(PaymentInfo paymentDetails) {
         try {
             // Step 1: Insert the billing address and get addressID
             int addressID = insertAddress(paymentDetails.getBillingAddress());
@@ -91,7 +91,7 @@ public class PaymentDetailsDAO extends BaseDAO<PaymentDetails, Integer> {
      * Update an existing PaymentDetails entry.
      */
     @Override
-    public boolean update(PaymentDetails paymentDetails) {
+    public boolean update(PaymentInfo paymentDetails) {
         try {
             // Update PaymentDetails entry
             String query = "UPDATE PaymentDetails SET cardNumber = ?, exp = ?, cardHolderName = ?, cvv = ?, isDeleted = ? " +
@@ -131,8 +131,8 @@ public class PaymentDetailsDAO extends BaseDAO<PaymentDetails, Integer> {
     /**
      * Get all payment details for a specific user.
      */
-    public List<PaymentDetails> getAllPaymentDetailsForUser(String username) throws SQLException {
-        List<PaymentDetails> paymentDetailsList = new ArrayList<>();
+    public List<PaymentInfo> getAllPaymentDetailsForUser(String username) throws SQLException {
+        List<PaymentInfo> paymentDetailsList = new ArrayList<>();
         
         String query = "SELECT pd.paymentID, pd.username, pd.cardNumber, pd.exp, pd.cardHolderName, pd.cvv, pd.isDeleted, " +
                        "a.addressID, a.street, a.city, a.state, a.zip, a.country " +
@@ -156,7 +156,7 @@ public class PaymentDetailsDAO extends BaseDAO<PaymentDetails, Integer> {
             );
 
             // Create a PaymentDetails object
-            PaymentDetails paymentDetails = new PaymentDetails(
+            PaymentInfo paymentDetails = new PaymentInfo(
                 rs.getInt("paymentID"),
                 rs.getString("username"),
                 rs.getString("cardNumber"),

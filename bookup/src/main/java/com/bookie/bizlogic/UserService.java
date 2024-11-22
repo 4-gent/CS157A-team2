@@ -1,10 +1,14 @@
 package com.bookie.bizlogic;
 
+import java.sql.Connection;
 import java.sql.SQLException;
 
 import com.bookie.auth.IsAdmin;
 import com.bookie.auth.SameUser;
+import com.bookie.bizlogic.interfaces.UserServiceInterface;
+import com.bookie.dao.CartDAO;
 import com.bookie.dao.UserDAO;
+import com.bookie.models.Cart;
 import com.bookie.models.User;
 
 public class UserService implements UserServiceInterface {
@@ -15,11 +19,50 @@ public class UserService implements UserServiceInterface {
     }
 
     @Override
-    public User register(String username, String password, String email, String phone, boolean isAdmin, int favoriteAuthorID, int favoriteGenreID) throws SQLException {
-        User newUser = new User(username, password, email, phone, isAdmin, favoriteAuthorID, favoriteGenreID);
-        return userDAO.add(newUser);
-    }
+    public User register(String username, String password, String email, String phone, boolean isAdmin, int favoriteAuthorID, int favoriteGenreID) throws Exception {
+        Connection connection = userDAO.getConnection(); // Fetch connection from BaseDAO
 
+        try {
+            // Step 1: Start transaction
+            connection.setAutoCommit(false);
+
+            // Step 2: Create a new user
+            User newUser = new User(username, password, email, phone, isAdmin, favoriteAuthorID, favoriteGenreID);
+            User registeredUser = userDAO.add(newUser);
+
+            if (registeredUser == null) {
+                throw new SQLException("Failed to create user.");
+            }
+
+            // Step 3: If the user is not an admin, create an empty cart
+            if (!isAdmin) {
+                CartDAO cartDAO = new CartDAO(); // Ensure CartDAO is initialized
+                Cart newCart = new Cart(0, username, 0.0);
+                Cart createdCart = cartDAO.add(newCart);
+
+                if (createdCart == null) {
+                    throw new SQLException("Failed to create cart for user.");
+                }
+            }
+
+            // Step 4: Commit the transaction
+            connection.commit();
+            return registeredUser;
+
+        } catch (Exception e) {
+            // Step 5: Rollback in case of an error
+            if (connection != null) {
+                connection.rollback();
+            }
+            throw e; // Rethrow the exception to be handled by the caller
+        } finally {
+            // Step 6: Restore auto-commit
+            if (connection != null) {
+                connection.setAutoCommit(true);
+            }
+        }
+    }
+    
     @Override
     public boolean login(String username, String password) {
         User user = userDAO.getById(username);

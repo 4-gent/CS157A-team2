@@ -8,7 +8,7 @@ public class Cart {
 	private int cartID;
 	private String username;
 	private double total;
-	private List<InventoryItem> inventoryItems= new ArrayList<InventoryItem>();
+	private List<CartItem> cartItems= new ArrayList<CartItem>();
 	
 	public Cart(int cartID, String username, double total) {
 		super();
@@ -17,12 +17,12 @@ public class Cart {
 		this.total = total;
 	}
 
-	public List<InventoryItem> getInventoryItems() {
-		return inventoryItems;
+	public List<CartItem> getCartItems() {
+		return cartItems;
 	}
 
-	public void setInventoryItems(List<InventoryItem> inventoryItems) {
-		this.inventoryItems = inventoryItems;
+	public void setCartItems(List<CartItem> cartItems) {
+		this.cartItems = cartItems;
 	}
 
 	public int getCartID() {

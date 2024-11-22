@@ -5,8 +5,10 @@ import java.util.List;
 
 import com.bookie.auth.IsAdminOrSameUser;
 import com.bookie.auth.SameUser;
+import com.bookie.bizlogic.interfaces.CartServiceInterface;
 import com.bookie.dao.CartDAO;
 import com.bookie.models.Cart;
+import com.bookie.models.CartItem;
 import com.bookie.models.InventoryItem;
 import com.bookie.models.Order;
 
@@ -20,7 +22,7 @@ public class CartService implements CartServiceInterface{
 	}
 	
 	@SameUser(value = "username")
-	public Cart addItemsToCart(String username, List<InventoryItem> items) throws Exception {
+	public Cart addItemsToCart(String username, List<CartItem> items) throws Exception {
 		return cartDAO.addItemsToCart(username, items);
 	}
 	
@@ -30,7 +32,7 @@ public class CartService implements CartServiceInterface{
 	}
 	
 	@IsAdminOrSameUser(value = "username")
-	public Cart updateInventoryItems(String username, List<InventoryItem> items) throws Exception{
+	public Cart updateInventoryItems(String username, List<CartItem> items) throws Exception{
 		return cartDAO.updateInventoryItems(username, items);
 	}
 	
@@ -38,13 +40,13 @@ public class CartService implements CartServiceInterface{
 	 * Checks out the cart for the user, and creates an Order
 	 * @param username
 	 * @param addressID , the ID of the shipping address
+	 * @param paymentDetailsID , the ID of the Payment Detail
 	 * @return
 	 * @throws Exception
 	 */
 	@SameUser(value = "username")
-	public Order checkout(String username, int addressID) throws Exception {
-		return cartDAO.checkout(username, addressID); 
+	public Order checkout(String username, int addressID, int paymentDetailsID) throws Exception {
+		return cartDAO.checkout(username, addressID, paymentDetailsID); 
 	}
-	
 	
 }

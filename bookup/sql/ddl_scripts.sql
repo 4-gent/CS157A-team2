@@ -4,7 +4,6 @@ CREATE SCHEMA IF NOT EXISTS Bookie;
 -- Set the default schema to 'Bookie'
 USE Bookie;
 
-
 -- Entities
 
 -- Authors Table
@@ -48,7 +47,7 @@ CREATE TABLE IF NOT EXISTS InventoryItems (
     price DECIMAL(10, 2),
     qty INT,
     description TEXT,
-    FOREIGN KEY (ISBN) REFERENCES Books(ISBN)
+    FOREIGN KEY (ISBN) REFERENCES Books(ISBN) ON DELETE CASCADE
 );
 
 -- Addresses Table
@@ -66,13 +65,13 @@ CREATE TABLE IF NOT EXISTS PaymentDetails (
     paymentID INT AUTO_INCREMENT PRIMARY KEY,
     username VARCHAR(255),
     cardNumber VARCHAR(16),
-    exp DATE,
+    exp VARCHAR(7),
     cardHolderName VARCHAR(255),
     cvv VARCHAR(4),
     addressID INT,
     isDeleted BOOLEAN,
-    FOREIGN KEY (username) REFERENCES Users(username),
-    FOREIGN KEY (addressID) REFERENCES Addresses(addressID)
+    FOREIGN KEY (username) REFERENCES Users(username) ON DELETE CASCADE,
+    FOREIGN KEY (addressID) REFERENCES Addresses(addressID) ON DELETE CASCADE
 );
 
 -- Orders Table
@@ -80,11 +79,13 @@ CREATE TABLE IF NOT EXISTS Orders (
     orderID INT AUTO_INCREMENT PRIMARY KEY,
     username VARCHAR(255),
     addressID INT,
+    paymentID INT, -- Foreign key to PaymentDetails
     orderDate DATE,
     orderStatus VARCHAR(50),
     total DECIMAL(10, 2),
-    FOREIGN KEY (username) REFERENCES Users(username),
-    FOREIGN KEY (addressID) REFERENCES Addresses(addressID)
+    FOREIGN KEY (username) REFERENCES Users(username) ON DELETE CASCADE,
+    FOREIGN KEY (addressID) REFERENCES Addresses(addressID) ON DELETE CASCADE,
+    FOREIGN KEY (paymentID) REFERENCES PaymentDetails(paymentID) ON DELETE CASCADE
 );
 
 -- Updated Cart Table with totalPrice
@@ -92,10 +93,8 @@ CREATE TABLE IF NOT EXISTS Cart (
     cartID INT AUTO_INCREMENT PRIMARY KEY,
     username VARCHAR(255),
     cartTotal DECIMAL(10, 2) DEFAULT 0.0,
-    FOREIGN KEY (username) REFERENCES Users(username)
+    FOREIGN KEY (username) REFERENCES Users(username) ON DELETE CASCADE
 );
-
-
 
 -- Relationships
 
@@ -104,8 +103,8 @@ CREATE TABLE IF NOT EXISTS Owns (
     username VARCHAR(255),
     cartID INT,
     PRIMARY KEY (username, cartID),
-    FOREIGN KEY (username) REFERENCES Users(username),
-    FOREIGN KEY (cartID) REFERENCES Cart(cartID)
+    FOREIGN KEY (username) REFERENCES Users(username) ON DELETE CASCADE,
+    FOREIGN KEY (cartID) REFERENCES Cart(cartID) ON DELETE CASCADE
 );
 
 -- Updated Includes Relationship (Between Cart and InventoryItems)
@@ -123,10 +122,11 @@ CREATE TABLE IF NOT EXISTS Contains (
     orderID INT,
     inventoryItemID INT,
     addressID INT,
+    quantity INT NOT NULL,
     PRIMARY KEY (orderID, inventoryItemID),
-    FOREIGN KEY (orderID) REFERENCES Orders(orderID),
-    FOREIGN KEY (inventoryItemID) REFERENCES InventoryItems(inventoryItemID),
-    FOREIGN KEY (addressID) REFERENCES Addresses(addressID)
+    FOREIGN KEY (orderID) REFERENCES Orders(orderID) ON DELETE CASCADE,
+    FOREIGN KEY (inventoryItemID) REFERENCES InventoryItems(inventoryItemID) ON DELETE CASCADE,
+    FOREIGN KEY (addressID) REFERENCES Addresses(addressID) ON DELETE CASCADE
 );
 
 -- FavoriteBooks Relationship (Between Users and Books)
@@ -134,8 +134,8 @@ CREATE TABLE IF NOT EXISTS FavoriteBooks (
     username VARCHAR(255),
     ISBN VARCHAR(13),
     PRIMARY KEY (username, ISBN),
-    FOREIGN KEY (username) REFERENCES Users(username),
-    FOREIGN KEY (ISBN) REFERENCES Books(ISBN)
+    FOREIGN KEY (username) REFERENCES Users(username) ON DELETE CASCADE,
+    FOREIGN KEY (ISBN) REFERENCES Books(ISBN) ON DELETE CASCADE
 );
 
 -- Written Relationship (Between Authors and Books)
@@ -143,18 +143,17 @@ CREATE TABLE IF NOT EXISTS Written (
     authorID INT,
     ISBN VARCHAR(13),
     PRIMARY KEY (authorID, ISBN),
-    FOREIGN KEY (authorID) REFERENCES Authors(authorID),
-    FOREIGN KEY (ISBN) REFERENCES Books(ISBN)
+    FOREIGN KEY (authorID) REFERENCES Authors(authorID) ON DELETE CASCADE,
+    FOREIGN KEY (ISBN) REFERENCES Books(ISBN) ON DELETE CASCADE
 );
-
 
 -- Recommend Relationship (Between Users and Books)
 CREATE TABLE IF NOT EXISTS Recommend (
     username VARCHAR(255),
     ISBN VARCHAR(13),
     PRIMARY KEY (username, ISBN),
-    FOREIGN KEY (username) REFERENCES Users(username),
-    FOREIGN KEY (ISBN) REFERENCES Books(ISBN)
+    FOREIGN KEY (username) REFERENCES Users(username) ON DELETE CASCADE,
+    FOREIGN KEY (ISBN) REFERENCES Books(ISBN) ON DELETE CASCADE
 );
 
 -- Modifies Relationship (Between Users, Orders, and Addresses)
@@ -164,9 +163,9 @@ CREATE TABLE IF NOT EXISTS OrderModifications (
     addressID INT,
     modifiedDateTime TIMESTAMP,
     PRIMARY KEY (username, orderID, addressID),
-    FOREIGN KEY (username) REFERENCES Users(username),
-    FOREIGN KEY (orderID) REFERENCES Orders(orderID),
-    FOREIGN KEY (addressID) REFERENCES Addresses(addressID)
+    FOREIGN KEY (username) REFERENCES Users(username) ON DELETE CASCADE,
+    FOREIGN KEY (orderID) REFERENCES Orders(orderID) ON DELETE CASCADE,
+    FOREIGN KEY (addressID) REFERENCES Addresses(addressID) ON DELETE CASCADE
 );
 
 -- Update Relationship (Between Users, Books, and InventoryItems)
@@ -176,9 +175,9 @@ CREATE TABLE IF NOT EXISTS InventoryUpdates (
     inventoryItemID INT,
     updatedDateTime TIMESTAMP,
     PRIMARY KEY (username, ISBN, inventoryItemID),
-    FOREIGN KEY (username) REFERENCES Users(username),
-    FOREIGN KEY (ISBN) REFERENCES Books(ISBN),
-    FOREIGN KEY (inventoryItemID) REFERENCES InventoryItems(inventoryItemID)
+    FOREIGN KEY (username) REFERENCES Users(username) ON DELETE CASCADE,
+    FOREIGN KEY (ISBN) REFERENCES Books(ISBN) ON DELETE CASCADE,
+    FOREIGN KEY (inventoryItemID) REFERENCES InventoryItems(inventoryItemID) ON DELETE CASCADE
 );
 
 -- Belong Relationship (Between Books and Genres)
@@ -186,6 +185,6 @@ CREATE TABLE IF NOT EXISTS Belong (
     ISBN VARCHAR(13),
     genreID INT,
     PRIMARY KEY (ISBN, genreID),
-    FOREIGN KEY (ISBN) REFERENCES Books(ISBN),
-    FOREIGN KEY (genreID) REFERENCES Genres(genreID)
+    FOREIGN KEY (ISBN) REFERENCES Books(ISBN) ON DELETE CASCADE,
+    FOREIGN KEY (genreID) REFERENCES Genres(genreID) ON DELETE CASCADE
 );

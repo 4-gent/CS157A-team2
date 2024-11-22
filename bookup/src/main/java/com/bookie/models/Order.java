@@ -4,88 +4,86 @@ import java.util.Date;
 import java.util.List;
 
 public class Order {
-	
-	private int orderID;
-	private String username;
-	private double total;
-	private Address shipppingAddress;
-	private Date orderDate;
-	private String orderStatus;
-	private List<InventoryItem> items;
-	
-	public Order(int orderID, String username, double total, Address shipppingAddress, Date orderDate,
-			String orderStatus, List<InventoryItem> items) {
-		super();
-		this.orderID = orderID;
-		this.username = username;
-		this.total = total;
-		this.shipppingAddress = shipppingAddress;
-		this.orderDate = orderDate;
-		this.orderStatus = orderStatus;
-		this.items = items;
-	}
 
-	public int getOrderID() {
-		return orderID;
-	}
+    private int orderID;
+    private String username;
+    private double total;
+    private Address shippingAddress;
+    private Date orderDate;
+    private String orderStatus;
+    private List<CartItem> items;
 
-	public void setOrderID(int orderID) {
-		this.orderID = orderID;
-	}
+    public Order(int orderID, String username, double total, Address shippingAddress, Date orderDate,
+                 String orderStatus, List<CartItem> items) {
+        this.orderID = orderID;
+        this.username = username;
+        this.total = total;
+        this.shippingAddress = shippingAddress;
+        this.orderDate = orderDate;
+        this.orderStatus = orderStatus;
+        this.items = items;
+    }
 
-	public String getUsername() {
-		return username;
-	}
+    public int getOrderID() {
+        return orderID;
+    }
 
-	public void setUsername(String username) {
-		this.username = username;
-	}
+    public void setOrderID(int orderID) {
+        this.orderID = orderID;
+    }
 
-	public double getTotal() {
-		return total;
-	}
+    public String getUsername() {
+        return username;
+    }
 
-	public void setTotal(double total) {
-		this.total = total;
-	}
+    public void setUsername(String username) {
+        this.username = username;
+    }
 
-	public Address getShipppingAddress() {
-		return shipppingAddress;
-	}
+    public double getTotal() {
+        return total;
+    }
 
-	public void setShipppingAddress(Address shipppingAddress) {
-		this.shipppingAddress = shipppingAddress;
-	}
+    public void setTotal(double total) {
+        this.total = total;
+    }
 
-	public Date getOrderDate() {
-		return orderDate;
-	}
+    public Address getShippingAddress() {
+        return shippingAddress;
+    }
 
-	public void setOrderDate(Date orderDate) {
-		this.orderDate = orderDate;
-	}
+    public void setShippingAddress(Address shippingAddress) {
+        this.shippingAddress = shippingAddress;
+    }
 
-	public String getOrderStatus() {
-		return orderStatus;
-	}
+    public Date getOrderDate() {
+        return orderDate;
+    }
 
-	public void setOrderStatus(String orderStatus) {
-		this.orderStatus = orderStatus;
-	}
+    public void setOrderDate(Date orderDate) {
+        this.orderDate = orderDate;
+    }
 
-	public List<InventoryItem> getItems() {
-		return items;
-	}
+    public String getOrderStatus() {
+        return orderStatus;
+    }
 
-	public void setItems(List<InventoryItem> items) {
-		this.items = items;
-	}
+    public void setOrderStatus(String orderStatus) {
+        this.orderStatus = orderStatus;
+    }
 
-	@Override
-	public String toString() {
-		return "Order [orderID=" + orderID + ", username=" + username + ", total=" + total + ", shipppingAddress="
-				+ shipppingAddress + ", orderDate=" + orderDate + ", orderStatus=" + orderStatus + ", items=" + items
-				+ "]";
-	}
-	
+    public List<CartItem> getItems() {
+        return items;
+    }
+
+    public void setItems(List<CartItem> items) {
+        this.items = items;
+    }
+
+    @Override
+    public String toString() {
+        return "Order [orderID=" + orderID + ", username=" + username + ", total=" + total + ", shippingAddress="
+                + shippingAddress + ", orderDate=" + orderDate + ", orderStatus=" + orderStatus + ", items=" + items
+                + "]";
+    }
 }
