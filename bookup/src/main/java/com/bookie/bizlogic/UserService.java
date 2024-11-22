@@ -97,5 +97,10 @@ public class UserService implements UserServiceInterface {
     @IsAdmin
     public boolean deleteUser(String username) throws SQLException {
         return userDAO.delete(username);
+    }   
+    
+    @Override
+    public User getUserByUsername(String username) throws SQLException {
+    	return userDAO.getUserByUsername(username);
     }
 }

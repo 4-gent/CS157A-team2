@@ -54,6 +54,53 @@ bookup/                    <-- Root directory of your Maven project
 ```
 # Project Structure
 
+## Maven
+The project uses appache maven for dependency management and forbuild and deploy.
+You need to install Maven in your computer. These are the instructions to deploy maven in your computer
+
+### If you have a Mac
+
+Install Homebrew (if not already installed):
+Open Terminal and run the following command to install Homebrew:
+```
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+```
+Install Maven using Homebrew
+```
+brew install maven
+```
+
+Verify the Installation:
+After installation, confirm that Maven is correctly installed by checking its version:
+```
+mvn -version
+```
+You should see output displaying the Maven version, Java version, and OS information.
+
+### If you have a Windows machine
+
+1. Download Maven from [here](https://maven.apache.org/download.cgi)
+2. Extract the downloaded zip file to a directory of your choice, e.g., C:\Program Files\Apache\Maven.
+3. Set Environment Variables:
+     * Open the Start menu, search for “Environment Variables,” and select “Edit the system environment variables.”
+     * In the System Properties window, click on “Environment Variables.”
+     * Under “System variables,” click “New” and add:
+     1. Variable name: MAVEN_HOME
+     2. Variable value: C:\Program Files\Apache\Maven (or your chosen directory)
+     3. Find the Path variable in the “System variables” section, select it, and click “Edit.”
+     4. Click “New” and add:
+
+```
+%MAVEN_HOME%\bin
+```
+
+    5. Click “OK” to close all dialogs.
+4. Verify Installation:
+```
+mvn -version
+```
+You should see output displaying the Maven version, Java version, and OS information.
+
 ## pom.xml
 The Maven configuration file where dependencies, plugins, and project details are defined.
 

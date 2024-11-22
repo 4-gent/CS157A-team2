@@ -11,4 +11,5 @@ public interface UserServiceInterface {
     boolean updateFavoriteAuthor(String username, int favoriteAuthorID) throws SQLException;
     boolean updateFavoriteGenre(String username, int favoriteGenreID) throws SQLException;
     boolean deleteUser(String username) throws SQLException;
+    User getUserByUsername(String username) throws SQLException;
 }
