@@ -1,15 +1,18 @@
 package com.bookie.servlet;
 
-import com.bookie.bizlogic.BookService;
-import com.bookie.bizlogic.BookServiceInterface;
-import com.bookie.models.Book;
 import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import com.bookie.bizlogic.BookService;
+import com.bookie.bizlogic.interfaces.BookServiceInterface;
+import com.bookie.models.Book;
 
 @WebServlet("/Books")
 public class GetBooks extends HttpServlet {
@@ -21,7 +24,7 @@ public class GetBooks extends HttpServlet {
     public GetBooks() {
         super();
         // Instantiate the BookService class
-        bookService = new BookService(); // Ensure BookService implements BookServiceInterface
+        bookService = BookService.getServiceInstance(); // Ensure BookService implements BookServiceInterface
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response)

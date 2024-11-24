@@ -14,7 +14,6 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import com.bookie.auth.AuthorizationProxy;
 import com.bookie.auth.UserContext;
 import com.bookie.bizlogic.interfaces.AddressServiceInterface;
 import com.bookie.bizlogic.interfaces.BookServiceInterface;
@@ -41,12 +40,12 @@ public class AddressServiceTest {
 
 	@BeforeEach
 	public void setUp() {
-	    addressService = AuthorizationProxy.createProxy(new AddressService());
-	    userService = AuthorizationProxy.createProxy(new UserService());
-	    cartService = AuthorizationProxy.createProxy(new CartService());
-	    paymentInfoService = AuthorizationProxy.createProxy(new PaymentInfoService());
-	    bookService = AuthorizationProxy.createProxy(new BookService());
-	    inventoryService = AuthorizationProxy.createProxy(new InventoryService());
+	    addressService = AddressService.getServiceInstance();
+	    userService = UserService.getServiceInstance();
+	    cartService = CartService.getServiceInstance();
+	    paymentInfoService = PaymentInfoService.getServiceInstance();
+	    bookService = BookService.getServiceInstance();
+	    inventoryService = InventoryService.getServiceInstance();
 
 	    connection = new AddressDAO().getConnection(); // Obtain connection for cleanup purposes
 	}

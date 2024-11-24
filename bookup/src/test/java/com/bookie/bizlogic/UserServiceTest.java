@@ -15,14 +15,11 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import com.bookie.auth.AuthorizationProxy;
 import com.bookie.auth.UserContext;
 import com.bookie.bizlogic.interfaces.AuthorServiceInterface;
 import com.bookie.bizlogic.interfaces.GenreServiceInterface;
 import com.bookie.bizlogic.interfaces.UserServiceInterface;
-import com.bookie.dao.AuthorDAO;
 import com.bookie.dao.CartDAO;
-import com.bookie.dao.GenreDAO;
 import com.bookie.dao.UserDAO;
 import com.bookie.models.Author;
 import com.bookie.models.Cart;
@@ -35,22 +32,17 @@ public class UserServiceTest {
     private AuthorServiceInterface authorService;
     private GenreServiceInterface genreService;
     private UserDAO userDAO;
-    private AuthorDAO authorDAO;
-    private GenreDAO genreDAO;
 
     @BeforeEach
     public void setUp() {
         // Initialize DAOs for database cleanup
         userDAO = new UserDAO();
-        authorDAO = new AuthorDAO();
-        genreDAO = new GenreDAO();
         
         cleanDB();
 
-        // Create proxied instances of services
-        userService = AuthorizationProxy.createProxy(new UserService());
-        authorService = AuthorizationProxy.createProxy(new AuthorService());
-        genreService = AuthorizationProxy.createProxy(new GenreService());
+        userService = UserService.getServiceInstance();
+        authorService = AuthorService.getServiceInstance();
+        genreService = GenreService.getServiceInstance();
     }
 
     @AfterEach

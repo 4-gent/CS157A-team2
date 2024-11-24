@@ -13,7 +13,6 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import com.bookie.auth.AuthorizationProxy;
 import com.bookie.auth.UserContext;
 import com.bookie.bizlogic.interfaces.BookServiceInterface;
 import com.bookie.bizlogic.interfaces.UserServiceInterface;
@@ -32,8 +31,8 @@ public class BookServiceTest {
     @BeforeEach
     public void setUp() throws Exception {
         // Create a proxied instance of BookService
-        bookService = AuthorizationProxy.createProxy(new BookService());
-        userService = AuthorizationProxy.createProxy(new UserService());
+        bookService = BookService.getServiceInstance();
+        userService = UserService.getServiceInstance();
     }
 
     @AfterEach

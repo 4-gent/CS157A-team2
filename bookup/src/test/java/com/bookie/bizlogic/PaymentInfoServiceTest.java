@@ -12,7 +12,6 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import com.bookie.auth.AuthorizationProxy;
 import com.bookie.auth.UserContext;
 import com.bookie.bizlogic.interfaces.PaymentInfoServiceInterface;
 import com.bookie.bizlogic.interfaces.UserServiceInterface;
@@ -32,8 +31,8 @@ public class PaymentInfoServiceTest {
 
     @BeforeEach
     public void setUp() {
-        userService = AuthorizationProxy.createProxy(new UserService());
-        paymentInfoService = AuthorizationProxy.createProxy(new PaymentInfoService());
+        userService = UserService.getServiceInstance();
+        paymentInfoService = PaymentInfoService.getServiceInstance();
         userDAO = new UserDAO();
         addressDAO = new AddressDAO();
         paymentInfoDAO = new PaymentInfoDAO();

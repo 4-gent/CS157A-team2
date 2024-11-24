@@ -1,6 +1,7 @@
 package com.bookie.bizlogic;
 import java.util.List;
 
+import com.bookie.auth.AuthorizationProxy;
 import com.bookie.auth.IsAdmin;
 import com.bookie.bizlogic.interfaces.BookServiceInterface;
 import com.bookie.dao.BookDAO;
@@ -9,8 +10,12 @@ import com.bookie.models.Book;
 public class BookService implements BookServiceInterface {
     private BookDAO bookDAO;
 
-    public BookService() {
+    private BookService() {
         this.bookDAO = new BookDAO();
+    }
+    
+    public static BookServiceInterface getServiceInstance() {
+    	return AuthorizationProxy.createProxy(new BookService());
     }
 
     @Override

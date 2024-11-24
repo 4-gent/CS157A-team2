@@ -2,6 +2,7 @@ package com.bookie.bizlogic;
 
 import java.util.List;
 
+import com.bookie.auth.AuthorizationProxy;
 import com.bookie.auth.IsAdmin;
 import com.bookie.bizlogic.interfaces.InventoryServiceInterface;
 import com.bookie.dao.InventoryDAO;
@@ -9,7 +10,15 @@ import com.bookie.models.InventoryItem;
 
 public class InventoryService implements InventoryServiceInterface {
 
-	private InventoryDAO inventoryDAO = new InventoryDAO();
+	private InventoryDAO inventoryDAO;
+	
+	private InventoryService() {
+		inventoryDAO = new InventoryDAO();
+	}
+	
+	public static InventoryServiceInterface getServiceInstance() {
+    	return AuthorizationProxy.createProxy(new InventoryService());
+    }
 	
 	@IsAdmin
 	public InventoryItem addInventoryItem(InventoryItem item) {

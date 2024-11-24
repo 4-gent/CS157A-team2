@@ -3,6 +3,7 @@ package com.bookie.bizlogic;
 import java.util.Date;
 import java.util.List;
 
+import com.bookie.auth.AuthorizationProxy;
 import com.bookie.auth.IsAdmin;
 import com.bookie.auth.IsAdminOrSameUser;
 import com.bookie.bizlogic.interfaces.OrderServiceInterface;
@@ -12,7 +13,15 @@ import com.bookie.models.Order;
 
 public class OrderService implements OrderServiceInterface{
 
-	private OrderDAO orderDAO = new OrderDAO();
+	private OrderDAO orderDAO;
+	
+	private OrderService() {
+		orderDAO = new OrderDAO();
+	}
+	
+	public static OrderServiceInterface getServiceInstance() {
+    	return AuthorizationProxy.createProxy(new OrderService());
+    }
 	
 	@IsAdminOrSameUser(value = "username")
 	public Order getOrderByID(int orderID, String username) throws Exception {

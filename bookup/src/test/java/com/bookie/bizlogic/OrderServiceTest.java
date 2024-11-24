@@ -13,12 +13,13 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import com.bookie.auth.AuthorizationProxy;
 import com.bookie.auth.UserContext;
+import com.bookie.bizlogic.interfaces.AddressServiceInterface;
 import com.bookie.bizlogic.interfaces.BookServiceInterface;
 import com.bookie.bizlogic.interfaces.CartServiceInterface;
 import com.bookie.bizlogic.interfaces.InventoryServiceInterface;
 import com.bookie.bizlogic.interfaces.OrderServiceInterface;
+import com.bookie.bizlogic.interfaces.PaymentInfoServiceInterface;
 import com.bookie.bizlogic.interfaces.UserServiceInterface;
 import com.bookie.dao.UserDAO;
 import com.bookie.models.Address;
@@ -40,11 +41,11 @@ public class OrderServiceTest {
 
     @BeforeEach
     public void setUp() {
-        userService = AuthorizationProxy.createProxy(new UserService());
-        cartService = AuthorizationProxy.createProxy(new CartService());
-        bookService = AuthorizationProxy.createProxy(new BookService());
-        inventoryService = AuthorizationProxy.createProxy(new InventoryService());
-        orderService = AuthorizationProxy.createProxy(new OrderService());
+        userService = UserService.getServiceInstance();
+        cartService = CartService.getServiceInstance();
+        bookService = BookService.getServiceInstance();
+        inventoryService = InventoryService.getServiceInstance();
+        orderService = OrderService.getServiceInstance();
         userDAO = new UserDAO();
     }
 
@@ -77,12 +78,14 @@ public class OrderServiceTest {
 
             // Step 2: Add address
             Address address = new Address(0, "123 Main St", "Cityville", "Stateville", "12345", "Country");
-            Address savedAddress = new AddressService().addAddress(address);
+            AddressServiceInterface addressService = AddressService.getServiceInstance();
+            Address savedAddress = addressService.addAddress(address);
             assertNotNull(savedAddress, "Address should be saved successfully");
 
             // Step 3: Add payment details
             PaymentInfo paymentInfo = new PaymentInfo(0, "user1", "4111111111111111", "12/25", "John Doe", "123", savedAddress, false);
-            PaymentInfo savedPaymentInfo = new PaymentInfoService().addPaymentDetailsForUser(paymentInfo);
+            PaymentInfoServiceInterface paymentInfoService = PaymentInfoService.getServiceInstance();
+            PaymentInfo savedPaymentInfo = paymentInfoService.addPaymentDetailsForUser(paymentInfo);
             assertNotNull(savedPaymentInfo, "Payment info should be saved successfully");
 
          // Step 1: Register a admin user
@@ -137,10 +140,12 @@ public class OrderServiceTest {
 
             // Step 2: Add address, payment details, and book for user1
             Address address = new Address(0, "123 Main St", "Cityville", "Stateville", "12345", "Country");
-            Address savedAddress = new AddressService().addAddress(address);
+            AddressServiceInterface addressService = AddressService.getServiceInstance();
+            Address savedAddress = addressService.addAddress(address);
 
             PaymentInfo paymentInfo = new PaymentInfo(0, "user1", "4111111111111111", "12/25", "John Doe", "123", savedAddress, false);
-            PaymentInfo savedPaymentInfo = new PaymentInfoService().addPaymentDetailsForUser(paymentInfo);
+            PaymentInfoServiceInterface paymentInfoService = PaymentInfoService.getServiceInstance();
+            PaymentInfo savedPaymentInfo = paymentInfoService.addPaymentDetailsForUser(paymentInfo);
 
             cartService.addItemsToCart("user1", List.of(new CartItem(savedItem,1)));
             Order createdOrder = cartService.checkout("user1", savedAddress.getAddressID(), savedPaymentInfo.getPaymentID());
@@ -176,10 +181,12 @@ public class OrderServiceTest {
 
             // Step 2: Add address and payment details
             Address address = new Address(0, "123 Main St", "Cityville", "Stateville", "12345", "Country");
-            Address savedAddress = new AddressService().addAddress(address);
+            AddressServiceInterface addressService = AddressService.getServiceInstance();
+            Address savedAddress = addressService.addAddress(address);
 
             PaymentInfo paymentInfo = new PaymentInfo(0, "user1", "4111111111111111", "12/25", "John Doe", "123", savedAddress, false);
-            PaymentInfo savedPaymentInfo = new PaymentInfoService().addPaymentDetailsForUser(paymentInfo);
+            PaymentInfoServiceInterface paymentInfoService = PaymentInfoService.getServiceInstance();
+            PaymentInfo savedPaymentInfo = paymentInfoService.addPaymentDetailsForUser(paymentInfo);
 
 
             cartService.addItemsToCart("user1", List.of(new CartItem(savedItem,1)));

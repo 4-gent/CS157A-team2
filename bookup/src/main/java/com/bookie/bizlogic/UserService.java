@@ -3,6 +3,7 @@ package com.bookie.bizlogic;
 import java.sql.Connection;
 import java.sql.SQLException;
 
+import com.bookie.auth.AuthorizationProxy;
 import com.bookie.auth.IsAdmin;
 import com.bookie.auth.SameUser;
 import com.bookie.bizlogic.interfaces.UserServiceInterface;
@@ -14,8 +15,12 @@ import com.bookie.models.User;
 public class UserService implements UserServiceInterface {
     private UserDAO userDAO;
 
-    public UserService() {
+    private UserService() {
         this.userDAO = new UserDAO();
+    }
+    
+    public static UserServiceInterface getServiceInstance() {
+    	return AuthorizationProxy.createProxy(new UserService());
     }
 
     @Override

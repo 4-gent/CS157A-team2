@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.bookie.bizlogic.UserService;
+import com.bookie.bizlogic.interfaces.UserServiceInterface;
 
 @WebServlet("/Register")
 public class Register extends HttpServlet {
@@ -31,10 +32,10 @@ public class Register extends HttpServlet {
 		boolean admin = false;
 		int favoriteAuthor = 0, favoriteGenre = 0;
 		
-		UserService user = new UserService();
+		UserServiceInterface userService = UserService.getServiceInstance();
 		
 		try {
-			user.register(username, password, email, phone, admin, favoriteAuthor, favoriteGenre);
+			userService.register(username, password, email, phone, admin, favoriteAuthor, favoriteGenre);
 		} catch (SQLException e) {
 			// FIXME SHOW to the User that new user creation failed
 			e.printStackTrace();

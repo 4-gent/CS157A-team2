@@ -14,11 +14,11 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import com.bookie.auth.AuthorizationProxy;
 import com.bookie.auth.UserContext;
 import com.bookie.bizlogic.interfaces.BookServiceInterface;
 import com.bookie.bizlogic.interfaces.CartServiceInterface;
 import com.bookie.bizlogic.interfaces.InventoryServiceInterface;
+import com.bookie.bizlogic.interfaces.PaymentInfoServiceInterface;
 import com.bookie.bizlogic.interfaces.UserServiceInterface;
 import com.bookie.dao.AddressDAO;
 import com.bookie.dao.CartDAO;
@@ -41,10 +41,10 @@ public class CartServiceTest {
 
     @BeforeEach
     public void setUp() {
-        cartService = AuthorizationProxy.createProxy(new CartService());
-        userService = AuthorizationProxy.createProxy(new UserService());
-        bookService = AuthorizationProxy.createProxy(new BookService());
-        inventoryService = AuthorizationProxy.createProxy(new InventoryService());
+        cartService = CartService.getServiceInstance();
+        userService = UserService.getServiceInstance();
+        bookService = BookService.getServiceInstance();
+        inventoryService = InventoryService.getServiceInstance();
         UserContext.clear();
      // Get connection from any DAO (CartDAO, BookDAO, etc.)
         try {
@@ -189,7 +189,7 @@ public class CartServiceTest {
             savedAddress,
             false
         );
-        PaymentInfoService paymentDetailsService = new PaymentInfoService();
+        PaymentInfoServiceInterface paymentDetailsService =  PaymentInfoService.getServiceInstance();
         PaymentInfo savedPaymentDetails = paymentDetailsService.addPaymentDetailsForUser(paymentDetails);
         assertNotNull(savedPaymentDetails, "Payment details should be saved successfully");
         int paymentDetailsID = savedPaymentDetails.getPaymentID();

@@ -3,19 +3,25 @@ package com.bookie.bizlogic;
 import java.sql.SQLException;
 import java.util.List;
 
+import com.bookie.auth.AuthorizationProxy;
 import com.bookie.auth.IsAdmin;
 import com.bookie.auth.IsAdminOrSameUser;
+import com.bookie.bizlogic.interfaces.AddressServiceInterface;
 import com.bookie.dao.AddressDAO;
 import com.bookie.models.Address;
-import com.bookie.bizlogic.interfaces.AddressServiceInterface;
 
 public class AddressService implements AddressServiceInterface {
 
     private AddressDAO addressDAO;
 
-    public AddressService() {
+    private AddressService() {
         this.addressDAO = new AddressDAO();
     }
+    
+    public static AddressServiceInterface getServiceInstance() {
+    	return AuthorizationProxy.createProxy(new AddressService());
+    }
+
 
     /**
      * Adds a new address.

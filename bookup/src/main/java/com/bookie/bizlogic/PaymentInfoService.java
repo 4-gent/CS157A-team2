@@ -3,6 +3,7 @@ package com.bookie.bizlogic;
 import java.sql.SQLException;
 import java.util.List;
 
+import com.bookie.auth.AuthorizationProxy;
 import com.bookie.auth.IsAdminOrSameUser;
 import com.bookie.bizlogic.interfaces.PaymentInfoServiceInterface;
 import com.bookie.dao.PaymentInfoDAO;
@@ -12,8 +13,12 @@ public class PaymentInfoService implements PaymentInfoServiceInterface {
 
     private PaymentInfoDAO paymentDetailsDAO;
 
-    public PaymentInfoService() {
+    private PaymentInfoService() {
         this.paymentDetailsDAO = new PaymentInfoDAO();
+    }
+    
+    public static PaymentInfoServiceInterface getServiceInstance() {
+    	return AuthorizationProxy.createProxy(new PaymentInfoService());
     }
 
     /**

@@ -1,13 +1,17 @@
 package com.bookie.servlet;
-import com.bookie.bizlogic.BookService;
-import com.bookie.models.Book;
-import java.io.IOException; 
-import java.util.*;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import com.bookie.bizlogic.BookService;
+import com.bookie.bizlogic.interfaces.BookServiceInterface;
+import com.bookie.models.Book;
 
 @WebServlet("/Search")
 public class Search extends HttpServlet{
@@ -20,7 +24,7 @@ public class Search extends HttpServlet{
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 	    String input_phrase = request.getParameter("search-input");
 
-	    BookService book = new BookService();
+	    BookServiceInterface book = BookService.getServiceInstance();
 	    List<Book> search_result = book.bookSearch(input_phrase);
 
 	    if (search_result != null && !search_result.isEmpty()) {

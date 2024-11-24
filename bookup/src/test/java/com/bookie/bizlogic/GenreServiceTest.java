@@ -1,20 +1,24 @@
 package com.bookie.bizlogic;
 
-import static org.junit.jupiter.api.Assertions.*;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.Test;
-
-import com.bookie.auth.UserContext;
-import com.bookie.bizlogic.interfaces.GenreServiceInterface;
-import com.bookie.auth.AuthorizationProxy;
-import com.bookie.dao.UserDAO;
-import com.bookie.models.Genre;
-import com.bookie.models.User;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.List;
+
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import com.bookie.auth.UserContext;
+import com.bookie.bizlogic.interfaces.GenreServiceInterface;
+import com.bookie.dao.UserDAO;
+import com.bookie.models.Genre;
+import com.bookie.models.User;
 
 public class GenreServiceTest {
 
@@ -27,7 +31,7 @@ public class GenreServiceTest {
         userDAO = new UserDAO();
 
         // Create a proxied instance of GenreService
-        genreService = AuthorizationProxy.createProxy(new GenreService());
+        genreService = GenreService.getServiceInstance();
     }
 
     @AfterEach

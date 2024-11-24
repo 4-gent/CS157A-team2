@@ -1,6 +1,8 @@
 package com.bookie.bizlogic;
 
 import java.util.List;
+
+import com.bookie.auth.AuthorizationProxy;
 import com.bookie.auth.IsAdmin;
 import com.bookie.bizlogic.interfaces.AuthorServiceInterface;
 import com.bookie.dao.AuthorDAO;
@@ -9,8 +11,12 @@ import com.bookie.models.Author;
 public class AuthorService implements AuthorServiceInterface {
     private AuthorDAO authorDAO;
 
-    public AuthorService() {
+    private AuthorService() {
         authorDAO = new AuthorDAO();
+    }
+    
+    public static AuthorServiceInterface getServiceInstance() {
+    	return AuthorizationProxy.createProxy(new AuthorService());
     }
 
     @Override
