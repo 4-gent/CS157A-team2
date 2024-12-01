@@ -12,6 +12,7 @@
     <div class="nav">
         <a href="${pageContext.request.contextPath}/index.jsp"><button class="nav-button">Home</button></a>
         <a href="${pageContext.request.contextPath}/User_Info"><button class="nav-button">Profile</button></a>
+        <a href="${pageContext.request.contextPath}/cart.jsp"><button class="nav-button">Checkout</button></a>
     </div>
     <div class="books-header">
         <h1>Books</h1>

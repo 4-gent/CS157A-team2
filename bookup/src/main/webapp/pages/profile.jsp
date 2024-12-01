@@ -13,6 +13,7 @@
     <div class="nav">
         <a href="/bookup/Books"><button class="nav-button">Books</button></a>
         <a href="/bookup/index.jsp"><button class="nav-button">Log Out</button></a>
+         <a href="/bookup/pages/cart.jsp"><button class="nav-button">Checkout</button></a>
     </div>
 
     <!-- User Profile Section -->
