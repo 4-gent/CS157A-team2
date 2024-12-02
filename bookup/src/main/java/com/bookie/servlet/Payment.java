@@ -45,12 +45,16 @@ public class Payment extends HttpServlet {
         try {
         	List<PaymentInfo> userPayment = paymentInfoService.getAllPaymentDetailsForUser(username);
         	if (userPayment != null) {
-        		//request.setAttribute(username, response)
+        		request.setAttribute("paymentDetails", userPayment);
+        		request.getRequestDispatcher("/pages/payment.jsp").forward(request, response);
         	} else {
-        		
+        		response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+                response.getWriter().write("Payment Information not found");
         	}
         } catch (Exception e) {
-        	
+        	e.printStackTrace();
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            response.getWriter().write("An error occurred while fetching payment information");
         }
     	
     	
@@ -60,8 +64,30 @@ public class Payment extends HttpServlet {
     
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException { 
+    	// Retrieve the username from the session, need for service methods
+    	String username = (String) request.getSession().getAttribute("username");
     	
-    	//hasn't made payment details yet so needs to fill them in
+    	// If username is null, redirect to login page
+        if (username == null) {
+            response.sendRedirect("/bookup/pages/login.jsp");
+            return;
+        }
+        
+        try {
+        	String updatePayment = request.getParameter("updatePayment");
+        	if (updatePayment != null) {
+        		boolean updated = false;
+        		
+        	}
+        	
+        } catch (Exception e) {
+            e.printStackTrace();
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            response.getWriter().write("An error occurred while processing the request");
+        }
+    	
+    	//Add new payment detail for user? (if dont have them already or adding more)
+    	
     	
     	//update
     	

@@ -26,7 +26,7 @@
 			<c:if test="${not empty paymentInfos}">
 				<c:forEach var="info" items="${paymentInfos}">
 					<div class="payment-info">
-						<p><strong>Payment ID:</strong> ${info.paymentID}</p>
+						<p><strong>Payment ID:</strong> ${info.paymentDetails.paymentID}</p>
 						<p><strong>User Name:</strong> ${info.username}</p>
 						<p><strong>Card Number:</strong> ${info.cardNumber}</p>
 						<p><strong>Expiration:</strong> ${info.exp}</p>
@@ -47,6 +47,8 @@
 			<c:if test="${empty paymentInfos}">
 				<p class="none-found">Your payment detail are empty. Add them now!</p>
 			</c:if>
+			
+			<button class ="addPayment">Add Payment</button>
 			
 		</div>
 		
