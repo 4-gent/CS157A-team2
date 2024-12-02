@@ -96,6 +96,7 @@
                         <p>${book.title}</p>
                         <label>Year</label>
                         <p>${book.year}</p>
+                        <!-- Add to Cart Button -->
                     </div>
                 </c:forEach>
             </c:otherwise>
@@ -114,6 +115,8 @@
             <h2 id="modalTitle">Book Title</h2>
             <p id="modalYear">Published Year</p>
             <p id="modalISBN">ISBN</p>
+             <button class="add-to-cart" onclick="addToCart(event, '${book.ISBN}')">Add to Cart</button>
+            
         </div>
     </div>
 
@@ -138,6 +141,7 @@
                 closeModal();
             }
         }
+        
     </script>
 </body>
 </html>
