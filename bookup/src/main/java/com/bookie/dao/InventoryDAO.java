@@ -342,5 +342,4 @@ public class InventoryDAO extends BaseDAO<InventoryItem, Integer>{
 	    }
 	    return inventoryItems;
 	}
-	
 }

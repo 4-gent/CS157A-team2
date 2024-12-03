@@ -26,5 +26,21 @@ public interface CartServiceInterface {
 	@SameUser(value = "username")
 	public Order checkout(String username, int addressID, int paymentDetailsID) throws Exception;
 
+	public List<CartItem> getCartItems(int userId);
+
+	public List<CartItem> searchCartItems(int userId, String searchInput);
+
+
+	public void removeCartItem(int userId, int itemId);
+
+	public void updateCartItemQuantity(int userId, int updateItemId, int newQuantity);
+
+	public List<CartItem> filterCartItems(int userId, String category, String availability);
+
+	public void removeItemsFromCart(int userId, String bookId);
+
+
+
+
 	
 }
