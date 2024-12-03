@@ -54,10 +54,10 @@ public class InventoryItem{
 	}
 
 	@Override
-	public String toString() {
-		return "InventoryItem [inventoryItemID=" + inventoryItemID + ", book=" + book + ", price=" + price + ", qty="
-				+ qty + ", description=" + description + "]";
-	}
+    public String toString() {
+        return "InventoryItem [inventoryItemID=" + inventoryItemID + ", book=" + (book != null ? book.toString() : "N/A")
+                + ", price=" + price + ", qty=" + qty + ", description=" + description + "]";
+    }
 	
 
 }

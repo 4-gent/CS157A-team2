@@ -83,8 +83,9 @@ public class Book {
 	}
 
 	@Override
-	public String toString() {
-		return "Book [ISBN=" + ISBN + ", title=" + title + ", year=" + year + ", publisher=" + publisher
-				+ ", isFeatured=" + isFeatured + ", author=" + author.getName() + ", genre=" + genre.getName() + "]";
-	}
+    public String toString() {
+        return "Book [ISBN=" + ISBN + ", title=" + title + ", year=" + year + ", publisher=" + publisher
+                + ", isFeatured=" + isFeatured + ", author=" + (author != null ? author.getName() : "N/A")
+                + ", genre=" + (genre != null ? genre.getName() : "N/A") + "]";
+    }
 }

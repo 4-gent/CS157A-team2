@@ -46,4 +46,8 @@ public class InventoryService implements InventoryServiceInterface {
 	public List<InventoryItem> searchInventoryItemsByKeyword(String keyword){
 		return inventoryDAO.searchInventoryItemsByKeyword(keyword);
 	}
+	public List<InventoryItem> getAllInventoryItems(){
+		return inventoryDAO.getAllInventoryItems();
+	}
+	
 }
