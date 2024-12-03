@@ -110,6 +110,7 @@
                         <p>${book.title}</p>
                         <label>Year</label>
                         <p>${book.year}</p>
+                        <!-- Add to Cart Button -->
                     </div>
                 </c:forEach>
             </c:otherwise>
@@ -128,6 +129,17 @@
             <h2 id="modalTitle">Book Title</h2>
             <p id="modalYear">Published Year</p>
             <p id="modalISBN">ISBN</p>
+        <!-- Add to Cart Form -->
+
+             <form action="${pageContext.request.contextPath}/Cart" method="POST">
+            <input type="hidden" name="action" value="addToCart">
+            <input type="hidden" name="isbn" id="modalISBNInput">
+            <label for="quantity">Quantity:</label>
+            <input type="number" id="quantity" name="quantity" value="1" min="1" required>
+              <input type="hidden" name="id" value="${book.Id})"> 
+            <button type="submit" class="add-to-cart">Add to Cart</button>
+        </form>
+            
         </div>
     </div>
 
@@ -137,6 +149,8 @@
             document.getElementById("modalTitle").textContent = title;
             document.getElementById("modalYear").textContent = "Published in: " + year;
             document.getElementById("modalISBN").textContent = "ISBN: " + isbn;
+            document.getElementById("modalISBNInput").value = isbn; // Populate the hidden input field
+
             document.getElementById("bookModal").style.display = "block";
         }
 
@@ -152,6 +166,7 @@
                 closeModal();
             }
         }
+        
     </script>
 </body>
 </html>

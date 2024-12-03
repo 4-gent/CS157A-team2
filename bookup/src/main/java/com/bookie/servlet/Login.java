@@ -44,7 +44,6 @@ public class Login extends HttpServlet {
             if (loginResult) {
                 // Retrieve user details after successful login
                 User userDetails = userService.getUserByUsername(username); // Assuming this method exists
-
                 // Retrieve all authors and genres
                 List<Author> authors = authorService.getAuthors();
                 List<Genre> genres = genreService.getGenres();

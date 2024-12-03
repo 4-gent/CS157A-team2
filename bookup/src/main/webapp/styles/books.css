@@ -185,3 +185,17 @@
 .filter-container select {
     margin: 0 10px;
 }
+.add-to-cart-button {
+    padding: 10px 15px;
+    background-color: #28a745;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.add-to-cart-button:hover {
+    background-color: #218838;
+}
+

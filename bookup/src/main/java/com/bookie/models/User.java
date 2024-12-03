@@ -76,4 +76,9 @@ public class User {
     public void setFavoriteGenreID(int favoriteGenreID) {
         this.favoriteGenreID = favoriteGenreID;
     }
+
+	public Object getId() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }
