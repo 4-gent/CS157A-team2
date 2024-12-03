@@ -164,7 +164,7 @@ public class Payment extends HttpServlet {
         		PaymentInfo paymentInfo = new PaymentInfo(paymentID, username, cardNumber, monthYear, cardHolderName, cvv, billingAddress, isDeleted);
         		
         		paymentInfo = paymentInfoService.addPaymentDetailsForUser(paymentInfo);
-        	}
+        	} 
         	
         	
         } catch (Exception e) {
