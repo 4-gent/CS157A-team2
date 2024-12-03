@@ -3,25 +3,27 @@ package com.bookie.servlet;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Map;
+import java.util.HashMap;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
+import com.bookie.auth.UserContext;
 import com.bookie.bizlogic.AuthorService;
 import com.bookie.bizlogic.GenreService;
 import com.bookie.bizlogic.UserService;
+import com.bookie.bizlogic.interfaces.AuthorServiceInterface;
+import com.bookie.bizlogic.interfaces.GenreServiceInterface;
 import com.bookie.bizlogic.interfaces.UserServiceInterface;
-import com.bookie.models.User;
 import com.bookie.models.Author;
 import com.bookie.models.Genre;
-import com.bookie.bizlogic.interfaces.GenreServiceInterface;
-import com.bookie.bizlogic.interfaces.AuthorServiceInterface;
+import com.bookie.models.User;
 
-@WebServlet("/ViewCustomer")
+@WebServlet("/Customers")
 public class ViewCustomer extends HttpServlet {
     private static final long serialVersionUID = 1L;
 
@@ -30,29 +32,65 @@ public class ViewCustomer extends HttpServlet {
     }
 
     @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        UserServiceInterface userService = UserService.getServiceInstance();
+        AuthorServiceInterface authorService = AuthorService.getServiceInstance();
+        GenreServiceInterface genreService = GenreService.getServiceInstance();
+
+        try {
+            // Ensure UserContext is set
+            String username = (String) request.getSession().getAttribute("username");
+            if (username == null) {
+                throw new Exception("User is not logged in");
+            }
+            UserContext.setUserId(username);
+
+            // Retrieve all non-admin users
+            List<User> nonAdminUsers = userService.getAllNonAdminUsers();
+            List<Author> authors = authorService.getAuthors();
+            List<Genre> genres = genreService.getGenres();
+
+            // Create maps for quick lookup of authors and genres by ID
+            Map<Integer, Author> authorMap = new HashMap<>();
+            for (Author author : authors) {
+                authorMap.put(author.getAuthorID(), author);
+            }
+
+            Map<Integer, Genre> genreMap = new HashMap<>();
+            for (Genre genre : genres) {
+                genreMap.put(genre.getGenreID(), genre);
+            }
+
+            // Set the non-admin users, authors, and genres as request attributes
+            request.setAttribute("nonAdminUsers", nonAdminUsers);
+            request.setAttribute("authorMap", authorMap);
+            request.setAttribute("genreMap", genreMap);
+
+            // Forward the request to the JSP page
+            request.getRequestDispatcher("/pages/customers.jsp").forward(request, response);
+        } catch (Exception e) {
+            e.printStackTrace();
+            response.sendRedirect(request.getContextPath() + "/pages/customers.jsp?error=Unknown Error");
+        }
+    }
+
+    @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String username = request.getParameter("username");
 
         UserServiceInterface userService = UserService.getServiceInstance();
-        GenreServiceInterface genreService = GenreService.getServiceInstance();
         AuthorServiceInterface authorService = AuthorService.getServiceInstance();
+        GenreServiceInterface genreService = GenreService.getServiceInstance();
 
         try {
             User userDetails = userService.getUserByUsername(username);
 
             if (userDetails != null) {
-                // Invalidate old session (if any) and create a new session
-                HttpSession session = request.getSession(false);
-                if (session != null) {
-                    session.invalidate();
-                }
-                session = request.getSession(true);
-
-                // Fetch all genres and authors
-                List<Genre> genres = genreService.getGenres();
+                // Retrieve all authors and genres
                 List<Author> authors = authorService.getAuthors();
+                List<Genre> genres = genreService.getGenres();
 
-                // Find the favorite genre and author by ID
+                // Find the favorite author and genre by ID
                 Genre favoriteGenre = null;
                 Author favoriteAuthor = null;
 

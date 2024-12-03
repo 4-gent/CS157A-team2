@@ -5,8 +5,8 @@
 <head>
 	<meta charset="UTF-8">
 	<title>Index Page for Book Up</title>
-	<link rel="stylesheet" href="./styles/index.css">
-	<link rel="stylesheet" href="./styles/global.css">
+	<link rel="stylesheet" type="text/css" href="./styles/index.css">
+	<link rel="stylesheet" type="text/css" href="./styles/global.css">
 </head>
 <body class="index-body">
 	<div class="index-header">

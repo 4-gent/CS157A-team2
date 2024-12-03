@@ -1,0 +1,158 @@
+@charset "UTF-8";
+
+.orders-body{
+	background-color: #3E8E41; /* A rich, natural green */
+}
+
+.orders-container{
+	display: block;
+	width: 100%;
+	height: auto;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+.orders-header{
+	display:flex;
+	justify-content:center;
+	text-align: center;
+}
+
+/* General styling for the table */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+    font-family: Arial, sans-serif;
+}
+
+/* Table header */
+th {
+    background-color: #3E8E41; /* Green header */
+    color: white;
+    padding: 12px;
+    text-align: left;
+    font-size: 1rem;
+}
+
+/* Table data cells */
+td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+/* Table rows */
+tr:nth-child(even) {
+    background-color: #f2f2f2; /* Light grey for even rows */
+}
+
+/* Hover effect for rows */
+tr:hover {
+    background-color: #d9f7d9; /* Light green on hover */
+    cursor: pointer;
+}
+
+/* Styling for action links */
+a {
+    color: #3E8E41; /* Green color for links */
+    text-decoration: none;
+    font-weight: bold;
+}
+
+/* Change link color on hover */
+a:hover {
+    color: #2d6a2d; /* Darker green when hovered */
+}
+
+/* Responsiveness: stack table rows on smaller screens */
+@media (max-width: 768px) {
+    table, th, td {
+        display: block;
+        width: 100%;
+    }
+
+    th {
+        text-align: right;
+    }
+
+    td {
+        text-align: left;
+        position: relative;
+        padding-left: 50%;
+    }
+
+    td::before {
+        content: attr(data-label);
+        position: absolute;
+        left: 10px;
+        top: 12px;
+        font-weight: bold;
+        color: #3E8E41;
+    }
+}
+
+/* Styling for the search bar container */
+.search-bar {
+    width: 100%;
+    max-width: 600px;
+    margin: 40px auto;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.search-bar h2 {
+    text-align: center;
+    color: #3E8E41;
+    font-size: 1.5rem;
+    margin-bottom: 20px;
+}
+
+/* Input and button styling */
+.search-bar input, .search-bar button {
+    width: 37vw;
+    padding: 12px;
+    margin-bottom: 15px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 1rem;
+}
+
+.search-bar button{
+	width: 38.7vw;
+}
+
+/* Input and button placeholder */
+.search-bar input::placeholder {
+    color: #888;
+}
+
+/* Focus effect for inputs */
+.search-bar input:focus {
+    border-color: #3E8E41;
+    outline: none;
+}
+
+/* Styling for the search button */
+.search-bar button {
+    background-color: #3E8E41;
+    color: white;
+    border: none;
+    cursor: pointer;
+    font-size: 1rem;
+}
+
+.search-bar button:hover {
+    background-color: #2d6a2d; /* Darker green on hover */
+}
+
+/* Responsive styling: stack the search form on small screens */
+@media (max-width: 768px) {
+    .search-bar {
+        padding: 15px;
+        max-width: 90%;
+    }
+}

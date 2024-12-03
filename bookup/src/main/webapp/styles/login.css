@@ -1,17 +1,16 @@
 .login-body{
-    background-color: rgb(41, 37, 37);
-}
+    background-color: #3E8E41; /* A rich, natural green */
 
 .login-header{
 	text-align: center;
-	color: white;
+	color: black;
 	font-size: 2em;
 }
 
 .login-form{
-    background-color: rgb(32, 31, 31);
-    width: 20vw;
-    padding: 10vh;
+    background-color: whitesmoke;
+    width: 25vw;
+    padding: 15vh;
     height: auto;
     margin: 0 auto;
     margin-top: 10vh;
@@ -22,9 +21,9 @@
     box-shadow: 0px 7px 10px 3px rgba(37, 37, 37, 0.7);
 }
 .login-form:hover{
-    transition: 300ms;
-    width: 21vw;
-    box-shadow: 0px 7px 10px 3px hsla(39, 99%, 54%, 0.7);
+	transition: 300ms;
+    transform: scale(1.05);
+	box-shadow: 0px 7px 10px 3px rgba(37, 37, 37, 0.7);
 }
 
 .login-input{
@@ -36,15 +35,16 @@
     padding: 3px;
     border: none;
     border-radius: 5px;
-    background-color: rgb(32, 31, 31);
-    color: white;
+    background-color: whitesmoke;
+    color: black;
+    font-weight: 200;
 
     transition: 300ms;
 }
 .login-input:hover{
     transition: 300ms;
-    background-color: rgb(32, 31, 31);
-    box-shadow: 0px 7px 10px 3px hsla(39, 99%, 54%, 0.7);
+    background-color: whitesmoke;
+	box-shadow: 0px 7px 10px 3px rgba(37, 37, 37, 0.7);
 }
 
 .login-button{
@@ -55,11 +55,14 @@
     border: none;
     border-radius: 5px;
     background-color: grey;
-    color: white;
+    color: black;
 
     transition: 300ms;
 }
+
 .login-button:hover{
     transition: 300ms;
-    background-color: rgb(32, 31, 31);
-    box-shadow: 0px 7px 10px 3px hsla(39, 99%, 54%, 0.7);
+    background-color: white;
+	box-shadow: 0px 7px 10px 3px rgba(37, 37, 37, 0.7);
+}
+

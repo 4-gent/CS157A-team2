@@ -1,6 +1,7 @@
 package com.bookie.servlet;
 
 import com.bookie.dao.UserDAO;
+import com.bookie.dao.CartDAO;
 import com.bookie.models.User;
 
 import java.io.IOException;
@@ -15,10 +16,12 @@ public class UserInfo extends HttpServlet {
     private static final long serialVersionUID = 1L;
 
     private UserDAO userDAO;
+    private CartDAO cartDAO;
 
     @Override
     public void init() throws ServletException {
         userDAO = new UserDAO(); // Initialize UserDAO
+        cartDAO = new CartDAO();
     }
 
     @Override
@@ -97,6 +100,10 @@ public class UserInfo extends HttpServlet {
                 // Handle account deletion
                 String deleteAccount = request.getParameter("deleteAccount");
                 if ("true".equals(deleteAccount)) {
+                    // Delete associated records in the cart table
+                    cartDAO.deleteByUsername(username);
+
+                    // Delete the user
                     userDAO.delete(username);
                     response.sendRedirect("/bookup/index.jsp");
                     return;

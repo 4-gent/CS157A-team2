@@ -194,4 +194,32 @@ public class PaymentInfoDAO extends BaseDAO<PaymentInfo, Integer> {
         throw new SQLException("Failed to insert address.");
     }
  
+    /**
+     * Get PaymentInfo by ID.
+     */
+    public PaymentInfo getPaymentInfoById(int paymentId) {
+        String query = "SELECT * FROM PaymentDetails WHERE paymentID = ?";
+        try (PreparedStatement stmt = connection.prepareStatement(query)) {
+            stmt.setInt(1, paymentId);
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    Address address = new AddressDAO().getById(rs.getInt("addressID"));
+                    return new PaymentInfo(
+                        rs.getInt("paymentID"),
+                        rs.getString("username"),
+                        rs.getString("cardNumber"),
+                        rs.getDate("exp").toString(), // Convert DATE to String
+                        rs.getString("cardHolderName"),
+                        rs.getString("cvv"),
+                        address,
+                        rs.getBoolean("isDeleted")
+                    );
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
 }

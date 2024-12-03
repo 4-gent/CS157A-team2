@@ -57,3 +57,26 @@ INSERT INTO Users (username, password, email, phone, isAdmin, favoriteAuthorID, 
 ('customer4', 'custpass4', 'cust4@store.com', '654-321-0987', FALSE, 6, 2),
 ('customer5', 'custpass5', 'cust5@store.com', '543-210-9876', FALSE, 7, 3),
 ('customer6', 'custpass6', 'cust6@store.com', '432-109-8765', FALSE, 8, 4);
+
+--insert addresses for the users
+INSERT INTO addresses (addressID, street, city, state, zip, country) VALUES
+(101, '123 Main St', 'Cityville', 'CA', '12345', 'USA'),
+(102, '456 Elm St', 'Townsville', 'TX', '67890', 'USA'),
+(103, '789 Oak St', 'Villagetown', 'FL', '11223', 'USA'),
+(104, '101 Pine St', 'Metrocity', 'NY', '33445', 'USA'),
+(105, '202 Maple St', 'Capetown', 'IL', '55667', 'USA'),
+(106, '303 Cedar St', 'Rivertown', 'WA', '77889', 'USA'),
+(107, '404 Birch St', 'Hilltown', 'NV', '99100', 'USA'),
+(108, '505 Spruce St', 'Beachcity', 'SC', '22334', 'USA');
+
+--insert payment details for the users
+INSERT INTO paymentdetails (paymentID, username, cardNumber, exp, cardHolderName, cvv, addressID, isDeleted) VALUES
+(1, 'johndoe', '1234567812345678', '2025-12-31', 'John Doe', '123', 101, 0),
+(2, 'janedoe', '2345678923456789', '2024-11-30', 'Jane Doe', '234', 102, 0),
+(3, 'customer1', '3456789034567890', '2026-01-31', 'Customer One', '345', 103, 0),
+(4, 'customer2', '4567890145678901', '2025-05-31', 'Customer Two', '456', 104, 0),
+(5, 'customer3', '5678901256789012', '2026-07-31', 'Customer Three', '567', 105, 0),
+(6, 'customer4', '6789012367890123', '2024-08-31', 'Customer Four', '678', 106, 0),
+(7, 'customer5', '7890123478901234', '2025-03-31', 'Customer Five', '789', 107, 0),
+(8, 'customer6', '8901234589012345', '2024-12-31', 'Customer Six', '890', 108, 0);
+

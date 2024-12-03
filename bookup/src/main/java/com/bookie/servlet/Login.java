@@ -11,14 +11,18 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import com.bookie.auth.UserContext;
 import com.bookie.bizlogic.AuthorService;
 import com.bookie.bizlogic.GenreService;
+import com.bookie.bizlogic.PaymentInfoService;
 import com.bookie.bizlogic.UserService;
 import com.bookie.bizlogic.interfaces.AuthorServiceInterface;
 import com.bookie.bizlogic.interfaces.GenreServiceInterface;
+import com.bookie.bizlogic.interfaces.PaymentInfoServiceInterface;
 import com.bookie.bizlogic.interfaces.UserServiceInterface;
 import com.bookie.models.Author;
 import com.bookie.models.Genre;
+import com.bookie.models.PaymentInfo;
 import com.bookie.models.User;
 
 @WebServlet("/Login")
@@ -37,13 +41,18 @@ public class Login extends HttpServlet {
         UserServiceInterface userService = UserService.getServiceInstance();
         AuthorServiceInterface authorService = AuthorService.getServiceInstance();
         GenreServiceInterface genreService = GenreService.getServiceInstance();
+        PaymentInfoServiceInterface paymentInfoService = PaymentInfoService.getServiceInstance();
 
         try {
             boolean loginResult = userService.login(username, password);
 
             if (loginResult) {
                 // Retrieve user details after successful login
-                User userDetails = userService.getUserByUsername(username); // Assuming this method exists
+                User userDetails = userService.getUserByUsername(username);
+
+                // Set UserContext
+                UserContext.setUserId(username);
+
                 // Retrieve all authors and genres
                 List<Author> authors = authorService.getAuthors();
                 List<Genre> genres = genreService.getGenres();
@@ -66,6 +75,11 @@ public class Login extends HttpServlet {
                     }
                 }
 
+                // Retrieve payment details for the user
+                List<PaymentInfo> paymentDetails = paymentInfoService.getAllPaymentDetailsForUser(username);
+                
+                System.out.println("payment details: " + paymentDetails);
+
                 // Invalidate old session (if any) and create a new session
                 HttpSession session = request.getSession(false);
                 if (session != null) {
@@ -76,11 +90,12 @@ public class Login extends HttpServlet {
                 // Store user details in the session
                 session.setAttribute("username", userDetails.getUsername());
                 session.setAttribute("email", userDetails.getEmail());
-                session.setAttribute("isAdmin", userDetails.isAdmin()); // Boolean for profile.jsp
-                session.setAttribute("role", userDetails.isAdmin() ? "admin" : "user"); // Optional, for other usage
+                session.setAttribute("isAdmin", userDetails.isAdmin());
+                session.setAttribute("role", userDetails.isAdmin() ? "admin" : "user");
                 session.setAttribute("phone", userDetails.getPhone());
                 session.setAttribute("favoriteAuthor", favoriteAuthor != null ? favoriteAuthor.getName() : "N/A");
                 session.setAttribute("favoriteGenre", favoriteGenre != null ? favoriteGenre.getName() : "N/A");
+                session.setAttribute("paymentDetails", paymentDetails);
 
                 // Redirect to User_Info page
                 response.sendRedirect(request.getContextPath() + "/pages/profile.jsp");

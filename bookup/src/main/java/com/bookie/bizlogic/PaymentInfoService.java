@@ -73,4 +73,9 @@ public class PaymentInfoService implements PaymentInfoServiceInterface {
     public boolean deletePaymentDetailsForUser(String username, Integer paymentID) {
         return paymentDetailsDAO.delete(paymentID);
     }
+
+    @Override
+    public PaymentInfo getPaymentInfoById(Integer paymentID) throws SQLException {
+        return paymentDetailsDAO.getPaymentInfoById(paymentID);
+    }
 }

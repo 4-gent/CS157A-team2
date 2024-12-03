@@ -19,4 +19,7 @@ public interface PaymentInfoServiceInterface {
 	
 	@IsAdminOrSameUser(value = "username")
 	public boolean deletePaymentDetailsForUser(String username, Integer paymentID);
+
+	@IsAdminOrSameUser(value = "username")
+    public PaymentInfo getPaymentInfoById(Integer paymentID) throws SQLException;
 }

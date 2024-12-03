@@ -10,19 +10,27 @@
 </head>
 <body>
     <!-- Navigation Bar -->
-    <div class="nav">
-        <c:if test="${sessionScope.isAdmin}">
-        	<a href="${pageContext.request.contextPath}/Books"><button class="nav-button">Books</button></a>
-            <a href="${pageContext.request.contextPath}/pages/orders.jsp"><button class="nav-button">Orders</button></a>
-            <a href="${pageContext.request.contextPath}/Inventory"><button class="nav-button">Inventory</button></a>
-            <a href="${pageContext.request.contextPath}/pages/profile.jsp"><button class="nav-button">Profile</button></a>
-        </c:if>
-        <c:if test="${!sessionScope.isAdmin}">
-            <a href="${pageContext.request.contextPath}/pages/books.jsp"><button class="nav-button">Books</button></a>
-            <a href="${pageContext.request.contextPath}/pages/profile.jsp"><button class="nav-button">Profile</button></a>
-        </c:if>
-        <a href="${pageContext.request.contextPath}/index.jsp"><button class="nav-button">Log Out</button></a>
-    </div>
+    <c:choose>
+        <c:when test="${sessionScope.isAdmin}">
+            <div class="nav">
+                <a href="${pageContext.request.contextPath}/Books"><button class="nav-button">Books</button></a>
+                <a href="${pageContext.request.contextPath}/Inventory"><button class="nav-button">Inventory</button></a>
+                <a href="${pageContext.request.contextPath}/Orders"><button class="nav-button">Orders</button></a>
+                <a href="${pageContext.request.contextPath}/Customers"><button class="nav-button">Customers</button></a>
+                <a href="${pageContext.request.contextPath}/User_Info"><button class="nav-button">Profile</button></a>
+                <a href="${pageContext.request.contextPath}/index.jsp"><button class="nav-button">Log Out</button></a>
+            </div>
+        </c:when>
+        <c:otherwise>
+            <div class="nav">
+                <a href="${pageContext.request.contextPath}/Books"><button class="nav-button">Books</button></a>
+                <a href="${pageContext.request.contextPath}/Orders"><button class="nav-button">Your Orders</button></a>
+                <a href="${pageContext.request.contextPath}/Cart"><button class="nav-button">Your Cart</button></a>
+                <a href="${pageContext.request.contextPath}/User_Info"><button class="nav-button">Profile</button></a>
+                <a href="${pageContext.request.contextPath}/index.jsp"><button class="nav-button">Log Out</button></a>
+            </div>
+        </c:otherwise>
+    </c:choose>
 
     <div class="orders-container">
         <!-- Admin-Only Search Form -->
@@ -54,7 +62,7 @@
 
         <!-- Display all orders -->
         <c:if test="${empty order}">
-            <h1>All Orders</h1>
+            <h1 class="orders-header">All Orders</h1>
             <table border="1">
                 <tr>
                     <th>Order ID</th>

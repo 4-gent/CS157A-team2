@@ -1,0 +1,148 @@
+/* Styling for the table wrapper (scrollable table) */
+.scrollable-table {
+    max-width: 100%;
+    overflow-x: auto; /* Enables horizontal scrolling on smaller screens */
+    margin: 20px 0;
+}
+/* General styling for the table */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    font-family: Arial, sans-serif;
+}
+
+/* Styling for the table header */
+th {
+    background-color: #3E8E41; /* Green header */
+    color: black;
+    padding: 12px;
+    text-align: left;
+    font-size: 1rem;
+}
+
+/* Styling for table cells */
+td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+/* Zebra striping for rows */
+tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+/* Hover effect for rows */
+tr:hover {
+    background-color: #e6f7e6; /* Light green hover effect */
+    cursor: pointer;
+}
+
+/* Styling for forms and buttons inside table cells */
+form {
+    display: inline-block;
+    margin-right: 10px;
+}
+
+.inventory-button {
+    background-color: #3E8E41 !important;
+    color: white;
+    border: none;
+    padding: 6px 12px;
+    cursor: pointer;
+    font-size: 1rem;
+    border-radius: 4px;
+}
+
+.inventory-button:hover {
+    background-color: #2d6a2d; /* Darker green on hover */
+}
+
+/* Responsive styling: Make table rows stack on small screens */
+@media (max-width: 768px) {
+    table, th, td {
+        display: block;
+        width: 100%;
+    }
+
+    th {
+        text-align: right;
+    }
+
+    td {
+        text-align: left;
+        padding-left: 50%;
+        position: relative;
+    }
+
+    td::before {
+        content: attr(data-label);
+        position: absolute;
+        left: 10px;
+        top: 12px;
+        font-weight: bold;
+        color: #3E8E41;
+    }
+}
+
+/* Styling for the add item form container */
+.add-item-form {
+    width: 100%;
+    max-width: 600px;
+    margin: 40px auto;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.add-item-form h2 {
+    text-align: center;
+    color: #3E8E41;
+    font-size: 1.5rem;
+    margin-bottom: 20px;
+}
+
+/* Input and button styling */
+.add-item-form input, .add-item-form button {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 15px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 1rem;
+}
+
+/* Input and button placeholder */
+.add-item-form input::placeholder {
+    color: #888;
+}
+
+/* Focus effect for inputs */
+.add-item-form input:focus {
+    border-color: #3E8E41;
+    outline: none;
+}
+
+/* Styling for the submit button */
+.add-item-form button {
+    background-color: #3E8E41;
+    color: white;
+    border: none;
+    cursor: pointer;
+    font-size: 1rem;
+}
+
+.add-item-form button:hover {
+    background-color: #2d6a2d; /* Darker green on hover */
+}
+
+/* Responsive styling: stack the form on small screens */
+@media (max-width: 768px) {
+    .add-item-form {
+        padding: 15px;
+        max-width: 90%;
+    }
+}
+

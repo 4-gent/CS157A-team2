@@ -5,7 +5,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Inventory Management</title>
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/styles/profile.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/styles/inventory.css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/styles/global.css">
     <style>
         .scrollable-table {
@@ -41,36 +41,34 @@
         }
     </style>
 </head>
-<body>
+<body class="inventory-body">
     <!-- Navigation Bar -->
-    <div class="nav">
-        <a href="${pageContext.request.contextPath}/pages/orders.jsp"><button class="nav-button">Orders</button></a>
-        <a href="${pageContext.request.contextPath}/pages/customers.jsp"><button class="nav-button">Customers</button></a>
-        <a href="${pageContext.request.contextPath}/index.jsp"><button class="nav-button">Log Out</button></a>
-    </div>
+    <c:choose>
+        <c:when test="${sessionScope.isAdmin}">
+            <div class="nav">
+                <a href="${pageContext.request.contextPath}/Books"><button class="nav-button">Books</button></a>
+                <a href="${pageContext.request.contextPath}/Inventory"><button class="nav-button">Inventory</button></a>
+                <a href="${pageContext.request.contextPath}/Orders"><button class="nav-button">Orders</button></a>
+                <a href="${pageContext.request.contextPath}/Customers"><button class="nav-button">Customers</button></a>
+                <a href="${pageContext.request.contextPath}/User_Info"><button class="nav-button">Profile</button></a>
+                <a href="${pageContext.request.contextPath}/index.jsp"><button class="nav-button">Log Out</button></a>
+            </div>
+        </c:when>
+        <c:otherwise>
+            <div class="nav">
+                <a href="${pageContext.request.contextPath}/Books"><button class="nav-button">Books</button></a>
+                <a href="${pageContext.request.contextPath}/Orders"><button class="nav-button">Your Orders</button></a>
+                <a href="${pageContext.request.contextPath}/Cart"><button class="nav-button">Your Cart</button></a>
+                <a href="${pageContext.request.contextPath}/User_Info"><button class="nav-button">Profile</button></a>
+                <a href="${pageContext.request.contextPath}/index.jsp"><button class="nav-button">Log Out</button></a>
+            </div>
+        </c:otherwise>
+    </c:choose>
 
     <div class="inventory-container">
         <h1>Inventory Management</h1>
 
-        <!-- Add Inventory Item Form -->
-        <c:if test="${sessionScope.isAdmin}">
-            <div class="add-item-form">
-                <h2>Add Inventory Item</h2>
-                <form action="${pageContext.request.contextPath}/Inventory" method="post">
-                    <input type="hidden" name="action" value="add">
-                    <input type="text" name="isbn" placeholder="ISBN" required>
-                    <input type="text" name="title" placeholder="Title" required>
-                    <input type="number" name="year" placeholder="Year" required>
-                    <input type="text" name="publisher" placeholder="Publisher" required>
-                    <input type="number" step="0.01" name="price" placeholder="Price" required>
-                    <input type="number" name="quantity" placeholder="Quantity" required>
-                    <input type="text" name="description" placeholder="Description" required>
-                    <button type="submit">Add Item</button>
-                </form>
-            </div>
-        </c:if>
-
-        <!-- Inventory Items Table -->
+		<!-- Inventory Items Table -->
         <div class="scrollable-table">
             <table>
                 <thead>
@@ -105,7 +103,7 @@
                                     <form action="${pageContext.request.contextPath}/Inventory" method="post" style="display:inline;">
                                         <input type="hidden" name="action" value="delete">
                                         <input type="hidden" name="itemId" value="${details.inventoryItem.inventoryItemID}">
-                                        <button type="submit">Delete</button>
+                                        <button class="inventory-button" type="submit">Delete</button>
                                     </form>
                                     <!-- Update Inventory Item Form -->
                                     <form action="${pageContext.request.contextPath}/Inventory" method="post" style="display:inline;">
@@ -114,7 +112,7 @@
                                         <input type="number" step="0.01" name="price" placeholder="Price" value="${details.inventoryItem.price}" required>
                                         <input type="number" name="quantity" placeholder="Quantity" value="${details.inventoryItem.qty}" required>
                                         <input type="text" name="description" placeholder="Description" value="${details.inventoryItem.description}" required>
-                                        <button type="submit">Update</button>
+                                        <button type="submit" class="inventory-button">Update</button>
                                     </form>
                                 </c:if>
                             </td>
@@ -126,6 +124,25 @@
                 <div class="none-found">No inventory items found.</div>
             </c:if>
         </div>
+
+        <!-- Add Inventory Item Form -->
+        <c:if test="${sessionScope.isAdmin}">
+		    <div class="add-item-form">
+		        <h2>Add Inventory Item</h2>
+		        <form action="${pageContext.request.contextPath}/Inventory" method="post">
+		            <input type="hidden" name="action" value="add">
+		            <input type="text" name="isbn" placeholder="ISBN" required>
+		            <input type="text" name="title" placeholder="Title" required>
+		            <input type="number" name="year" placeholder="Year" required>
+		            <input type="text" name="publisher" placeholder="Publisher" required>
+		            <input type="number" step="0.01" name="price" placeholder="Price" required>
+		            <input type="number" name="quantity" placeholder="Quantity" required>
+		            <input type="text" name="description" placeholder="Description" required>
+		            <button type="submit">Add Item</button>
+		        </form>
+		    </div>
+		</c:if>
+
     </div>
 </body>
 </html>

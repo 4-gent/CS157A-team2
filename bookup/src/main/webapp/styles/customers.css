@@ -1,0 +1,114 @@
+/* Styling for the search form container */
+.customers-body{
+	background-color: #3E8E41; /* A rich, natural green */
+}
+
+.search-container {
+    width: 100%;
+    max-width: 600px;
+    margin: 40px auto;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.search-container form {
+    display: flex;
+    justify-content: space-between;
+}
+
+.search-container input {
+    width: 80%;
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 1rem;
+    margin-right: 10px;
+}
+
+.search-container button {
+    padding: 12px;
+    background-color: #3E8E41;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    font-size: 1rem;
+    cursor: pointer;
+}
+
+.search-container button:hover {
+    background-color: #2d6a2d;
+}
+
+/* Styling for the customer details container */
+.customer-details-container {
+    width: 100%;
+    max-width: 1000px;
+    margin: 40px auto;
+    padding: 20px;
+    background-color: #f9f9f9;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+}
+
+.customer-details-container h1 {
+    text-align: center;
+    color: #3E8E41;
+    font-size: 1.8rem;
+    margin-bottom: 20px;
+}
+
+/* Table styling */
+.customer-details-container table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+}
+
+.customer-details-container th, .customer-details-container td {
+    padding: 12px;
+    text-align: left;
+    border: 1px solid #ddd;
+}
+
+.customer-details-container th {
+    background-color: #3E8E41;
+    color: white;
+}
+
+.customer-details-container tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
+.customer-details-container tr:hover {
+    background-color: #e2f4e2; /* Light green hover effect */
+}
+
+.customer-details-container p {
+    text-align: center;
+    color: #888;
+    font-size: 1rem;
+}
+
+/* Responsive styling */
+@media (max-width: 768px) {
+    .search-container, .customer-details-container {
+        padding: 15px;
+        max-width: 90%;
+    }
+
+    .search-container form {
+        flex-direction: column;
+    }
+
+    .search-container input {
+        width: 100%;
+        margin-bottom: 10px;
+    }
+
+    .search-container button {
+        width: 100%;
+    }
+}

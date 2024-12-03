@@ -107,7 +107,6 @@ public class UserService implements UserServiceInterface {
     }   
     
     @Override
-    @IsAdminOrSameUser("username")
     public User getUserByUsername(String username) throws SQLException {
     	return userDAO.getUserByUsername(username);
     }

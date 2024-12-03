@@ -126,7 +126,7 @@ public class CartDAO extends BaseDAO<Cart, Integer> {
                 validateInventoryAvailability(item);
 
                 // Update inventory quantity
-                String updateQtyQuery = "UPDATE InventoryItems SET qty = qty - ? WHERE inventoryItemID = ?";
+                String updateQtyQuery = "UPDATE InventoryItems SET qty = qty - ? WHERE ISBN = ?";
                 try (PreparedStatement updateQtyStmt = connection.prepareStatement(updateQtyQuery)) {
                     updateQtyStmt.setInt(1, item.getQuantity());
                     updateQtyStmt.setInt(2, item.getInventoryItem().getInventoryItemID());
@@ -415,5 +415,17 @@ public class CartDAO extends BaseDAO<Cart, Integer> {
         }
     }
     
+    public boolean deleteByUsername(String username) throws SQLException {
+        String query = "DELETE FROM Cart WHERE username = ?";
+        try (PreparedStatement stmt = connection.prepareStatement(query)) {
+            stmt.setString(1, username);
+
+            int affectedRows = stmt.executeUpdate();
+            return affectedRows > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw e;
+        }
+    }
     
 }

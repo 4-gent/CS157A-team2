@@ -2,34 +2,10 @@
 .profile-body {
     width: 100%;
     height: 100vh;
-    background-color: #342F2C;
+    background-color: #3E8E41; /* A rich, natural green */
     font-family: Arial, sans-serif;
 }
 
-/* Navigation Bar Styling */
-.nav {
-    display: flex;
-    justify-content: center;
-    margin-bottom: 3vh;
-    gap: 20px;
-}
-
-.nav-button {
-    width: 10vw;
-    height: 5vh;
-    border-radius: 3px;
-    background-color: #2B2624;
-    color: white;
-    border: none;
-    font-size: 1.2em;
-    box-shadow: 0px 7px 10px 4px black;
-    transition: 300ms;
-}
-
-.nav-button:hover {
-    transform: scale(1.04);
-    box-shadow: 0px 1px 4px 3px #FFA500;
-}
 
 /* Profile Header */
 .profile-header {
@@ -38,14 +14,20 @@
 }
 
 .user-element {
-    background-color: #2B2624;
-    color: white;
+    background-color: whitesmoke;
+    color: black;
     padding: 20px;
     border-radius: 10px;
     box-shadow: 0px 7px 10px 4px black;
     width: 50%;
     margin: 0 auto;
     text-align: left;
+    transition: 300ms;
+}
+
+.user-element:hover{
+	transition: 300ms;
+	transform: scale(1.02);
 }
 
 .user-element label {
@@ -54,21 +36,26 @@
 }
 
 .user-element input {
-    width: 100%;
+    width: 48vw;
     padding: 10px;
     margin: 5px 0 15px 0;
     border-radius: 5px;
-    border: 1px solid #FFA500;
-    background-color: #342F2C;
-    color: white;
+    border-color: transparent;
+    background-color: whitesmoke;
+    color: black;
     font-size: 1em;
-    box-shadow: 0px 7px 10px 4px black;
     transition: 300ms;
+   	box-shadow: 0px 7px 10px 3px rgba(37, 37, 37, 0.7);
+    
 }
 
-.user-element input:focus {
-    outline: none;
-    box-shadow: 0 0 5px 2px #FFA500;
+.user-element input:hover {
+	transition: 300ms;
+	transform: scale(1.02);
+}
+
+.user-element input:focus{
+	outline: none;
 }
 
 .user-element button {
@@ -86,7 +73,6 @@
 
 .user-element button:hover {
     transform: scale(1.04);
-    box-shadow: 0px 1px 4px 3px #FFA500;
 }
 
 /* Form Layout for Inputs and Labels */
