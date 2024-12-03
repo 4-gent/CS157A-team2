@@ -22,5 +22,7 @@ public interface InventoryServiceInterface {
 	
 	public List<InventoryItem> searchInventoryItemsByKeyword(String keyword);
 
+	public List<InventoryItem> getAllInventoryItems();
+
 	
 }
