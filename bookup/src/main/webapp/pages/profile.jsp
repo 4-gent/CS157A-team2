@@ -98,13 +98,8 @@
                          <form action="${pageContext.request.contextPath}/Payment" method="POST">
                              <input type="hidden" name="action" value="delete">
                              <input type="hidden" name="paymentId" value="${paymentInfo.paymentID}">
-<button 
-    type="submit" 
-    name="deletePayment" 
-    value="true" 
-    onclick="return confirm('Are you sure you want to delete this payment method?');">
-    Delete Payment Information
-</button>                         </form>
+                             <button type="submit" name="deletePayment" value="true" onclick="return confirm('Are you sure you want to delete this payment method?');">Delete Payment Information</button>
+                         </form>
                      </c:forEach>
                 </c:if>
                 <c:if test="${empty sessionScope.paymentDetails}">
