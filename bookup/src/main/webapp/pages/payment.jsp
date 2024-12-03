@@ -52,9 +52,15 @@
 			
 		</div>
 		
+		<!-- Add Button -->
+		<form> </form>
+		
 		<!-- Delete Button --> 
+		<form> </form>
 		
 		<!-- Edit Button -->
+		<form> </form>
+		
 	</div>
 </body>
 </html>
