@@ -16,6 +16,7 @@
     </div>
     <div class="register-container">
         <form class="register-form" action="/bookup/Register" method="post">
+        <h2>User Information</h2>
             <input class="register-input" type="text" name="username" placeholder="Username" required />
             <input class="register-input" type="password" name="password" placeholder="Password" required />
             <input class="register-input" type="text" name="email" placeholder="Email" required />
@@ -36,7 +37,14 @@
             <input class="register-input" type="text" name="cardHolderName" placeholder="Card Holder Name" required />
             <input class="register-input" type="text" name="cvv" placeholder="CVV" required />
 
-            <input class="register-input" type="submit" value="Register" />
+           <input 
+    class="register-input" 
+    type="submit" 
+    value="Register" 
+    style="background-color: rgb(76, 175, 80); color: white; border: none; border-radius: 5px; padding: 8px 12px; font-size: 1rem; font-weight: bold; text-transform: uppercase; cursor: pointer;" 
+    onmouseover="this.style.backgroundColor='rgb(58, 135, 61)'" 
+    onmouseout="this.style.backgroundColor='rgb(76, 175, 80)'"
+/>
         </form>
     </div>
     <br>

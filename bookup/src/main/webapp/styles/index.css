@@ -1,19 +1,19 @@
+/* General body styling */
 .index-body {
-    background-color: red;
+    background-color: #d3d3d3; /* Light gray background */
     width: 100vw;
     height: 100vh;
-     font-family: 'Poppins', sans-serif;
-     font-weight: 400;
-      background-color: #f5f5f5;
-      
+    font-family: 'Poppins', sans-serif; /* Prettier font */
+    font-weight: 400;
+    margin: 0;
+    padding: 0;
 }
 
+/* Header styling */
 .index-header {
     width: 100%;
     height: 100vh;
-    padding-top: 0;
     color: black;
-  
     display: flex;
     flex-direction: row;
     justify-content: space-around;
@@ -21,50 +21,74 @@
     background-color: #3E8E41; /* A rich, natural green */
 }
 
-.index-subtitle{
-	font-size: 2.7em;
+/* Subtitle styling */
+.index-subtitle {
+    font-size: 2.7em;
+    font-family: 'Poppins', sans-serif;
+    color: #2c3e50; /* Dark gray for contrast */
 }
 
-.index-title{
-	font-size: 5em;
-	color: black !important;
+/* Title styling */
+.index-title {
+    font-size: 4em; /* Slightly smaller title for balance */
+    font-weight: 700; /* Bold for emphasis */
+    color: black !important;
+    font-family: 'Poppins', sans-serif; /* Prettier font */
 }
 
-.link-container{
-	display: flex;
-	flex-direction: column;
-	align-items: center;
+/* Link container styling */
+.link-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px; /* Space between buttons */
 }
 
-.index-title-container{
-	text-align: center;
-	     font-weight: 400;
-	
+/* Login Button */
+.index-button.login {
+    width: 20vw;
+    height: 10vh;
+    background-color: #add8e6; /* Light blue for Login button */
+    border-radius: 50px;
+    border-color: transparent;
+    font-weight: 700;
+    font-family: 'Poppins', sans-serif;
+    transition: 300ms;
+    color: black; /* Dark text for contrast */
+    font-size: 1.3em;
+    cursor: pointer;
 }
 
-.index-button{
-	width: 20vw;
-	height: 10vh;
-	
-	background-color: rgb(32, 31, 31);
-	border-radius: 50px;
-	border-color: transparent;
-	
-	gap: 15px;
-	font-weight: 700; 
-	
-	transition: 300ms;
-	
-	color: white;
-	font-size: 1.3em;
+.index-button.login:hover {
+    background-color: #87ceeb; /* Slightly darker light blue on hover */
+    box-shadow: 0px 7px 10px 3px rgba(37, 37, 37, 0.7);
+    transform: scale(1.06);
+    transition: 300ms;
 }
 
-.index-button:hover{
-	transition: 300ms;
-	box-shadow: 0px 7px 10px 3px rgba(37, 37, 37, 0.7);
-	transform: scale(1.06);
+/* Register Button */
+.index-button.register {
+    width: 20vw;
+    height: 10vh;
+    background-color: #90ee90; /* Light green for Register button */
+    border-radius: 50px;
+    border-color: transparent;
+    font-weight: 700;
+    font-family: 'Poppins', sans-serif;
+    transition: 300ms;
+    color: black; /* Dark text for contrast */
+    font-size: 1.3em;
+    cursor: pointer;
 }
 
+.index-button.register:hover {
+    background-color: #77dd77; /* Slightly darker light green on hover */
+    box-shadow: 0px 7px 10px 3px rgba(37, 37, 37, 0.7);
+    transform: scale(1.06);
+    transition: 300ms;
+}
+
+/* Reset margin and padding */
 html, body {
     margin: 0;
     padding: 0;
