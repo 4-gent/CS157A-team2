@@ -1,6 +1,7 @@
 package com.bookie.servlet;
 
 import java.io.IOException;
+import java.sql.SQLException;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -11,6 +12,7 @@ import javax.servlet.http.HttpSession;
 
 import com.bookie.bizlogic.UserService;
 import com.bookie.bizlogic.interfaces.UserServiceInterface;
+import com.bookie.models.User;
 
 @WebServlet("/Login")
 public class Login extends HttpServlet {
@@ -26,18 +28,44 @@ public class Login extends HttpServlet {
         String password = request.getParameter("password");
 
         UserServiceInterface userService = UserService.getServiceInstance();
-        boolean login_result = userService.login(username, password);
 
-        if (login_result) {
-            // Store the username in the session
-            HttpSession session = request.getSession();
-            session.setAttribute("username", username);
+        try {
+            boolean loginResult = userService.login(username, password);
 
-            // Redirect to User_Info page
-            response.sendRedirect(request.getContextPath() + "/pages/profile.jsp");
-        } else {
-            // Redirect to error page
-            response.sendRedirect("/bookup/pages/error.jsp");
+            if (loginResult) {
+                // Retrieve user details after successful login
+                User userDetails = userService.getUserByUsername(username); // Assuming this method exists
+
+                // Invalidate old session (if any) and create a new session
+                HttpSession session = request.getSession(false);
+                if (session != null) {
+                    session.invalidate();
+                }
+                session = request.getSession(true);
+
+                // Store user details in the session
+                session.setAttribute("userId", userDetails.getId()); // Add userId to session
+
+                session.setAttribute("username", userDetails.getUsername());
+                session.setAttribute("email", userDetails.getEmail());
+                session.setAttribute("isAdmin", userDetails.isAdmin()); // Boolean for profile.jsp
+                session.setAttribute("role", userDetails.isAdmin() ? "admin" : "user"); // Optional, for other usage
+                session.setAttribute("phone", userDetails.getPhone());
+
+                // Redirect to User_Info page
+                response.sendRedirect(request.getContextPath() + "/pages/profile.jsp");
+            } else {
+                // Redirect to login page with an error message
+                response.sendRedirect(request.getContextPath() + "/pages/login.jsp?error=Invalid credentials");
+            }
+        } catch (SQLException e) {
+            // Log the error and redirect to an error page
+            e.printStackTrace();
+            response.sendRedirect(request.getContextPath() + "/pages/error.jsp?message=Database error occurred");
+        } catch (Exception e) {
+            // Handle any other unexpected errors
+            e.printStackTrace();
+            response.sendRedirect(request.getContextPath() + "/pages/error.jsp?message=Unexpected error occurred");
         }
     }
 }
