@@ -280,4 +280,67 @@ public class InventoryDAO extends BaseDAO<InventoryItem, Integer>{
 	    return inventoryItems;
 	}
 	
+	
+	public List<InventoryItem> getAllInventoryItems() {
+	    List<InventoryItem> inventoryItems = new ArrayList<>();
+	    try {
+	        // Query to fetch all InventoryItems along with Book, Author, and Genre details
+	        String query = 
+	            "SELECT i.inventoryItemID, i.price, i.qty, i.description, " +
+	            "b.ISBN, b.title, b.year, b.publisher, b.isFeatured, " +
+	            "a.authorID, a.name AS authorName, " +
+	            "g.genreID, g.name AS genreName " +
+	            "FROM InventoryItems i " +
+	            "JOIN Books b ON i.ISBN = b.ISBN " +
+	            "LEFT JOIN Written w ON b.ISBN = w.ISBN " +
+	            "LEFT JOIN Authors a ON w.authorID = a.authorID " +
+	            "LEFT JOIN Belong bl ON b.ISBN = bl.ISBN " +
+	            "LEFT JOIN Genres g ON bl.genreID = g.genreID";
+
+	        PreparedStatement stmt = connection.prepareStatement(query);
+	        ResultSet rs = stmt.executeQuery();
+
+	        // Iterate through the result set and create InventoryItem objects
+	        while (rs.next()) {
+	            // Create Author object if available
+	            Author author = null;
+	            if (rs.getInt("authorID") != 0) {
+	                author = new Author(rs.getInt("authorID"), rs.getString("authorName"));
+	            }
+
+	            // Create Genre object if available
+	            Genre genre = null;
+	            if (rs.getInt("genreID") != 0) {
+	                genre = new Genre(rs.getInt("genreID"), rs.getString("genreName"));
+	            }
+
+	            // Create Book object with associated Author and Genre
+	            Book book = new Book(
+	                rs.getString("ISBN"),
+	                rs.getString("title"),
+	                rs.getInt("year"),
+	                rs.getString("publisher"),
+	                rs.getBoolean("isFeatured"),
+	                author,
+	                genre
+	            );
+
+	            // Create InventoryItem object
+	            InventoryItem inventoryItem = new InventoryItem(
+	                rs.getInt("inventoryItemID"),
+	                book,
+	                rs.getDouble("price"),
+	                rs.getInt("qty"),
+	                rs.getString("description")
+	            );
+
+	            // Add the InventoryItem to the list
+	            inventoryItems.add(inventoryItem);
+	        }
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	    }
+	    return inventoryItems;
+	}
+	
 }

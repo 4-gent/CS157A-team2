@@ -31,6 +31,20 @@ INSERT INTO Books (ISBN, title, year, publisher, isFeatured) VALUES
 ('9780452284234', 'It', 1986, 'Viking Press', TRUE),
 ('9780446310789', 'The Client', 1993, 'Putnam', FALSE);
 
+-- Inserting Inventory Items
+INSERT INTO InventoryItems (inventoryItemID, ISBN, price, qty, description) VALUES
+(1, '9780451524935', 9.99, 50, 'Classic dystopian novel by George Orwell'),
+(2, '9780747532743', 12.99, 100, 'First book in the Harry Potter series'),
+(3, '9780261102385', 10.99, 70, 'A timeless adventure by J.R.R. Tolkien'),
+(4, '9780007119314', 8.99, 30, 'Agatha Christie mystery novel'),
+(5, '9780743273565', 7.99, 40, 'F. Scott Fitzgerald classic'),
+(6, '9780684830421', 6.99, 20, 'Short novel by Ernest Hemingway'),
+(7, '9780451527999', 5.99, 15, 'Mark Twain\'s adventure story'),
+(8, '9781501160827', 11.99, 80, 'Harper Lee\'s Pulitzer-winning novel'),
+(9, '9780452284234', 14.99, 60, 'Stephen King\'s horror masterpiece'),
+(10, '9780446310789', 9.49, 25, 'Legal thriller by John Grisham');
+
+
 -- Inserting Users (2 Admins and 8 Customers)
 INSERT INTO Users (username, password, email, phone, isAdmin, favoriteAuthorID, favoriteGenreID) VALUES
 ('johndoe', 'password123', 'john@example.com', '123-456-7890', FALSE, 1, 1),
