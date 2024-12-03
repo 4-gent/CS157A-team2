@@ -3,6 +3,7 @@ html, body {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+    font-family: arial, sans-serif;
 }
 
 /* Ensure the nav fills the full width of the page */
