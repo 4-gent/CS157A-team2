@@ -10,6 +10,7 @@ import static org.junit.jupiter.api.Assertions.fail;
 
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.List;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -328,4 +329,52 @@ public class UserServiceTest {
             fail("Unexpected exception during test: " + e.getMessage());
         }
     }
+    
+    @Test
+    public void testGetAllNonAdminUsers_Success() {
+        try {
+            
+            // Add non-admin users
+            userService.register("user1", "pass1", "user1@example.com", "1234567890", false, 0, 0);
+            userService.register("user2", "pass2", "user2@example.com", "1234567891", false, 0, 0);
+            userService.register("user3", "pass3", "user3@example.com", "1234567892", false, 0, 0);
+
+         // Create an admin user and set context
+            userService.register("adminUser", "adminPass", "admin@example.com", "0987654321", true, 0, 0);
+            UserContext.setUserId("adminUser");
+            
+            // Retrieve all non-admin users
+            List<User> nonAdminUsers = userService.getAllNonAdminUsers();
+
+            // Assertions
+            assertNotNull(nonAdminUsers, "Non-admin users list should not be null");
+            assertEquals(3, nonAdminUsers.size(), "There should be exactly 3 non-admin users");
+
+            assertTrue(nonAdminUsers.stream().noneMatch(User::isAdmin), "All retrieved users should be non-admin");
+
+        } catch (Exception e) {
+            fail("Unexpected exception: " + e.getMessage());
+        }
+    }
+
+    @Test
+    public void testGetAllNonAdminUsers_AccessDenied() {
+        try {
+            // Create a non-admin user and set context
+            userService.register("user", "password", "user@example.com", "1234567890", false, 0, 0);
+            UserContext.setUserId("user");
+
+            // Attempt to retrieve non-admin users
+            Exception exception = assertThrows(SecurityException.class, () -> {
+                userService.getAllNonAdminUsers();
+            });
+
+            // Assertions
+            assertEquals("Access denied: Admin privileges required", exception.getMessage());
+
+        } catch (Exception e) {
+            fail("Unexpected exception: " + e.getMessage());
+        }
+    }
+    
 }

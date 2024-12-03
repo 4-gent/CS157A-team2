@@ -2,9 +2,11 @@ package com.bookie.bizlogic;
 
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.List;
 
 import com.bookie.auth.AuthorizationProxy;
 import com.bookie.auth.IsAdmin;
+import com.bookie.auth.IsAdminOrSameUser;
 import com.bookie.auth.SameUser;
 import com.bookie.bizlogic.interfaces.UserServiceInterface;
 import com.bookie.dao.CartDAO;
@@ -105,7 +107,16 @@ public class UserService implements UserServiceInterface {
     }   
     
     @Override
+    @IsAdminOrSameUser("username")
     public User getUserByUsername(String username) throws SQLException {
     	return userDAO.getUserByUsername(username);
     }
+
+	@Override
+	@IsAdmin
+	public List<User> getAllNonAdminUsers() {
+		return userDAO.getAllNonAdminUsers();
+	}
+    
+    
 }

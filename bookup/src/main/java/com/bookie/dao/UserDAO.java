@@ -3,6 +3,8 @@ package com.bookie.dao;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 import com.bookie.auth.UserContext;
 import com.bookie.models.User;
@@ -198,4 +200,31 @@ public class UserDAO extends BaseDAO<User, String> {
 		
 		return user;
 	}
+	
+
+	public List<User> getAllNonAdminUsers() {
+	    List<User> nonAdminUsers = new ArrayList<>();
+	    String query = "SELECT username, password, email, phone, favoriteAuthorID, favoriteGenreID " +
+	                   "FROM Users WHERE isAdmin = false";
+
+	    try (PreparedStatement stmt = connection.prepareStatement(query)) {
+	        ResultSet rs = stmt.executeQuery();
+	        while (rs.next()) {
+	            User user = new User(
+	                rs.getString("username"),
+	                rs.getString("password"),
+	                rs.getString("email"),
+	                rs.getString("phone"),
+	                false, // isAdmin is always false for this query
+	                rs.getInt("favoriteAuthorID"),
+	                rs.getInt("favoriteGenreID")
+	            );
+	            nonAdminUsers.add(user);
+	        }
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	    }
+	    return nonAdminUsers;
+	}
+	
 }

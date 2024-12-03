@@ -1,6 +1,7 @@
 package com.bookie.bizlogic.interfaces;
 
 import java.sql.SQLException;
+import java.util.List;
 
 import com.bookie.models.User;
 
@@ -12,4 +13,5 @@ public interface UserServiceInterface {
     boolean updateFavoriteGenre(String username, int favoriteGenreID) throws SQLException;
     boolean deleteUser(String username) throws SQLException;
     User getUserByUsername(String username) throws SQLException;
+    List<User> getAllNonAdminUsers();
 }
