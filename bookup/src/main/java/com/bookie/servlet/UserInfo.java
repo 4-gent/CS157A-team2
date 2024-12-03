@@ -1,27 +1,39 @@
 package com.bookie.servlet;
 
 import com.bookie.dao.UserDAO;
-import com.bookie.dao.CartDAO;
+import com.bookie.bizlogic.PaymentInfoService;
+import com.bookie.bizlogic.interfaces.PaymentInfoServiceInterface;
 import com.bookie.models.User;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.io.IOException;
+
+import com.bookie.models.Author;
+import com.bookie.models.Book;
+import com.bookie.models.InventoryItem;
+import com.bookie.models.PaymentInfo;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.bookie.auth.UserContext;
+import com.bookie.bizlogic.CartService;
+import com.bookie.bizlogic.interfaces.CartServiceInterface;
+
 @WebServlet("/User_Info")
 public class UserInfo extends HttpServlet {
     private static final long serialVersionUID = 1L;
 
     private UserDAO userDAO;
-    private CartDAO cartDAO;
 
     @Override
     public void init() throws ServletException {
         userDAO = new UserDAO(); // Initialize UserDAO
-        cartDAO = new CartDAO();
     }
 
     @Override
@@ -57,6 +69,11 @@ public class UserInfo extends HttpServlet {
         // Retrieve the username from the session
         String username = (String) request.getSession().getAttribute("username");
 
+        // Ensure UserContext is set
+        UserContext.setUserId(username);
+        
+        PaymentInfoServiceInterface paymentInfoService = PaymentInfoService.getServiceInstance();
+        CartServiceInterface cartService = CartService.getServiceInstance();
         // If username is null, redirect to login page
         if (username == null) {
             response.sendRedirect("/bookup/pages/login.jsp");
@@ -101,10 +118,17 @@ public class UserInfo extends HttpServlet {
                 String deleteAccount = request.getParameter("deleteAccount");
                 if ("true".equals(deleteAccount)) {
                     // Delete associated records in the cart table
-                    cartDAO.deleteByUsername(username);
+                    cartService.deleteByUsername(username);
+
+                    // Retrieve and delete payment information
+                    List<PaymentInfo> payInfo = paymentInfoService.getAllPaymentDetailsForUser(username);
+                    for (PaymentInfo payment : payInfo) {
+                        paymentInfoService.deletePaymentDetailsForUser(username, payment.getPaymentID());
+                    }
 
                     // Delete the user
                     userDAO.delete(username);
+
                     response.sendRedirect("/bookup/index.jsp");
                     return;
                 }
