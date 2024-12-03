@@ -15,13 +15,17 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import com.bookie.auth.UserContext;
+import com.bookie.bizlogic.interfaces.AuthorServiceInterface;
 import com.bookie.bizlogic.interfaces.BookServiceInterface;
+import com.bookie.bizlogic.interfaces.GenreServiceInterface;
 import com.bookie.bizlogic.interfaces.InventoryServiceInterface;
 import com.bookie.bizlogic.interfaces.UserServiceInterface;
 import com.bookie.dao.BookDAO;
 import com.bookie.dao.InventoryDAO;
 import com.bookie.dao.UserDAO;
+import com.bookie.models.Author;
 import com.bookie.models.Book;
+import com.bookie.models.Genre;
 import com.bookie.models.InventoryItem;
 
 public class InventoryServiceTest {
@@ -29,12 +33,16 @@ public class InventoryServiceTest {
     private InventoryServiceInterface inventoryService;
     private BookServiceInterface bookService;
     private UserServiceInterface userService;
+    private AuthorServiceInterface authorService;
+    private GenreServiceInterface genreService;
 
     @BeforeEach
     public void setUp() {
         inventoryService = InventoryService.getServiceInstance();
         bookService = BookService.getServiceInstance();
         userService = UserService.getServiceInstance();
+        authorService = AuthorService.getServiceInstance();
+        genreService = GenreService.getServiceInstance();
     }
     
     @AfterEach
@@ -280,6 +288,56 @@ public class InventoryServiceTest {
             assertEquals("Access denied: Admin privileges required", exception.getMessage());
         } catch (SQLException e) {
             fail("SQLException during test: " + e.getMessage());
+        }
+    }
+    
+    @Test
+    public void testGetAllInventoryItems_WithAuthorsAndGenres_Success() {
+        try {
+            // Create admin user and set context
+            userService.register("adminUser", "adminPass", "admin@example.com", "0987654321", true, 0, 0);
+            UserContext.setUserId("adminUser");
+
+            // Add authors
+            Author author1 = new Author(0, "Author One");
+            Author author2 = new Author(0, "Author Two");
+            author1 = authorService.addAuthor(author1);
+            author2 = authorService.addAuthor(author2);
+
+            // Add genres
+            Genre genre1 = new Genre(0, "Fiction");
+            Genre genre2 = new Genre(0, "Non-Fiction");
+            genre1 = genreService.addGenre(genre1);
+            genre2 = genreService.addGenre(genre2);
+
+            // Add books with authors and genres
+            Book book1 = new Book("1234567890123", "Test Book 1", 2023, "Test Publisher 1", false, author1, genre1);
+            Book book2 = new Book("1234567890124", "Test Book 2", 2022, "Test Publisher 2", false, author2, genre2);
+            bookService.addBook(book1);
+            bookService.addBook(book2);
+
+            // Add inventory items
+            InventoryItem item1 = new InventoryItem(0, book1, 19.99, 10, "A great book with an amazing story");
+            InventoryItem item2 = new InventoryItem(0, book2, 24.99, 15, "Another great book, full of insights");
+            inventoryService.addInventoryItem(item1);
+            inventoryService.addInventoryItem(item2);
+
+            // Retrieve all inventory items
+            List<InventoryItem> items = inventoryService.getAllInventoryItems();
+
+            // Assertions
+            assertNotNull(items, "Inventory items list should not be null");
+            assertEquals(2, items.size(), "There should be two inventory items");
+            assertEquals("Test Book 1", items.get(0).getBook().getTitle(), "First item should be Test Book 1");
+            assertEquals("Author One", items.get(0).getBook().getAuthor().getName(), "First item's author should be Author One");
+            assertEquals("Fiction", items.get(0).getBook().getGenre().getName(), "First item's genre should be Fiction");
+
+            assertEquals("Test Book 2", items.get(1).getBook().getTitle(), "Second item should be Test Book 2");
+            assertEquals("Author Two", items.get(1).getBook().getAuthor().getName(), "Second item's author should be Author Two");
+            assertEquals("Non-Fiction", items.get(1).getBook().getGenre().getName(), "Second item's genre should be Non-Fiction");
+
+        } catch (Exception e) {
+            fail("Unexpected exception during test: " + e.getMessage());
         }
     }
     
