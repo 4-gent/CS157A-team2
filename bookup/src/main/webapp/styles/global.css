@@ -3,7 +3,7 @@ html, body {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: arial, sans-serif;
+    font-family: Arial, sans-serif;
 }
 
 /* Ensure the nav fills the full width of the page */
@@ -25,19 +25,34 @@ html, body {
 .nav-button {
     transition: 300ms;
     text-decoration: none;
-    width: 100px;
+    width: 120px; /* Slightly wider buttons */
     height: 7vh;
 
     margin-right: 7vw;
-    background-color: rgb(32, 31, 31);
-    border-color: transparent;
+    background-color: transparent; /* Transparent background for modern look */
+    border: none; /* No border by default */
     color: white;
     
-    font-size: 1.2em;
+    font-size: 1em;
+    font-family: 'Poppins', sans-serif; /* Modern font */
+    letter-spacing: 0.05em; /* Slight spacing for readability */
+    font-weight: 500; /* Medium weight for a polished look */
+    cursor: pointer;
 }
 
+/* Add hover effects for nav buttons */
 .nav-button:hover {
     transition: 300ms;
-    border-width: 3px;
-    border-bottom-color: hsla(39, 99%, 54%, 0.7) !important;
+    border-bottom: 3px solid hsla(39, 99%, 54%, 0.7); /* Underline effect on hover */
+    color: hsla(39, 99%, 54%, 0.9); /* Light golden color on hover */
+    font-weight: bold; /* Bold text on hover */
+    background-color: rgba(255, 255, 255, 0.1); /* Subtle background color on hover */
+}
+
+/* For better responsiveness on smaller screens */
+@media (max-width: 768px) {
+    .nav-button {
+        width: 100px; /* Narrower buttons for smaller screens */
+        font-size: 0.9em; /* Slightly smaller font */
+    }
 }

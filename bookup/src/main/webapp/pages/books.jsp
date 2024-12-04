@@ -86,9 +86,9 @@
             <c:when test="${not empty search_result}">
                 <c:forEach var="book" items="${search_result}">
                     <div class="book-element" onclick="openModal('${book.title}', '${book.year}', '${book.ISBN}')">
-                        <label>Title</label>
+                        <label>Title:</label>
                         <p>${book.title}</p>
-                        <label>Year</label>
+                        <label>Year:</label>
                         <p>${book.year}</p>
                     </div>
                 </c:forEach>
@@ -97,9 +97,9 @@
             <c:when test="${not empty filter_result}">
                 <c:forEach var="book" items="${filter_result}">
                     <div class="book-element" onclick="openModal('${book.title}', '${book.year}', '${book.ISBN}')">
-                        <label>Title</label>
+                        <label>Title:</label>
                         <p>${book.title}</p>
-                        <label>Year</label>
+                        <label>Year:</label>
                         <p>${book.year}</p>
                     </div>
                 </c:forEach>
@@ -109,9 +109,9 @@
                 <!-- Show all books if no results from filters/search -->
                 <c:forEach var="book" items="${bookList}">
                     <div class="book-element" onclick="openModal('${book.title}', '${book.year}', '${book.ISBN}')">
-                        <label>Title</label>
+                        <label>Title:</label>
                         <p>${book.title}</p>
-                        <label>Year</label>
+                        <label>Year:</label>
                         <p>${book.year}</p>
                         <!-- Add to Cart Button -->
                     </div>

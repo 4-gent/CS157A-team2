@@ -1,68 +1,102 @@
-.login-body{
-    background-color: #3E8E41; /* A rich, natural green */
-
-.login-header{
-	text-align: center;
-	color: black;
-	font-size: 2em;
+/* General body background */
+.login-body {
+    background-color: #a8d5a2; /* Lighter green background */
+    font-family: 'Roboto', sans-serif;
 }
 
-.login-form{
-    background-color: whitesmoke;
+/* Login Header (Title) */
+.login-header {
+    text-align: center;
+    color: #2c3e50;
+    font-size: 2.8em;
+    font-weight: bold;
+    margin-top: 5vh;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    text-shadow: 0px 4px 8px rgba(0, 0, 0, 0.4);
+    font-family: 'Poppins', sans-serif; /* Pretty font */
+}
+
+/* Form Container */
+.login-form {
+    background-color: white; /* Change form to white */
     width: 25vw;
-    padding: 15vh;
-    height: auto;
+    padding: 10vh 2vw;
     margin: 0 auto;
     margin-top: 10vh;
+    height: auto;
 
-    transition: 300ms;
+    transition: all 300ms ease-in-out;
 
-    border-radius: 5px;
-    box-shadow: 0px 7px 10px 3px rgba(37, 37, 37, 0.7);
+    border-radius: 10px;
+    box-shadow: 0px 10px 15px 3px rgba(0, 0, 0, 0.3);
 }
-.login-form:hover{
-	transition: 300ms;
-    transform: scale(1.05);
-	box-shadow: 0px 7px 10px 3px rgba(37, 37, 37, 0.7);
+.login-form:hover {
+    transition: all 300ms ease-in-out;
+    width: 26vw; /* Slight expansion on hover */
+    box-shadow: 0px 10px 20px 3px hsla(39, 99%, 54%, 0.7);
 }
 
-.login-input{
-    width: 21vw;
+/* Input Fields */
+.login-input {
+    width: 90%; /* Adjust width relative to container */
     height: 40px;
-    margin: 10px 0;
-    margin-left: auto;
-    margin-right: auto;
-    padding: 3px;
+    margin: 20px 0; /* Added spacing between input fields */
+    padding: 8px 12px;
+    border: 2px solid #ccc; /* Box outline for the input */
+    border-radius: 5px;
+    background-color: #f8f8f8; /* Light background for contrast */
+    color: #333;
+    font-size: 1rem;
+
+    transition: all 300ms ease-in-out;
+}
+.login-input:hover, .login-input:focus {
+    background-color: #fff;
+    border-color: rgb(76, 175, 80); /* Subtle green border on hover/focus */
+    box-shadow: 0px 7px 10px 3px hsla(39, 99%, 54%, 0.7);
+    outline: none;
+}
+
+/* Submit Button */
+.login-button {
+    width: 95%; /* Adjust width to match form inputs */
+    height: 40px;
+    margin: 15px 0;
+    padding: 8px 12px;
     border: none;
     border-radius: 5px;
-    background-color: whitesmoke;
-    color: black;
-    font-weight: 200;
+    background-color: rgb(76, 175, 80); /* Primary color */
+    color: white;
+    font-size: 1rem;
+    font-weight: bold;
+    text-transform: uppercase;
+    cursor: pointer;
 
-    transition: 300ms;
+    transition: all 300ms ease-in-out;
 }
-.login-input:hover{
-    transition: 300ms;
-    background-color: whitesmoke;
-	box-shadow: 0px 7px 10px 3px rgba(37, 37, 37, 0.7);
+.login-button:hover {
+    background-color: rgb(58, 135, 61);
+    box-shadow: 0px 7px 10spx 3px hsla(39, 99%, 54%, 0.7);
 }
-
-.login-button{
-    width: 30vw;
-    height: 40px;
-    margin: 10px 0;
-    padding: 3px;
-    border: none;
-    border-radius: 5px;
-    background-color: grey;
-    color: black;
-
-    transition: 300ms;
+.form-header {
+    text-align: center;
+    font-size: 1.8em;
+    font-weight: bold;
+    margin-bottom: 20px;
+    color: #333;
+    font-family: 'Poppins', sans-serif; /* Pretty font */
 }
-
-.login-button:hover{
-    transition: 300ms;
-    background-color: white;
-	box-shadow: 0px 7px 10px 3px rgba(37, 37, 37, 0.7);
+/* Responsive Design for Smaller Screens */
+@media (max-width: 768px) {
+    .login-form {
+        width: 80vw;
+        padding: 5vh 5vw;
+    }
+    .login-input {
+        width: 100%;
+    }
+    .login-button {
+        width: 100%;
+    }
 }
-

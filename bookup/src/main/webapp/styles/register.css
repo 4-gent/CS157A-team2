@@ -1,67 +1,103 @@
-.register-body{
-    background-color: #3E8E41; /* A rich, natural green */
+/* General body background */
+.register-body {
+    background-color: #a8d5a2; /* Lighter green background */
+    font-family: 'Poppins', sans-serif; /* Modern font */
 }
 
-.register-header{
-	text-align: center;
-	color: black;
-	font-size: 2em;
+/* Register Header (Title) */
+.register-header {
+    text-align: center;
+    color: #2c3e50;
+    font-size: 2em; /* Smaller title font size */
+    font-weight: bold;
+    margin-top: 5vh;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    text-shadow: 0px 4px 8px rgba(0, 0, 0, 0.4);
 }
 
-.register-form{
-    background-color: whitesmoke;
-    width: 25vw;
-    padding: 15vh;
-    height: auto;
+/* Form Container */
+.register-form {
+    background-color: white; /* White form background */
+    width: 50vw; /* Increased form width */
+    padding: 8vh 2vw; /* Adjusted padding */
     margin: 0 auto;
     margin-top: 10vh;
+    height: auto;
 
-    transition: 300ms;
+    transition: all 300ms ease-in-out;
 
-    border-radius: 5px;
-    box-shadow: 0px 7px 10px 3px rgba(37, 37, 37, 0.7);
+    border-radius: 10px;
+    box-shadow: 0px 10px 15px 3px rgba(0, 0, 0, 0.3);
 }
-.register-form:hover{
-	transition: 300ms;
-    transform: scale(1.02);
-	box-shadow: 0px 7px 10px 3px rgba(37, 37, 37, 0.7);
+.register-form:hover {
+    transition: all 300ms ease-in-out;
+    transform: scale(1.02); /* Slight scaling effect on hover */
+    box-shadow: 0px 10px 20px 3px hsla(39, 99%, 54%, 0.7);
 }
 
-.register-input{
-    width: 21vw;
+/* Input Fields */
+.register-input {
+    width: 90%; /* Adjusted width relative to form */
     height: 40px;
-    margin: 10px 0;
-    margin-left: auto;
-    margin-right: auto;
-    padding: 3px;
+    margin: 20px 0; /* Added spacing between inputs */
+    padding: 8px 12px;
+    border: 2px solid #ccc; /* Box outline for inputs */
+    border-radius: 5px;
+    background-color: #f8f8f8; /* Light background */
+    color: #333;
+    font-size: 1rem;
+
+    transition: all 300ms ease-in-out;
+}
+.register-input:hover, .register-input:focus {
+    background-color: #fff;
+    border-color: rgb(76, 175, 80); /* Green border on focus/hover */
+    box-shadow: 0px 7px 10px 3px hsla(39, 99%, 54%, 0.7);
+    outline: none;
+}
+
+/* Submit Button */
+.register-button {
+    width: 100%; /* Adjusted to match input fields */
+    height: 40px;
+    margin: 15px 0;
+    padding: 10px 12px;
     border: none;
     border-radius: 5px;
-    background-color: whitesmoke;
-    color: black;
-    font-weight: 200;
+    background-color: rgb(76, 175, 80); /* Consistent primary color */
+    color: white;
+    font-size: 1rem;
+    font-weight: bold;
+    text-transform: uppercase;
+    cursor: pointer;
 
-    transition: 300ms;
+    transition: all 300ms ease-in-out;
 }
-.register-input:hover{
-    transition: 300ms;
-    background-color: whitesmoke;
-	box-shadow: 0px 7px 10px 3px rgba(37, 37, 37, 0.7);
+.register-button:hover {
+    background-color: rgb(58, 135, 61); /* Darker green on hover */
+    box-shadow: 0px 7px 10px 3px hsla(39, 99%, 54%, 0.7);
 }
 
-.register-button{
-    width: 30vw;
-    height: 40px;
-    margin: 10px 0;
-    padding: 3px;
-    border: none;
-    border-radius: 5px;
-    background-color: grey;
-    color: black;
-
-    transition: 300ms;
+/* Section Headers */
+h2 {
+    font-size: 1.5em;
+    margin-top: 30px;
+    margin-bottom: 10px;
+    color: #2c3e50;
+    text-align: center;
 }
-.register-button:hover{
-    transition: 300ms;
-    background-color: white;
-	box-shadow: 0px 7px 10px 3px rgba(37, 37, 37, 0.7);
+
+/* Responsive Design for Smaller Screens */
+@media (max-width: 768px) {
+    .register-form {
+        width: 90vw; /* Wider form for smaller screens */
+        padding: 5vh 5vw;
+    }
+    .register-input {
+        width: 100%;
+    }
+    .register-button {
+        width: 100%;
+    }
 }
