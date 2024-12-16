@@ -58,8 +58,7 @@ INSERT INTO Users (username, password, email, phone, isAdmin, favoriteAuthorID, 
 ('customer5', 'custpass5', 'cust5@store.com', '543-210-9876', FALSE, 7, 3),
 ('customer6', 'custpass6', 'cust6@store.com', '432-109-8765', FALSE, 8, 4);
 
---insert addresses for the users
-INSERT INTO addresses (addressID, street, city, state, zip, country) VALUES
+INSERT INTO Addresses (addressID, street, city, state, zip, country) VALUES
 (101, '123 Main St', 'Cityville', 'CA', '12345', 'USA'),
 (102, '456 Elm St', 'Townsville', 'TX', '67890', 'USA'),
 (103, '789 Oak St', 'Villagetown', 'FL', '11223', 'USA'),
@@ -69,14 +68,12 @@ INSERT INTO addresses (addressID, street, city, state, zip, country) VALUES
 (107, '404 Birch St', 'Hilltown', 'NV', '99100', 'USA'),
 (108, '505 Spruce St', 'Beachcity', 'SC', '22334', 'USA');
 
---insert payment details for the users
-INSERT INTO paymentdetails (paymentID, username, cardNumber, exp, cardHolderName, cvv, addressID, isDeleted) VALUES
-(1, 'johndoe', '1234567812345678', '2025-12-31', 'John Doe', '123', 101, 0),
-(2, 'janedoe', '2345678923456789', '2024-11-30', 'Jane Doe', '234', 102, 0),
-(3, 'customer1', '3456789034567890', '2026-01-31', 'Customer One', '345', 103, 0),
-(4, 'customer2', '4567890145678901', '2025-05-31', 'Customer Two', '456', 104, 0),
-(5, 'customer3', '5678901256789012', '2026-07-31', 'Customer Three', '567', 105, 0),
-(6, 'customer4', '6789012367890123', '2024-08-31', 'Customer Four', '678', 106, 0),
-(7, 'customer5', '7890123478901234', '2025-03-31', 'Customer Five', '789', 107, 0),
-(8, 'customer6', '8901234589012345', '2024-12-31', 'Customer Six', '890', 108, 0);
-
+INSERT INTO PaymentDetails (paymentID, username, cardNumber, exp, cardHolderName, cvv, addressID, isDeleted) VALUES
+(1, 'johndoe', '1234567812345678', '12/25', 'John Doe', '123', 101, 0),
+(2, 'janedoe', '2345678923456789', '11/24', 'Jane Doe', '234', 102, 0),
+(3, 'customer1', '3456789034567890', '01/26', 'Customer One', '345', 103, 0),
+(4, 'customer2', '4567890145678901', '05/25', 'Customer Two', '456', 104, 0),
+(5, 'customer3', '5678901256789012', '07/26', 'Customer Three', '567', 105, 0),
+(6, 'customer4', '6789012367890123', '08/29', 'Customer Four', '678', 106, 0),
+(7, 'customer5', '7890123478901234', '03/25', 'Customer Five', '789', 107, 0),
+(8, 'customer6', '8901234589012345', '08/27', 'Customer Six', '890', 108, 0);

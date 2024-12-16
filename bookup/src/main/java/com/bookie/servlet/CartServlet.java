@@ -122,8 +122,11 @@ public class CartServlet extends HttpServlet {
         int addressID = Integer.parseInt(request.getParameter("addressID"));
         int paymentDetailsID = Integer.parseInt(request.getParameter("paymentDetailsID"));
 
+//        Order order = cartService.checkout(username, addressID, paymentDetailsID);
+//        request.setAttribute("order", order);
+//        response.sendRedirect(request.getContextPath() + "/pages/orderConfirmation.jsp");
         Order order = cartService.checkout(username, addressID, paymentDetailsID);
         request.setAttribute("order", order);
-        response.sendRedirect(request.getContextPath() + "/pages/orderConfirmation.jsp");
+        request.getRequestDispatcher("/pages/orderConfirmation.jsp").forward(request, response);
     }
 }

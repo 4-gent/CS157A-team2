@@ -29,41 +29,57 @@ public class OrdersServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         try {
-            // Retrieve session and validate user login
+            // Validate session and user login
             HttpSession session = request.getSession(false);
-            System.out.println("Session info: " + session);
-            System.out.println("Session username: " + session.getAttribute("username"));
             if (session == null || session.getAttribute("username") == null) {
                 response.sendRedirect(request.getContextPath() + "/pages/login.jsp?error=Please log in to access orders.");
                 return;
             }
 
-            // Extract user details from session
+            // Extract username from session
             String currentUsername = (String) session.getAttribute("username");
             boolean isAdmin = Boolean.TRUE.equals(session.getAttribute("isAdmin"));
 
-            // Add logging to check session attributes
-            System.out.println("Current Username: " + currentUsername);
-            System.out.println("Is Admin: " + isAdmin);
-
-            // Set UserContext
+            // Ensure UserContext is set for proper authorization
             UserContext.setUserId(currentUsername);
-            System.out.println("UserContext set in OrdersServlet for userId: " + UserContext.getUserId());
 
-            // Admin-only search for orders by username
+            // Check for orderId (specific order details)
+            String orderIdParam = request.getParameter("orderId");
+            if (orderIdParam != null) {
+                try {
+                    int orderId = Integer.parseInt(orderIdParam);
+
+                    // Fetch specific order
+                    Order order = orderService.getOrderByID(orderId, currentUsername);
+                    if (order == null) {
+                        response.sendError(HttpServletResponse.SC_NOT_FOUND, "Order not found.");
+                        return;
+                    }
+
+                    // Forward order details to orderConfirmation.jsp
+                    request.setAttribute("order", order);
+                    request.getRequestDispatcher("/pages/orderConfirmation.jsp").forward(request, response);
+                    return;
+                } catch (NumberFormatException e) {
+                    response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid order ID format.");
+                    return;
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    response.sendError(HttpServletResponse.SC_FORBIDDEN, "You are not authorized to view this order.");
+                    return;
+                }
+            }
+
+            // If no orderId is provided, fetch all orders for the user
             String targetUsername = request.getParameter("username");
-            System.out.println("Target username: " + targetUsername);
             List<Order> orders;
             if (targetUsername != null && isAdmin) {
-                // Fetch all orders for the target user
                 orders = orderService.getAllOrdersForUser(targetUsername);
-                System.out.println("Admin user: " + currentUsername + " fetching orders for: " + targetUsername);
             } else {
-                // Fetch orders for the current user (default behavior)
                 orders = orderService.getAllOrdersForUser(currentUsername);
-                System.out.println("Regular user: " + currentUsername);
             }
-            System.out.println("User orders: " + orders);
+
+            // Forward list of orders to orders.jsp
             request.setAttribute("orders", orders);
             request.getRequestDispatcher("/pages/orders.jsp").forward(request, response);
 
