@@ -329,6 +329,91 @@ public class OrderDAO extends BaseDAO<Order, Integer> {
 	    
 	    return orders;
 	}
+	// Fetch all orders (admin access required)
+    public List<Order> getAllOrders() {
+        List<Order> orders = new ArrayList<>();
+        String orderQuery = "SELECT o.orderID, o.username, o.total, o.orderDate, o.orderStatus, " +
+                            "a.addressID, a.street, a.city, a.state, a.zip, a.country " +
+                            "FROM Orders o " +
+                            "JOIN Addresses a ON o.addressID = a.addressID";
+
+        String cartItemsQuery = "SELECT c.inventoryItemID, c.quantity, " +
+                                "i.price, i.qty AS availableQty, i.description, " +
+                                "b.ISBN, b.title, b.year, b.publisher " +
+                                "FROM Contains c " +
+                                "JOIN InventoryItems i ON c.inventoryItemID = i.inventoryItemID " +
+                                "JOIN Books b ON i.ISBN = b.ISBN " +
+                                "WHERE c.orderID = ?";
+
+        try (PreparedStatement orderStmt = connection.prepareStatement(orderQuery)) {
+            ResultSet orderResult = orderStmt.executeQuery();
+
+            while (orderResult.next()) {
+                // Populate Shipping Address
+                Address address = new Address(
+                        orderResult.getInt("addressID"),
+                        orderResult.getString("street"),
+                        orderResult.getString("city"),
+                        orderResult.getString("state"),
+                        orderResult.getString("zip"),
+                        orderResult.getString("country")
+                );
+
+                // Initialize an empty list for cart items
+                List<CartItem> cartItems = new ArrayList<>();
+
+                // Fetch associated cart items for the order
+                try (PreparedStatement cartStmt = connection.prepareStatement(cartItemsQuery)) {
+                    cartStmt.setInt(1, orderResult.getInt("orderID"));
+                    ResultSet cartResult = cartStmt.executeQuery();
+
+                    while (cartResult.next()) {
+                        // Populate Book details
+                        Book book = new Book(
+                                cartResult.getString("ISBN"),
+                                cartResult.getString("title"),
+                                cartResult.getInt("year"),
+                                cartResult.getString("publisher"),
+                                false, // Assuming 'isFeatured' is not used here
+                                null,  // Author and Genre can be fetched if needed
+                                null
+                        );
+
+                        // Populate Inventory Item
+                        InventoryItem item = new InventoryItem(
+                                cartResult.getInt("inventoryItemID"),
+                                book,
+                                cartResult.getDouble("price"),
+                                cartResult.getInt("availableQty"),
+                                cartResult.getString("description")
+                        );
+
+                        // Populate Cart Item
+                        CartItem cartItem = new CartItem(item, cartResult.getInt("quantity"));
+                        cartItems.add(cartItem);
+                    }
+                }
+
+                // Populate Order object
+                Order order = new Order(
+                        orderResult.getInt("orderID"),
+                        orderResult.getString("username"),
+                        orderResult.getDouble("total"),
+                        address,
+                        orderResult.getDate("orderDate"),
+                        orderResult.getString("orderStatus"),
+                        cartItems
+                );
+
+                orders.add(order);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return orders;
+    }
+
 	
 	/**
 	 * Get all orders for a user by searching for a keyword in past orders.

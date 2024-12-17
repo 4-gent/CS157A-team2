@@ -19,6 +19,9 @@ public interface OrderServiceInterface {
 	public List<Order> getAllOrdersByStatus(String status) throws Exception;
 	
 	@IsAdmin
+	public List<Order> getAllOrders() throws Exception;
+	
+	@IsAdmin
 	public List<Order> getAllOrders(Date fromDate, Date toDate) throws Exception;
 	
 	@IsAdminOrSameUser("username")

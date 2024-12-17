@@ -49,6 +49,11 @@ public class OrderService implements OrderServiceInterface{
 	}
 	
 	@IsAdmin
+	public List<Order> getAllOrders() throws Exception{ 
+		return orderDAO.getAllOrders();
+	}
+	
+	@IsAdmin
 	public List<Order> getAllOrders(Date fromDate, Date toDate) throws Exception{ 
 		return orderDAO.getAllOrders(fromDate, toDate);
 	}

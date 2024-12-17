@@ -7,20 +7,31 @@
     <link rel="stylesheet" href="../styles/register.css">
 </head>
 <body class="register-body">
+    <!-- Navigation Bar -->
     <div class="nav">
         <a href="/bookup/index.jsp"><button class="nav-button">Home</button></a>
         <a href="/bookup/pages/login.jsp"><button class="nav-button">Login</button></a>
     </div>
+    
+    <!-- Registration Form Header -->
     <div class="register-header">
         <h1>Register with Book Up</h1>
     </div>
+
+    <!-- Registration Form -->
     <div class="register-container">
         <form class="register-form" action="/bookup/Register" method="post">
-        <h2>User Information</h2>
+            <h2>User Information</h2>
             <input class="register-input" type="text" name="username" placeholder="Username" required />
             <input class="register-input" type="password" name="password" placeholder="Password" required />
             <input class="register-input" type="text" name="email" placeholder="Email" required />
             <input class="register-input" type="text" name="phone" placeholder="Phone Number" required />
+
+            <!-- Admin Checkbox -->
+            <label for="isAdmin" style="display: block; margin: 10px 0;">
+                <input type="checkbox" name="isAdmin" id="isAdmin" value="true" />
+                Register as Admin
+            </label>
 
             <!-- Address Information -->
             <h2>Address Information</h2>
@@ -37,14 +48,15 @@
             <input class="register-input" type="text" name="cardHolderName" placeholder="Card Holder Name" required />
             <input class="register-input" type="text" name="cvv" placeholder="CVV" required />
 
-           <input 
-    class="register-input" 
-    type="submit" 
-    value="Register" 
-    style="background-color: rgb(76, 175, 80); color: white; border: none; border-radius: 5px; padding: 8px 12px; font-size: 1rem; font-weight: bold; text-transform: uppercase; cursor: pointer;" 
-    onmouseover="this.style.backgroundColor='rgb(58, 135, 61)'" 
-    onmouseout="this.style.backgroundColor='rgb(76, 175, 80)'"
-/>
+            <!-- Submit Button -->
+            <input 
+                class="register-input" 
+                type="submit" 
+                value="Register" 
+                style="background-color: rgb(76, 175, 80); color: white; border: none; border-radius: 5px; padding: 8px 12px; font-size: 1rem; font-weight: bold; text-transform: uppercase; cursor: pointer;" 
+                onmouseover="this.style.backgroundColor='rgb(58, 135, 61)'" 
+                onmouseout="this.style.backgroundColor='rgb(76, 175, 80)'"
+            />
         </form>
     </div>
     <br>

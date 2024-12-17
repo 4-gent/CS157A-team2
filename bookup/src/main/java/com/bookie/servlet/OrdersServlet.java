@@ -36,27 +36,27 @@ public class OrdersServlet extends HttpServlet {
                 return;
             }
 
-            // Extract username from session
+            // Extract username and role
             String currentUsername = (String) session.getAttribute("username");
             boolean isAdmin = Boolean.TRUE.equals(session.getAttribute("isAdmin"));
 
             // Ensure UserContext is set for proper authorization
             UserContext.setUserId(currentUsername);
 
-            // Check for orderId (specific order details)
+            // Check if an orderId parameter is present
             String orderIdParam = request.getParameter("orderId");
             if (orderIdParam != null) {
                 try {
                     int orderId = Integer.parseInt(orderIdParam);
-
-                    // Fetch specific order
+                    // Fetch the specific order
                     Order order = orderService.getOrderByID(orderId, currentUsername);
+
                     if (order == null) {
                         response.sendError(HttpServletResponse.SC_NOT_FOUND, "Order not found.");
                         return;
                     }
 
-                    // Forward order details to orderConfirmation.jsp
+                    // Forward to order confirmation page with order details
                     request.setAttribute("order", order);
                     request.getRequestDispatcher("/pages/orderConfirmation.jsp").forward(request, response);
                     return;
@@ -70,17 +70,20 @@ public class OrdersServlet extends HttpServlet {
                 }
             }
 
-            // If no orderId is provided, fetch all orders for the user
-            String targetUsername = request.getParameter("username");
+            // Default behavior: Fetch all orders
             List<Order> orders;
-            if (targetUsername != null && isAdmin) {
-                orders = orderService.getAllOrdersForUser(targetUsername);
+
+            if (isAdmin) {
+                // Admin fetches all orders
+                orders = orderService.getAllOrders();
             } else {
+                // Normal user fetches their own orders
                 orders = orderService.getAllOrdersForUser(currentUsername);
             }
 
-            // Forward list of orders to orders.jsp
+            // Forward the list of orders to the JSP
             request.setAttribute("orders", orders);
+            request.setAttribute("isAdmin", isAdmin); // Pass the admin flag for JSP UI logic
             request.getRequestDispatcher("/pages/orders.jsp").forward(request, response);
 
         } catch (Exception e) {
@@ -88,7 +91,7 @@ public class OrdersServlet extends HttpServlet {
             response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "An error occurred while processing your request.");
         }
     }
-
+    
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {

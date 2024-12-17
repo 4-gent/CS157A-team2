@@ -50,13 +50,16 @@ public class Register extends HttpServlet {
         String cardHolderName = request.getParameter("cardHolderName");
         String cvv = request.getParameter("cvv");
 
+        // Check if the isAdmin checkbox was selected
+        boolean isAdmin = "true".equals(request.getParameter("isAdmin"));
+
         UserServiceInterface userService = UserService.getServiceInstance();
         AddressServiceInterface addressService = AddressService.getServiceInstance();
         PaymentInfoServiceInterface paymentInfoService = PaymentInfoService.getServiceInstance();
 
         try {
-            // Register the user
-            userService.register(username, password, email, phone, false, 0, 0);
+            // Register the user with the correct isAdmin flag
+            userService.register(username, password, email, phone, isAdmin, 0, 0);
 
             // Ensure UserContext is set
             UserContext.setUserId(username);

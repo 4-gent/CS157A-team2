@@ -9,15 +9,16 @@
     <style>
         body {
             font-family: Arial, sans-serif;
-            margin: 20px;
+            margin: 0;
             background-color: #f9f9f9;
         }
-        h1, h2 {
+        h1 {
             color: #4CAF50;
+            text-align: center;
+            margin: 20px 0;
         }
         .nav {
             background-color: #333;
-            overflow: hidden;
             padding: 10px 0;
             text-align: center;
         }
@@ -31,9 +32,9 @@
             background-color: #575757;
         }
         table {
-            width: 100%;
+            width: 90%;
+            margin: 20px auto;
             border-collapse: collapse;
-            margin: 20px 0;
         }
         th, td {
             border: 1px solid #ddd;
@@ -42,7 +43,6 @@
         }
         th {
             background-color: #f2f2f2;
-            font-weight: bold;
         }
         tr:nth-child(even) {
             background-color: #f9f9f9;
@@ -50,67 +50,67 @@
         tr:hover {
             background-color: #f1f1f1;
         }
-        .orders-container {
-            margin: 20px auto;
-            width: 90%;
+        .no-orders {
+            text-align: center;
+            color: #888;
+            margin: 20px 0;
         }
     </style>
 </head>
 <body>
     <!-- Navigation Bar -->
-    <c:choose>
-        <c:when test="${sessionScope.isAdmin}">
-            <div class="nav">
-                <a href="${pageContext.request.contextPath}/Books">Books</a>
-                <a href="${pageContext.request.contextPath}/Inventory">Inventory</a>
-                <a href="${pageContext.request.contextPath}/Orders">Orders</a>
-                <a href="${pageContext.request.contextPath}/Customers">Customers</a>
-                <a href="${pageContext.request.contextPath}/User_Info">Profile</a>
-                <a href="${pageContext.request.contextPath}/index.jsp">Log Out</a>
-            </div>
-        </c:when>
-        <c:otherwise>
-            <div class="nav">
-                <a href="${pageContext.request.contextPath}/Books">Books</a>
-                <a href="${pageContext.request.contextPath}/Orders">Your Orders</a>
-                <a href="${pageContext.request.contextPath}/Cart">Your Cart</a>
-                <a href="${pageContext.request.contextPath}/User_Info">Profile</a>
-                <a href="${pageContext.request.contextPath}/index.jsp">Log Out</a>
-            </div>
-        </c:otherwise>
-    </c:choose>
-
-    <div class="orders-container">
-        <h1 class="orders-header">All Orders</h1>
-        <table>
-            <thead>
-                <tr>
-                    <th>Order ID</th>
-                    <th>Username</th>
-                    <th>Status</th>
-                    <th>Order Date</th>
-                    <th>Total</th>
-                    <th>Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-                <c:forEach var="order" items="${orders}">
-                    <tr>
-                        <td>${order.orderID}</td>
-                        <td>${order.username}</td>
-                        <td>${order.orderStatus}</td>
-                        <td>${order.orderDate}</td>
-                        <td>$${order.total}</td>
-                        <td>
-                            <!-- Link to view order details -->
-                            <a href="${pageContext.request.contextPath}/Orders?orderId=${order.orderID}">
-                                View Details
-                            </a>
-                        </td>
-                    </tr>
-                </c:forEach>
-            </tbody>
-        </table>
+    <div class="nav">
+        <a href="${pageContext.request.contextPath}/Books">Books</a>
+        <a href="${pageContext.request.contextPath}/Inventory">Inventory</a>
+        <a href="${pageContext.request.contextPath}/Orders">Orders</a>
+        <a href="${pageContext.request.contextPath}/Customers">Customers</a>
+        <a href="${pageContext.request.contextPath}/User_Info">Profile</a>
+        <a href="${pageContext.request.contextPath}/index.jsp">Log Out</a>
     </div>
+
+    <!-- Orders Table -->
+    <h1>Orders</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>Order ID</th>
+                <th>Username</th>
+                <th>Status</th>
+                <th>Order Date</th>
+                <th>Total</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <c:forEach var="order" items="${orders}">
+                <tr>
+                    <td>${order.orderID}</td>
+                    <td>${order.username}</td>
+                    <td>${order.orderStatus}</td>
+                    <td>${order.orderDate}</td>
+                    <td>$${order.total}</td>
+                    <td>
+                        <a href="${pageContext.request.contextPath}/Orders?orderId=${order.orderID}">
+						    View Details
+						</a>
+                    </td>
+                </tr>
+            </c:forEach>
+            <c:if test="${empty orders}">
+                <tr>
+                    <td colspan="6" class="no-orders">
+                        <c:choose>
+                            <c:when test="${isAdmin}">
+                                No orders found in the system.
+                            </c:when>
+                            <c:otherwise>
+                                You have not placed any orders yet.
+                            </c:otherwise>
+                        </c:choose>
+                    </td>
+                </tr>
+            </c:if>
+        </tbody>
+    </table>
 </body>
 </html>

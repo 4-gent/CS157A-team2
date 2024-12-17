@@ -4,111 +4,198 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>Profile</title>
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/styles/profile.css">
+    <title>Bookie - Profile</title>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/styles/global.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f9f9f9;
+        }
+        h1, h2 {
+            color: #4CAF50;
+        }
+        .nav {
+            background-color: #333;
+            overflow: hidden;
+            padding: 10px 0;
+            text-align: center;
+        }
+        .nav a {
+            color: white;
+            text-decoration: none;
+            padding: 10px 20px;
+            display: inline-block;
+        }
+        .nav a:hover {
+            background-color: #575757;
+        }
+        .profile-container {
+            margin: 20px auto;
+            width: 90%;
+            background-color: #fff;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+            font-weight: bold;
+        }
+        .profile-section {
+            margin-bottom: 20px;
+        }
+        label {
+            font-weight: bold;
+            display: block;
+            margin: 10px 0 5px;
+        }
+        input[type="text"], input[type="password"], button {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        .delete-button {
+            background-color: #d9534f;
+        }
+        .delete-button:hover {
+            background-color: #c9302c;
+        }
+        .form-actions {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+        }
+        .profile-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        .no-data {
+            text-align: center;
+            font-style: italic;
+            color: #777;
+        }
+    </style>
 </head>
-<body class="profile-body">
+<body>
     <!-- Navigation Bar -->
     <c:choose>
         <c:when test="${sessionScope.isAdmin}">
             <div class="nav">
-                <a href="${pageContext.request.contextPath}/Books"><button class="nav-button">Books</button></a>
-                <a href="${pageContext.request.contextPath}/Inventory"><button class="nav-button">Inventory</button></a>
-                <a href="${pageContext.request.contextPath}/Orders"><button class="nav-button">Orders</button></a>
-                <a href="${pageContext.request.contextPath}/Customers"><button class="nav-button">Customers</button></a>
-                <a href="${pageContext.request.contextPath}/User_Info"><button class="nav-button">Profile</button></a>
-                <a href="${pageContext.request.contextPath}/index.jsp"><button class="nav-button">Log Out</button></a>
+                <a href="${pageContext.request.contextPath}/Books">Books</a>
+                <a href="${pageContext.request.contextPath}/Inventory">Inventory</a>
+                <a href="${pageContext.request.contextPath}/Orders">Orders</a>
+                <a href="${pageContext.request.contextPath}/Customers">Customers</a>
+                <a href="${pageContext.request.contextPath}/User_Info">Profile</a>
+                <a href="${pageContext.request.contextPath}/index.jsp">Log Out</a>
             </div>
         </c:when>
         <c:otherwise>
             <div class="nav">
-                <a href="${pageContext.request.contextPath}/Books"><button class="nav-button">Books</button></a>
-                <a href="${pageContext.request.contextPath}/Orders"><button class="nav-button">Your Orders</button></a>
-                <a href="${pageContext.request.contextPath}/Cart"><button class="nav-button">Your Cart</button></a>
-                <a href="${pageContext.request.contextPath}/User_Info"><button class="nav-button">Profile</button></a>
-                <a href="${pageContext.request.contextPath}/index.jsp"><button class="nav-button">Log Out</button></a>
+                <a href="${pageContext.request.contextPath}/Books">Books</a>
+                <a href="${pageContext.request.contextPath}/Orders">Your Orders</a>
+                <a href="${pageContext.request.contextPath}/Cart">Your Cart</a>
+                <a href="${pageContext.request.contextPath}/User_Info">Profile</a>
+                <a href="${pageContext.request.contextPath}/index.jsp">Log Out</a>
             </div>
         </c:otherwise>
     </c:choose>
 
-    <!-- User Profile Section -->
-    <div class="profile-header">
-        <div class="user-element">
-            <h2>User Profile</h2>
+    <!-- Profile Container -->
+    <div class="profile-container">
+        <div class="profile-header">
+            <h1>User Profile</h1>
+        </div>
+
+        <!-- User Information -->
+        <div class="profile-section">
+            <h2>Personal Information</h2>
             <p><strong>Username:</strong> ${sessionScope.username}</p>
             <p><strong>Email:</strong> ${sessionScope.email}</p>
             <p><strong>Phone:</strong> ${sessionScope.phone}</p>
-            <c:choose>
-                <c:when test="${sessionScope.isAdmin}">
-                    <p><strong>Role:</strong> Administrator</p>
-                </c:when>
-                <c:otherwise>
-                    <p><strong>Role:</strong> Regular User</p>
-                </c:otherwise>
-            </c:choose>
+            <p><strong>Role:</strong> ${sessionScope.isAdmin ? 'Administrator' : 'Regular User'}</p>
             <p><strong>Favorite Author:</strong> ${sessionScope.favoriteAuthor}</p>
             <p><strong>Favorite Genre:</strong> ${sessionScope.favoriteGenre}</p>
+        </div>
 
-			<br />
-
-            <!-- Form for Updating Information -->
+        <!-- Update Profile Form -->
+        <div class="profile-section">
+            <h2>Update Profile</h2>
             <form action="${pageContext.request.contextPath}/User_Info" method="POST">
                 <label for="newPassword">Update Password:</label>
-                <input type="password" name="newPassword" id="newPassword"><br>
-                <label for="favoriteAuthor">Update Favorite Author:</label>
-                <input type="text" name="favoriteAuthor" id="favoriteAuthor" value=""><br>
-                <label for="favoriteGenre">Update Favorite Genre:</label>
-                <input type="text" name="favoriteGenre" id="favoriteGenre" value=""><br>
-                <label for="deleteAccount">Delete Account:</label>
-                <button type="submit" name="deleteAccount" value="true" onclick="return confirm('Are you sure you want to delete your account?');">Delete</button><br>
-                <button type="submit" name="updateProfile" value="true">Update Profile</button>
-            </form>
+                <input type="password" name="newPassword" id="newPassword">
 
-            <!-- Payment Information Section -->
-            <div class="payment-info-container">
-                <h2>Payment Information</h2>
-                <c:if test="${not empty sessionScope.paymentDetails}">
-                     <c:forEach var="paymentInfo" items="${sessionScope.paymentDetails}">
-						<!-- Form for updating payment information -->
-                         <form action="${pageContext.request.contextPath}/Payment" method="POST">
-                             <input type="hidden" name="action" value="update">
-                             <input type="hidden" name="paymentId" value="${paymentInfo.paymentID}">
-                             <label for="newCardHolderName">Update Card Holder Name:</label>
-                             <input type="text" name="newCardHolderName" id="newCardHolderName" value="${paymentInfo.cardHolderName}"><br>
-                             <label for="newCardNumber">Update Card Number:</label>
-                             <input type="text" name="newCardNumber" id="newCardNumber" value="${paymentInfo.cardNumber}"><br>
-                             <label for="newCardExpiration">Update Card Expiration Date:</label>
-                             <input type="text" name="newCardExpiration" id="newCardExpiration" value="${paymentInfo.monthYear}"><br>
-                             <label for="newCardCVV">Update Card CVV:</label>
-                             <input type="text" name="newCardCVV" id="newCardCVV" value="${paymentInfo.cvv}"><br>
-                             <label for="newBillingStreet">Update Billing Street:</label>
-                             <input type="text" name="newBillingStreet" id="newBillingStreet" value="${paymentInfo.billingAddress.street}"><br>
-                             <label for="newBillingCity">Update Billing City:</label>
-                             <input type="text" name="newBillingCity" id="newBillingCity" value="${paymentInfo.billingAddress.city}"><br>
-                             <label for="newBillingState">Update Billing State:</label>
-                             <input type="text" name="newBillingState" id="newBillingState" value="${paymentInfo.billingAddress.state}"><br>
-                             <label for="newBillingZip">Update Billing ZIP:</label>
-                             <input type="text" name="newBillingZip" id="newBillingZip" value="${paymentInfo.billingAddress.zip}"><br>
-                             <label for="newBillingCountry">Update Billing Country:</label>
-                             <input type="text" name="newBillingCountry" id="newBillingCountry" value="${paymentInfo.billingAddress.country}"><br>
-                             <button type="submit" name="updatePayment" value="true">Update Payment Information</button>
-                         </form>
-                         <!-- Form for deleting payment information -->
-                         <form action="${pageContext.request.contextPath}/Payment" method="POST">
-                             <input type="hidden" name="action" value="delete">
-                             <input type="hidden" name="paymentId" value="${paymentInfo.paymentID}">
-                             <button type="submit" name="deletePayment" value="true" onclick="return confirm('Are you sure you want to delete this payment method?');">Delete Payment Information</button>
-                         </form>
-                     </c:forEach>
-                </c:if>
-                <c:if test="${empty sessionScope.paymentDetails}">
-                    <p>No payment information found.</p>
-                </c:if>
-            </div>
+                <label for="favoriteAuthor">Favorite Author:</label>
+                <input type="text" name="favoriteAuthor" id="favoriteAuthor">
+
+                <label for="favoriteGenre">Favorite Genre:</label>
+                <input type="text" name="favoriteGenre" id="favoriteGenre">
+
+                <div class="form-actions">
+                    <button type="submit" name="updateProfile" value="true">Update Profile</button>
+                    <button type="submit" name="deleteAccount" value="true" class="delete-button" onclick="return confirm('Are you sure you want to delete your account?');">Delete Account</button>
+                </div>
+            </form>
+        </div>
+
+        <!-- Payment Information Section -->
+        <div class="profile-section">
+            <h2>Payment Information</h2>
+            <c:if test="${not empty sessionScope.paymentDetails}">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Card Holder</th>
+                            <th>Card Number</th>
+                            <th>Expiration</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <c:forEach var="paymentInfo" items="${sessionScope.paymentDetails}">
+                            <tr>
+                                <td>${paymentInfo.cardHolderName}</td>
+                                <td>${paymentInfo.cardNumber}</td>
+                                <td>${paymentInfo.monthYear}</td>
+                                <td>
+                                    <form action="${pageContext.request.contextPath}/Payment" method="POST" style="display:inline;">
+                                        <input type="hidden" name="action" value="delete">
+                                        <input type="hidden" name="paymentId" value="${paymentInfo.paymentID}">
+                                        <button type="submit" class="delete-button">Delete</button>
+                                    </form>
+                                </td>
+                            </tr>
+                        </c:forEach>
+                    </tbody>
+                </table>
+            </c:if>
+            <c:if test="${empty sessionScope.paymentDetails}">
+                <p class="no-data">No payment information found.</p>
+            </c:if>
         </div>
     </div>
-    <br>
-    <br>
 </body>
 </html>
