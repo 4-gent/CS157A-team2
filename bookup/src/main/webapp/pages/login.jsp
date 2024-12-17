@@ -15,7 +15,7 @@
         <a href="/bookup/pages/register.jsp"><button class="nav-button">Register</button></a>
     </div>
     <div class="login-header">
-        <h1>Bookup</h1>
+        <h1>Login with Bookie</h1>
     </div>
     <div class="login-container">
         <form class="login-form" action="/bookup/Login" method="post">

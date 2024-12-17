@@ -1,6 +1,7 @@
 package com.bookie.servlet;
 
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -10,83 +11,86 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.bookie.bizlogic.AuthorService;
 import com.bookie.bizlogic.BookService;
+import com.bookie.bizlogic.GenreService;
+import com.bookie.bizlogic.interfaces.AuthorServiceInterface;
 import com.bookie.bizlogic.interfaces.BookServiceInterface;
+import com.bookie.bizlogic.interfaces.GenreServiceInterface;
+import com.bookie.models.Author;
 import com.bookie.models.Book;
+import com.bookie.models.Genre;
 
 @WebServlet("/Books")
 public class GetBooks extends HttpServlet {
     private static final long serialVersionUID = 1L;
-    
-    // Use the interface to refer to the BookService
+
     private BookServiceInterface bookService;
+    private GenreServiceInterface genreService;
+    private AuthorServiceInterface authorService;
 
     public GetBooks() {
         super();
-        // Instantiate the BookService class
-        bookService = BookService.getServiceInstance(); // Ensure BookService implements BookServiceInterface
+        bookService = BookService.getServiceInstance();
+        genreService = GenreService.getServiceInstance();
+        authorService = AuthorService.getServiceInstance();
     }
 
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        // Always fetch the list of all books (default view)
-        List<Book> bookList = bookService.browseBooks();
-        request.setAttribute("bookList", bookList);  // Always set this
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        try {
+            // Always fetch the list of all books (default view)
+            List<Book> bookList = bookService.browseBooks();
+            request.setAttribute("bookList", bookList);  // Always set this
 
-        // Handle search functionality
-        String searchInput = request.getParameter("search-input");
-        if (searchInput != null && !searchInput.isEmpty()) {
-            List<Book> searchResult = bookService.bookSearch(searchInput);
-            request.setAttribute("search_result", searchResult);
+            // Handle search functionality
+            String searchInput = request.getParameter("search-input");
+            if (searchInput != null && !searchInput.isEmpty()) {
+                List<Book> searchResult = bookService.bookSearch(searchInput);
+                request.setAttribute("search_result", searchResult);
+            }
+
+            // Handle filter functionality
+            String genre = request.getParameter("genre");
+            String yearStr = request.getParameter("year");
+            String author = request.getParameter("author");
+            int year = (yearStr != null && !yearStr.isEmpty()) ? Integer.parseInt(yearStr) : 0;
+
+            if (genre != null || year > 0 || author != null) {
+                try {
+                	List<Book> filterResult = bookService.filterBooks(genre, "", year, author);
+                    System.out.println("Filter: " + filterResult);
+                    request.setAttribute("filter_result", filterResult);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "An error occurred while filtering books.");
+                    return;
+                }
+            } else {
+                request.setAttribute("filter_result", bookList);  // Set all books if no filters are applied
+            }
+
+            // Set data for the dropdowns (for genres, publishers, years, authors)
+            List<Genre> genres = genreService.getGenres();
+            List<String> years = new ArrayList<>();
+            years.add("1952");
+            years.add("1934");
+            List<Author> authors = authorService.getAuthors();
+
+            request.setAttribute("genres", genres);
+            request.setAttribute("years", years);
+            request.setAttribute("authors", authors);
+
+            // Forward to JSP
+            request.getRequestDispatcher("/pages/books.jsp").forward(request, response);
+        } catch (Exception e) {
+            e.printStackTrace();
+            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "An error occurred while processing your request.");
         }
-
-        // Handle filter functionality
-        String genre = request.getParameter("genre");
-        String availability = request.getParameter("availability");
-        String publisher = request.getParameter("publisher");
-        String yearStr = request.getParameter("year");
-        String author = request.getParameter("author");
-        int year = (yearStr != null && !yearStr.isEmpty()) ? Integer.parseInt(yearStr) : 0;
-
-        if (genre != null || availability != null || publisher != null || year > 0 || author != null) {
-            List<Book> filterResult = bookService.filterBooks(genre, availability, publisher, year, author);
-            request.setAttribute("filter_result", filterResult);
-        } else {
-            request.setAttribute("filter_result", bookList);  // Set all books if no filters are applied
-        }
-
-        // Set data for the dropdowns (for genres, publishers, years, authors)
-        List<String> genres = new ArrayList<>();
-        genres.add("Fiction");
-        genres.add("Fantasy");
-
-        List<String> publishers = new ArrayList<>();
-        publishers.add("Bloomsbury");
-        publishers.add("Putnam");
-
-        List<String> years = new ArrayList<>();
-        years.add("1952");
-        years.add("1934");
-
-        List<String> authors = new ArrayList<>();
-        authors.add("George Orwell");
-        authors.add("Harper Lee");
-
-        request.setAttribute("genres", genres);
-        request.setAttribute("publishers", publishers);
-        request.setAttribute("years", years);
-        request.setAttribute("authors", authors);
-
-        // Forward to the JSP page to display the results
-        request.getRequestDispatcher("/pages/books.jsp").forward(request, response);
     }
 
-
-
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        // POST request logic is handled similarly to GET requests
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         doGet(request, response);
     }
 }
-

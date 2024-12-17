@@ -9,28 +9,28 @@
     <link rel="stylesheet" href="${pageContext.request.contextPath}/styles/global.css">
 </head>
 <body class="profile-body">
-    <!-- Navigation Bar -->
-    <c:choose>
-        <c:when test="${sessionScope.isAdmin}">
-            <div class="nav">
-                <a href="${pageContext.request.contextPath}/Books"><button class="nav-button">Books</button></a>
-                <a href="${pageContext.request.contextPath}/Inventory"><button class="nav-button">Inventory</button></a>
-                <a href="${pageContext.request.contextPath}/Orders"><button class="nav-button">Orders</button></a>
-                <a href="${pageContext.request.contextPath}/Customers"><button class="nav-button">Customers</button></a>
-                <a href="${pageContext.request.contextPath}/User_Info"><button class="nav-button">Profile</button></a>
-                <a href="${pageContext.request.contextPath}/index.jsp"><button class="nav-button">Log Out</button></a>
-            </div>
-        </c:when>
-        <c:otherwise>
-            <div class="nav">
-                <a href="${pageContext.request.contextPath}/Books"><button class="nav-button">Books</button></a>
-                <a href="${pageContext.request.contextPath}/Orders"><button class="nav-button">Your Orders</button></a>
-                <a href="${pageContext.request.contextPath}/Cart"><button class="nav-button">Your Cart</button></a>
-                <a href="${pageContext.request.contextPath}/User_Info"><button class="nav-button">Profile</button></a>
-                <a href="${pageContext.request.contextPath}/index.jsp"><button class="nav-button">Log Out</button></a>
-            </div>
-        </c:otherwise>
-    </c:choose>
+    	<!-- Navigation Bar -->
+	    <c:choose>
+	        <c:when test="${sessionScope.isAdmin}">
+	            <div class="nav">
+	                <a href="${pageContext.request.contextPath}/Books"><button class="nav-button">Books</button></a>
+	                <a href="${pageContext.request.contextPath}/Inventory"><button class="nav-button">Inventory</button></a>
+	                <a href="${pageContext.request.contextPath}/Orders"><button class="nav-button">Orders</button></a>
+	                <a href="${pageContext.request.contextPath}/Customers"><button class="nav-button">Customers</button></a>
+	                <a href="${pageContext.request.contextPath}/User_Info"><button class="nav-button">Profile</button></a>
+	                <a href="${pageContext.request.contextPath}/index.jsp"><button class="nav-button">Log Out</button></a>
+	            </div>
+	        </c:when>
+	        <c:otherwise>
+	            <div class="nav">
+	                <a href="${pageContext.request.contextPath}/Books"><button class="nav-button">Books</button></a>
+	                <a href="${pageContext.request.contextPath}/Orders"><button class="nav-button">Your Orders</button></a>
+	                <a href="${pageContext.request.contextPath}/pages/cart.jsp"><button class="nav-button">Your Cart</button></a>
+	                <a href="${pageContext.request.contextPath}/User_Info"><button class="nav-button">Profile</button></a>
+	                <a href="${pageContext.request.contextPath}/index.jsp"><button class="nav-button">Log Out</button></a>
+	            </div>
+	        </c:otherwise>
+	    </c:choose>
 
     <!-- User Profile Section -->
     <div class="profile-header">

@@ -62,8 +62,8 @@ public class BookService implements BookServiceInterface {
     }
     
     @Override
-    public List<Book> filterBooks(String genre, String availability, String publisher, int year, String author){
-    	return bookDAO.filterBooks(genre, availability, publisher, year, author);
+    public List<Book> filterBooks(String genre, String publisher, int year, String author) {
+        return bookDAO.filterBooks(genre, publisher, year, author);
     }
     
 }

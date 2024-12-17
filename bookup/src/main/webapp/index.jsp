@@ -4,8 +4,8 @@
 <html>
 <head>
 	<meta charset="UTF-8">
-	<title>Index Page for Book Up</title>
 	<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap" rel="stylesheet">
+	<title>Index Page for Bookie</title>
 	<link rel="stylesheet" type="text/css" href="./styles/index.css">
 	<link rel="stylesheet" type="text/css" href="./styles/global.css">
 </head>
@@ -20,7 +20,7 @@
 			<p class="index-subtitle">
 				The Platform for Used and New Books! 
 			</p>
-			<h1 class="index-title">Book Up! 📚</h1>
+			<h1 class="index-title">Bookie! 📚</h1>
 		</div>
 	</div>
 </body>

@@ -13,6 +13,6 @@
 		<a href="/bookup/pages/login.jsp"><button class="nav-button">Login</button></a>
 		<a href="/bookup/pages/register.jsp"><button class="nav-button">Register</button></a>
 	</div>
-	<h1>Auth Error</h1>
+	<h1>Error</h1>
 </body>
 </html>

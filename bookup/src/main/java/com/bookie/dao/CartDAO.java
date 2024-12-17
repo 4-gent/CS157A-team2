@@ -122,11 +122,17 @@ public class CartDAO extends BaseDAO<Cart, Integer> {
 
             int cartID = ensureCartExists(username);
 
+            System.out.println("CartID: " + cartID);
+            
             for (CartItem item : items) {
-                validateInventoryAvailability(item);
-
+                System.out.println("Item: " + item.getInventoryItem().toString() + ", Quantity: " + item.getQuantity());
+            }
+            
+            for (CartItem item : items) {
+            	validateInventoryAvailability(item);
+                
                 // Update inventory quantity
-                String updateQtyQuery = "UPDATE InventoryItems SET qty = qty - ? WHERE ISBN = ?";
+                String updateQtyQuery = "UPDATE InventoryItems SET qty = qty - ? WHERE inventoryItemID = ?";
                 try (PreparedStatement updateQtyStmt = connection.prepareStatement(updateQtyQuery)) {
                     updateQtyStmt.setInt(1, item.getQuantity());
                     updateQtyStmt.setInt(2, item.getInventoryItem().getInventoryItemID());
@@ -288,11 +294,13 @@ public class CartDAO extends BaseDAO<Cart, Integer> {
     
     private void validateInventoryAvailability(CartItem item) throws Exception {
         String checkQtyQuery = "SELECT qty FROM InventoryItems WHERE inventoryItemID = ?";
+        System.out.println("Item quyantity in validation: " + item.getQuantity());
         try (PreparedStatement checkQtyStmt = connection.prepareStatement(checkQtyQuery)) {
             checkQtyStmt.setInt(1, item.getInventoryItem().getInventoryItemID());
             ResultSet rs = checkQtyStmt.executeQuery();
             if (rs.next()) {
                 int availableQty = rs.getInt("qty");
+                System.out.println("Available qty: " + availableQty);
                 if (availableQty < item.getQuantity()) {
                     throw new Exception("Not enough quantity available for item ID: " + item.getInventoryItem().getInventoryItemID());
                 }

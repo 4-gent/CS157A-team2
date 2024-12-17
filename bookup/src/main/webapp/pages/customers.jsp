@@ -9,36 +9,36 @@
     <link rel="stylesheet" href="${pageContext.request.contextPath}/styles/customers.css">
 </head>
 <body class="customers-body">
-    <!-- Navigation Bar -->
-    <c:choose>
-        <c:when test="${sessionScope.isAdmin}">
-            <div class="nav">
-                <a href="${pageContext.request.contextPath}/Books"><button class="nav-button">Books</button></a>
-                <a href="${pageContext.request.contextPath}/Inventory"><button class="nav-button">Inventory</button></a>
-                <a href="${pageContext.request.contextPath}/Orders"><button class="nav-button">Orders</button></a>
-                <a href="${pageContext.request.contextPath}/Customers"><button class="nav-button">Customers</button></a>
-                <a href="${pageContext.request.contextPath}/User_Info"><button class="nav-button">Profile</button></a>
-                <a href="${pageContext.request.contextPath}/index.jsp"><button class="nav-button">Log Out</button></a>
-            </div>
-        </c:when>
-        <c:otherwise>
-            <div class="nav">
-                <a href="${pageContext.request.contextPath}/Books"><button class="nav-button">Books</button></a>
-                <a href="${pageContext.request.contextPath}/Orders"><button class="nav-button">Your Orders</button></a>
-                <a href="${pageContext.request.contextPath}/Cart"><button class="nav-button">Your Cart</button></a>
-                <a href="${pageContext.request.contextPath}/User_Info"><button class="nav-button">Profile</button></a>
-                <a href="${pageContext.request.contextPath}/index.jsp"><button class="nav-button">Log Out</button></a>
-            </div>
-        </c:otherwise>
-    </c:choose>
+    	<!-- Navigation Bar -->
+	    <c:choose>
+	        <c:when test="${sessionScope.isAdmin}">
+	            <div class="nav">
+	                <a href="${pageContext.request.contextPath}/Books"><button class="nav-button">Books</button></a>
+	                <a href="${pageContext.request.contextPath}/Inventory"><button class="nav-button">Inventory</button></a>
+	                <a href="${pageContext.request.contextPath}/Orders"><button class="nav-button">Orders</button></a>
+	                <a href="${pageContext.request.contextPath}/Customers"><button class="nav-button">Customers</button></a>
+	                <a href="${pageContext.request.contextPath}/User_Info"><button class="nav-button">Profile</button></a>
+	                <a href="${pageContext.request.contextPath}/index.jsp"><button class="nav-button">Log Out</button></a>
+	            </div>
+	        </c:when>
+	        <c:otherwise>
+	            <div class="nav">
+	                <a href="${pageContext.request.contextPath}/Books"><button class="nav-button">Books</button></a>
+	                <a href="${pageContext.request.contextPath}/Orders"><button class="nav-button">Your Orders</button></a>
+	                <a href="${pageContext.request.contextPath}/pages/cart.jsp"><button class="nav-button">Your Cart</button></a>
+	                <a href="${pageContext.request.contextPath}/User_Info"><button class="nav-button">Profile</button></a>
+	                <a href="${pageContext.request.contextPath}/index.jsp"><button class="nav-button">Log Out</button></a>
+	            </div>
+	        </c:otherwise>
+	    </c:choose>
 
     <!-- Search Form -->
-    <div class="search-container">
+    <!--<div class="search-container">
         <form action="${pageContext.request.contextPath}/Customers" method="post">
             <input type="text" name="username" placeholder="Enter username" required>
             <button type="submit">Search</button>
         </form>
-    </div>
+    </div>-->
 
     <!-- Customer Details Section -->
     <div class="customer-details-container">

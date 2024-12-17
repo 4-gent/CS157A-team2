@@ -86,7 +86,13 @@ public class CartServlet extends HttpServlet {
 
     private void handleAddToCart(HttpServletRequest request, HttpServletResponse response, String username) throws Exception {
         String isbn = request.getParameter("isbn");
-        int quantity = Integer.parseInt(request.getParameter("quantity"));
+        int quantity;
+        try {
+            quantity = Integer.parseInt(request.getParameter("quantity"));
+        } catch (NumberFormatException e) {
+            response.sendRedirect(request.getContextPath() + "/pages/error.jsp?message=Invalid quantity");
+            return;
+        }
 
         // Retrieve the inventory item from the database based on ISBN
         InventoryItem inventoryItem = inventoryService.searchByISBN(isbn);
@@ -94,18 +100,30 @@ public class CartServlet extends HttpServlet {
             response.sendRedirect(request.getContextPath() + "/pages/error.jsp?message=Inventory item not found");
             return;
         }
+        
+        System.out.println("Quantity: " + quantity);
+        System.out.println("ISBN: " + isbn);
 
-        List<CartItem> items = new ArrayList<>();
-        items.add(new CartItem(inventoryItem, quantity));
-
+        // Attempt to add the item to the cart
         try {
+            List<CartItem> items = new ArrayList<>();
+            items.add(new CartItem(inventoryItem, quantity));
+
+            for (CartItem item : items) {
+                System.out.println("Item: " + item.getInventoryItem().toString() + ", Quantity: " + item.getQuantity());
+            }
+            
             Cart updatedCart = cartService.addItemsToCart(username, items);
             request.setAttribute("cart", updatedCart);
             response.sendRedirect(request.getContextPath() + "/Cart");
         } catch (NotEnoughQuantityException e) {
             response.sendRedirect(request.getContextPath() + "/pages/error.jsp?message=Not enough quantity available");
+        } catch (Exception e) {
+            e.printStackTrace();
+            response.sendRedirect(request.getContextPath() + "/pages/error.jsp?message=Failed to add item to cart");
         }
     }
+
 
     private void handleRemoveFromCart(HttpServletRequest request, HttpServletResponse response, String username) throws Exception {
         int itemId = Integer.parseInt(request.getParameter("itemId"));

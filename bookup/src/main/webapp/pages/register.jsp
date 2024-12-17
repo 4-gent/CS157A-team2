@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>Register with Book Up</title>
+    <title>Register with Bookie</title>
     <link rel="stylesheet" href="../styles/global.css">
     <link rel="stylesheet" href="../styles/register.css">
 </head>
@@ -12,7 +12,7 @@
         <a href="/bookup/pages/login.jsp"><button class="nav-button">Login</button></a>
     </div>
     <div class="register-header">
-        <h1>Register with Book Up</h1>
+        <h1>Register with Bookie</h1>
     </div>
     <div class="register-container">
         <form class="register-form" action="/bookup/Register" method="post">
