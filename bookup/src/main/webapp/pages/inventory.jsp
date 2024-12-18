@@ -14,30 +14,6 @@
             padding: 0;
         }
 
-        /* Navigation Bar */
-        .nav {
-            background-color: #333;
-            padding: 10px 0;
-            text-align: center;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        .nav .brand {
-            font-size: 1.8rem;
-            color: #4CAF50;
-            padding-left: 20px;
-            font-family: 'Sora', sans-serif;
-        }
-        .nav a {
-            color: white;
-            text-decoration: none;
-            padding: 10px 20px;
-        }
-        .nav a:hover {
-            background-color: #575757;
-        }
-
         .inventory-container {
             width: 95%;
             margin: 20px auto;
@@ -167,17 +143,27 @@
 </head>
 <body>
     <!-- Navigation Bar -->
-    <div class="nav">
-        <div class="brand">Bookie</div>
-        <div>
-            <a href="${pageContext.request.contextPath}/Books">Books</a>
-            <a href="${pageContext.request.contextPath}/Inventory">Inventory</a>
-            <a href="${pageContext.request.contextPath}/Orders">Orders</a>
-            <a href="${pageContext.request.contextPath}/Customers">Customers</a>
-            <a href="${pageContext.request.contextPath}/User_Info">Profile</a>
-            <a href="${pageContext.request.contextPath}/index.jsp">Log Out</a>
-        </div>
-    </div>
+    <c:choose>
+        <c:when test="${sessionScope.isAdmin}">
+            <div class="nav">
+                <a href="${pageContext.request.contextPath}/Books"><button class="nav-button">Books</button></a>
+                <a href="${pageContext.request.contextPath}/Inventory"><button class="nav-button">Inventory</button></a>
+                <a href="${pageContext.request.contextPath}/Orders"><button class="nav-button">Orders</button></a>
+                <a href="${pageContext.request.contextPath}/Customers"><button class="nav-button">Customers</button></a>
+                <a href="${pageContext.request.contextPath}/User_Info"><button class="nav-button">Profile</button></a>
+                <a href="${pageContext.request.contextPath}/index.jsp"><button class="nav-button">Log Out</button></a>
+            </div>
+        </c:when>
+        <c:otherwise>
+            <div class="nav">
+                <a href="${pageContext.request.contextPath}/Books"><button class="nav-button">Books</button></a>
+                <a href="${pageContext.request.contextPath}/Orders"><button class="nav-button">Your Orders</button></a>
+                <a href="${pageContext.request.contextPath}/Cart"><button class="nav-button">Your Cart</button></a>
+                <a href="${pageContext.request.contextPath}/User_Info"><button class="nav-button">Profile</button></a>
+                <a href="${pageContext.request.contextPath}/index.jsp"><button class="nav-button">Log Out</button></a>
+            </div>
+        </c:otherwise>
+    </c:choose>
 
     <div class="inventory-container">
         <h1>
